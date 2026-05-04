@@ -1,73 +1,141 @@
-/* Slider Wrapper */
-.dps-post-slider-wrapper {
-    position: relative;
-    padding: 0 30px; /* Space for arrows */
-}
+/**
+ * Dynamic Post Carousel for Elementor — base frontend styles.
+ *
+ * Templates ship intentionally minimal styling. Use the per-style settings
+ * in the widget Appearance tab + Custom CSS to fully theme each layout.
+ */
 
-/* Slick Slider Custom Arrows */
-.dps-post-slider-wrapper .slick-prev,
-.dps-post-slider-wrapper .slick-next {
+/* ---------- Carousel wrapper ---------- */
+.dpce-carousel { position: relative; }
+.dpce-carousel .dpce-track { display: block; }
+.dpce-carousel .dpce-slide { box-sizing: border-box; }
+.dpce-carousel .dpce-slide-inner {
+    background: #fff;
+    overflow: hidden;
+    height: 100%;
+}
+.dpce-carousel img { max-width: 100%; height: auto; display: block; }
+
+/* ---------- Slick overrides ---------- */
+.dpce-carousel .slick-prev,
+.dpce-carousel .slick-next {
     width: 40px;
     height: 40px;
-    z-index: 1;
-    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    background: rgba(0,0,0,0.45);
     border-radius: 50%;
+    transition: background-color .2s ease;
 }
-.dps-post-slider-wrapper .slick-prev:before,
-.dps-post-slider-wrapper .slick-next:before {
-    font-size: 20px;
+.dpce-carousel .slick-prev:hover,
+.dpce-carousel .slick-next:hover {
+    background: rgba(0,0,0,0.75);
+}
+.dpce-carousel .slick-prev { left: 8px; }
+.dpce-carousel .slick-next { right: 8px; }
+.dpce-carousel .slick-prev:before,
+.dpce-carousel .slick-next:before {
     color: #fff;
+    font-size: 20px;
     opacity: 1;
+    line-height: 1;
 }
-.dps-post-slider-wrapper .slick-prev {
-    left: -15px;
+.dpce-carousel .slick-prev:before { content: "\2039"; }
+.dpce-carousel .slick-next:before { content: "\203A"; }
+
+/* Arrow style variants */
+.dpce-arrows-arrow .slick-prev:before { content: "\2190"; }
+.dpce-arrows-arrow .slick-next:before { content: "\2192"; }
+.dpce-arrows-square .slick-prev,
+.dpce-arrows-square .slick-next { border-radius: 0; }
+.dpce-arrows-circle .slick-prev,
+.dpce-arrows-circle .slick-next { border-radius: 50%; }
+
+/* Dot style variants */
+.dpce-dots-square .slick-dots li button:before {
+    content: "\25A0";
 }
-.dps-post-slider-wrapper .slick-next {
-    right: -15px;
-}
-.dps-post-slider-wrapper .slick-prev:hover,
-.dps-post-slider-wrapper .slick-next:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+.dpce-dots-dash .slick-dots li button:before {
+    content: "\2014";
 }
 
-/* Individual Slide Styling */
-.dps-slide {
-    padding: 0 15px; /* Gutter between slides */
-}
-
-.dps-slide-inner {
-    border: 1px solid #eee;
-    border-radius: 5px;
-    overflow: hidden;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-/* Post Thumbnail */
-.dps-post-thumbnail img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Post Content */
-.dps-post-content {
-    padding: 20px;
-}
-
-.dps-post-title {
-    font-size: 18px;
-    margin-top: 0;
-    margin-bottom: 10px;
-}
-
-.dps-post-title a {
+/* ---------- Read more button ---------- */
+.dpce-carousel .dpce-button {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-top: 10px;
+    background: #1abc9c;
+    color: #fff;
     text-decoration: none;
-    color: #333;
+    border-radius: 3px;
+    transition: opacity .2s ease;
+}
+.dpce-carousel .dpce-button:hover { opacity: .85; color: #fff; }
+
+/* ---------- Title / description ---------- */
+.dpce-carousel .dpce-title { margin: 0 0 8px; font-size: 18px; line-height: 1.3; }
+.dpce-carousel .dpce-title a { text-decoration: none; color: inherit; }
+.dpce-carousel .dpce-desc { margin: 0 0 10px; font-size: 14px; line-height: 1.55; }
+
+/* ---------- Style 1 — Overlay Card ---------- */
+.dpce-style-1 { position: relative; margin: 0; overflow: hidden; }
+.dpce-style-1 .dpce-thumbnail img { width: 100%; height: auto; }
+.dpce-style-1 .dpce-icon {
+    position: absolute;
+    top: 16px; right: 16px;
+    color: #fff;
+    font-size: 20px;
+    opacity: 0; transform: translateY(-6px);
+    transition: opacity .25s ease, transform .25s ease;
+    z-index: 2;
+}
+.dpce-style-1 .dpce-caption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 18px 18px 16px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    transform: translateY(40%);
+    transition: transform .3s ease, background-color .3s ease;
+    z-index: 1;
+}
+.dpce-style-1 .dpce-caption .dpce-title,
+.dpce-style-1 .dpce-caption .dpce-desc { color: #fff; }
+.dpce-style-1:hover .dpce-caption,
+.dpce-style-1:focus-within .dpce-caption { transform: translateY(0); }
+.dpce-style-1:hover .dpce-icon { opacity: 1; transform: translateY(0); }
+.dpce-style-1 .dpce-overlay-link {
+    position: absolute; inset: 0; z-index: 3;
+    text-indent: -9999px; overflow: hidden;
+}
+.dpce-style-1 .dpce-overlay-link:focus { outline: 2px solid #fff; outline-offset: -4px; }
+
+/* ---------- Style 2 — Classic Card ---------- */
+.dpce-style-2 { display: flex; flex-direction: column; height: 100%; }
+.dpce-style-2 .dpce-thumbnail { margin-bottom: 12px; }
+.dpce-style-2 .dpce-body { padding: 0 16px 16px; }
+
+/* ---------- Style 3 — Side Meta ---------- */
+.dpce-style-3 { display: flex; gap: 14px; align-items: stretch; }
+.dpce-style-3 .dpce-side-image { flex: 0 0 40%; max-width: 40%; }
+.dpce-style-3 .dpce-side-content { flex: 1 1 auto; padding: 14px 14px 14px 0; }
+.dpce-style-3 .dpce-meta { font-size: 12px; color: #888; margin-bottom: 6px; }
+@media (max-width: 600px) {
+    .dpce-style-3 { flex-direction: column; }
+    .dpce-style-3 .dpce-side-image { flex-basis: auto; max-width: 100%; }
+    .dpce-style-3 .dpce-side-content { padding: 14px; }
 }
 
-.dps-post-excerpt {
-    font-size: 14px;
-    color: #666;
-    line-height: 1.6;
+/* ---------- Social share ---------- */
+.dpce-share { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.dpce-share .dpce-share-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px; height: 28px; padding: 0 8px;
+    border-radius: 3px;
+    background: #f1f1f1;
+    color: #333;
+    font-size: 12px;
+    text-decoration: none;
+    line-height: 1;
 }
+.dpce-share .dpce-share-link:hover { opacity: .85; }

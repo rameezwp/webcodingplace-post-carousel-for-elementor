@@ -1,0 +1,266 @@
+<?php
+/**
+ * Helper functions.
+ *
+ * @package DPCE
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * Trim a string to a given number of words and append a suffix.
+ *
+ * Falls back gracefully when the source contains HTML.
+ *
+ * @param string $text   Source string.
+ * @param int    $words  Maximum number of words. Use 0 to disable trimming.
+ * @param string $append Suffix appended when text was trimmed.
+ * @return string
+ */
+function dpce_trim_words( $text, $words, $append = '...' ) {
+	$text = (string) $text;
+	$words = (int) $words;
+
+	if ( $words <= 0 || '' === trim( wp_strip_all_tags( $text ) ) ) {
+		return $text;
+	}
+
+	return wp_trim_words( $text, $words, $append );
+}
+
+/**
+ * Get the value of a "field" off a post.
+ *
+ * Built-in identifiers:
+ *  - title
+ *  - excerpt
+ *  - content
+ *  - author
+ *  - date
+ *  - none
+ * Anything else is treated as a meta key.
+ *
+ * @param int    $post_id  Post ID.
+ * @param string $field    Field identifier.
+ * @param string $meta_key Optional meta key when $field === 'meta'.
+ * @return string
+ */
+function dpce_get_field_value( $post_id, $field, $meta_key = '' ) {
+	$post_id = (int) $post_id;
+	$field   = (string) $field;
+
+	if ( ! $post_id ) {
+		return '';
+	}
+
+	switch ( $field ) {
+		case 'title':
+			return get_the_title( $post_id );
+
+		case 'excerpt':
+			$post = get_post( $post_id );
+			if ( ! $post ) {
+				return '';
+			}
+			$excerpt = $post->post_excerpt;
+			if ( '' === trim( $excerpt ) ) {
+				$excerpt = wp_strip_all_tags( strip_shortcodes( $post->post_content ) );
+			}
+			return $excerpt;
+
+		case 'content':
+			$post = get_post( $post_id );
+			return $post ? $post->post_content : '';
+
+		case 'author':
+			$post = get_post( $post_id );
+			return $post ? get_the_author_meta( 'display_name', $post->post_author ) : '';
+
+		case 'date':
+			return get_the_date( '', $post_id );
+
+		case 'none':
+			return '';
+
+		case 'meta':
+			$meta_key = sanitize_key( $meta_key );
+			if ( '' === $meta_key ) {
+				return '';
+			}
+			$value = get_post_meta( $post_id, $meta_key, true );
+			if ( is_array( $value ) || is_object( $value ) ) {
+				return '';
+			}
+			return (string) $value;
+	}
+
+	// Backwards-compat: treat any other value as a meta key directly.
+	$value = get_post_meta( $post_id, sanitize_key( $field ), true );
+	if ( is_array( $value ) || is_object( $value ) ) {
+		return '';
+	}
+	return (string) $value;
+}
+
+/**
+ * Get the list of standard "field" choices used by the meta-key style controls.
+ *
+ * @return array
+ */
+function dpce_get_field_choices() {
+	return apply_filters(
+		'dpce_field_choices',
+		array(
+			'title'   => esc_html__( 'Post Title', 'dynamic-post-carousel-for-elementor' ),
+			'excerpt' => esc_html__( 'Post Excerpt', 'dynamic-post-carousel-for-elementor' ),
+			'content' => esc_html__( 'Post Content', 'dynamic-post-carousel-for-elementor' ),
+			'author'  => esc_html__( 'Author Name', 'dynamic-post-carousel-for-elementor' ),
+			'date'    => esc_html__( 'Post Date', 'dynamic-post-carousel-for-elementor' ),
+			'meta'    => esc_html__( 'Custom Meta Key', 'dynamic-post-carousel-for-elementor' ),
+			'none'    => esc_html__( 'None / Hide', 'dynamic-post-carousel-for-elementor' ),
+		)
+	);
+}
+
+/**
+ * List all public registered post types as id => label.
+ *
+ * @return array
+ */
+function dpce_get_post_types() {
+	$types  = get_post_types( array( 'public' => true ), 'objects' );
+	$result = array();
+	foreach ( $types as $type ) {
+		if ( 'attachment' === $type->name ) {
+			continue;
+		}
+		$result[ $type->name ] = $type->label;
+	}
+	return apply_filters( 'dpce_post_types', $result );
+}
+
+/**
+ * List all public registered taxonomies as id => label.
+ *
+ * @return array
+ */
+function dpce_get_taxonomies() {
+	$taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
+	$result     = array();
+	foreach ( $taxonomies as $tax ) {
+		$result[ $tax->name ] = $tax->label;
+	}
+	return apply_filters( 'dpce_taxonomies', $result );
+}
+
+/**
+ * Get all posts of a given post type as id => title.
+ *
+ * Capped to a sensible limit to avoid memory issues in the editor.
+ *
+ * @param string $post_type Post type slug.
+ * @param int    $limit     Max number of posts to return.
+ * @return array
+ */
+function dpce_get_posts_for_select( $post_type, $limit = 200 ) {
+	$post_type = sanitize_key( $post_type );
+	if ( '' === $post_type ) {
+		return array();
+	}
+
+	$posts = get_posts(
+		array(
+			'post_type'              => $post_type,
+			'post_status'            => 'publish',
+			'posts_per_page'         => (int) $limit,
+			'orderby'                => 'title',
+			'order'                  => 'ASC',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+			'suppress_filters'       => true,
+		)
+	);
+
+	$result = array();
+	foreach ( $posts as $post ) {
+		$result[ $post->ID ] = $post->post_title ? $post->post_title : '#' . $post->ID;
+	}
+	return $result;
+}
+
+/**
+ * Get all terms of a given taxonomy as id => name.
+ *
+ * @param string $taxonomy Taxonomy slug.
+ * @param int    $limit    Max terms to return.
+ * @return array
+ */
+function dpce_get_terms_for_select( $taxonomy, $limit = 500 ) {
+	$taxonomy = sanitize_key( $taxonomy );
+	if ( '' === $taxonomy || ! taxonomy_exists( $taxonomy ) ) {
+		return array();
+	}
+
+	$terms = get_terms(
+		array(
+			'taxonomy'   => $taxonomy,
+			'hide_empty' => false,
+			'number'     => (int) $limit,
+		)
+	);
+
+	if ( is_wp_error( $terms ) ) {
+		return array();
+	}
+
+	$result = array();
+	foreach ( $terms as $term ) {
+		$result[ $term->term_id ] = $term->name;
+	}
+	return $result;
+}
+
+/**
+ * List registered image sizes as slug => label.
+ *
+ * @return array
+ */
+function dpce_get_image_sizes() {
+	$sizes = array(
+		'thumbnail' => esc_html__( 'Thumbnail', 'dynamic-post-carousel-for-elementor' ),
+		'medium'    => esc_html__( 'Medium', 'dynamic-post-carousel-for-elementor' ),
+		'large'     => esc_html__( 'Large', 'dynamic-post-carousel-for-elementor' ),
+		'full'      => esc_html__( 'Full', 'dynamic-post-carousel-for-elementor' ),
+	);
+
+	$additional = wp_get_additional_image_sizes();
+	if ( is_array( $additional ) ) {
+		foreach ( array_keys( $additional ) as $size ) {
+			$sizes[ $size ] = $size;
+		}
+	}
+
+	return apply_filters( 'dpce_image_sizes', $sizes );
+}
+
+/**
+ * Convert comma/space separated IDs to a clean array of positive integers.
+ *
+ * @param string $value Raw input.
+ * @return int[]
+ */
+function dpce_parse_id_list( $value ) {
+	if ( is_array( $value ) ) {
+		$value = implode( ',', $value );
+	}
+	$value = (string) $value;
+	if ( '' === trim( $value ) ) {
+		return array();
+	}
+	$ids = preg_split( '/[\s,]+/', $value );
+	$ids = array_filter( array_map( 'absint', (array) $ids ) );
+	return array_values( array_unique( $ids ) );
+}
