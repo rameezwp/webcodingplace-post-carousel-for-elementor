@@ -14,6 +14,13 @@
     overflow: hidden;
     height: 100%;
 }
+/* Equal-height cards: once Slick wraps slides in .slick-track,
+   flex it so all .dpce-slide-inner stretch to the tallest card. */
+.dpce-carousel .slick-track { display: flex; align-items: stretch; }
+.dpce-carousel .slick-slide { height: auto; }
+.dpce-carousel .slick-slide > div,
+.dpce-carousel .dpce-slide { height: 100%; display: flex; }
+.dpce-carousel .dpce-slide-inner { width: 100%; }
 .dpce-carousel img { max-width: 100%; height: auto; display: block; }
 
 /* ---------- Slick overrides ---------- */
@@ -49,6 +56,89 @@
 .dpce-arrows-square .slick-next { border-radius: 0; }
 .dpce-arrows-circle .slick-prev,
 .dpce-arrows-circle .slick-next { border-radius: 50%; }
+
+/* Arrow position variants
+   Default (no class) keeps slick's vertically centered side arrows.        */
+
+/* Center (sides) — explicit reset in case another class was applied. */
+.dpce-arrows-pos-center .slick-prev {
+    top: 50%; bottom: auto;
+    left: 8px; right: auto;
+    transform: translateY(-50%);
+}
+.dpce-arrows-pos-center .slick-next {
+    top: 50%; bottom: auto;
+    right: 8px; left: auto;
+    transform: translateY(-50%);
+}
+
+/* Top Left — both arrows grouped at top-left. */
+.dpce-arrows-pos-top-left .slick-prev,
+.dpce-arrows-pos-top-left .slick-next {
+    top: -52px; bottom: auto;
+    transform: none;
+}
+.dpce-arrows-pos-top-left .slick-prev { left: 0; right: auto; }
+.dpce-arrows-pos-top-left .slick-next { left: 48px; right: auto; }
+
+/* Top Right — both arrows grouped at top-right. */
+.dpce-arrows-pos-top-right .slick-prev,
+.dpce-arrows-pos-top-right .slick-next {
+    top: -52px; bottom: auto;
+    transform: none;
+}
+.dpce-arrows-pos-top-right .slick-prev { right: 48px; left: auto; }
+.dpce-arrows-pos-top-right .slick-next { right: 0; left: auto; }
+
+/* Top Center — both arrows centered above the carousel. */
+.dpce-arrows-pos-top-center .slick-prev,
+.dpce-arrows-pos-top-center .slick-next {
+    top: -52px; bottom: auto;
+    transform: none;
+}
+.dpce-arrows-pos-top-center .slick-prev { left: calc(50% - 48px); right: auto; }
+.dpce-arrows-pos-top-center .slick-next { left: calc(50% + 8px); right: auto; }
+
+/* Bottom Left — both arrows grouped below at left.
+   Adds top margin to the wrapper so arrows don't collide with dots. */
+.dpce-arrows-pos-bottom-left .slick-prev,
+.dpce-arrows-pos-bottom-left .slick-next {
+    top: auto; bottom: -52px;
+    transform: none;
+}
+.dpce-arrows-pos-bottom-left .slick-prev { left: 0; right: auto; }
+.dpce-arrows-pos-bottom-left .slick-next { left: 48px; right: auto; }
+
+/* Bottom Right. */
+.dpce-arrows-pos-bottom-right .slick-prev,
+.dpce-arrows-pos-bottom-right .slick-next {
+    top: auto; bottom: -52px;
+    transform: none;
+}
+.dpce-arrows-pos-bottom-right .slick-prev { right: 48px; left: auto; }
+.dpce-arrows-pos-bottom-right .slick-next { right: 0; left: auto; }
+
+/* Bottom Center. */
+.dpce-arrows-pos-bottom-center .slick-prev,
+.dpce-arrows-pos-bottom-center .slick-next {
+    top: auto; bottom: -52px;
+    transform: none;
+}
+.dpce-arrows-pos-bottom-center .slick-prev { left: calc(50% - 48px); right: auto; }
+.dpce-arrows-pos-bottom-center .slick-next { left: calc(50% + 8px); right: auto; }
+
+/* Reserve space when arrows sit outside the track so they don't overlap content. */
+.dpce-carousel.dpce-arrows-pos-top-left,
+.dpce-carousel.dpce-arrows-pos-top-right,
+.dpce-carousel.dpce-arrows-pos-top-center { padding-top: 60px; }
+.dpce-carousel.dpce-arrows-pos-bottom-left,
+.dpce-carousel.dpce-arrows-pos-bottom-right,
+.dpce-carousel.dpce-arrows-pos-bottom-center { padding-bottom: 60px; }
+
+/* When dots also show below, push arrows above them. */
+.dpce-carousel.dpce-arrows-pos-bottom-left .slick-dots,
+.dpce-carousel.dpce-arrows-pos-bottom-right .slick-dots,
+.dpce-carousel.dpce-arrows-pos-bottom-center .slick-dots { bottom: -42px; }
 
 /* Dot style variants */
 .dpce-dots-square .slick-dots li button:before {

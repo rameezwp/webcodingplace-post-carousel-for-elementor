@@ -518,6 +518,24 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			)
 		);
 		$this->add_control(
+			'arrows_position',
+			array(
+				'label'     => esc_html__( 'Arrows Position', 'dynamic-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'center',
+				'options'   => array(
+					'center'       => esc_html__( 'Center (Sides)', 'dynamic-post-carousel-for-elementor' ),
+					'top-left'     => esc_html__( 'Top Left', 'dynamic-post-carousel-for-elementor' ),
+					'top-right'    => esc_html__( 'Top Right', 'dynamic-post-carousel-for-elementor' ),
+					'top-center'   => esc_html__( 'Top Center', 'dynamic-post-carousel-for-elementor' ),
+					'bottom-left'  => esc_html__( 'Bottom Left', 'dynamic-post-carousel-for-elementor' ),
+					'bottom-right' => esc_html__( 'Bottom Right', 'dynamic-post-carousel-for-elementor' ),
+					'bottom-center' => esc_html__( 'Bottom Center', 'dynamic-post-carousel-for-elementor' ),
+				),
+				'condition' => array( 'arrows' => 'yes' ),
+			)
+		);
+		$this->add_control(
 			'rtl',
 			array(
 				'label'        => esc_html__( 'RTL Mode', 'dynamic-post-carousel-for-elementor' ),
@@ -924,6 +942,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			'dpce-carousel',
 			'dpce-style-' . sanitize_html_class( $style_id ),
 			'dpce-arrows-' . sanitize_html_class( isset( $settings['arrows_style'] ) ? $settings['arrows_style'] : 'chevron' ),
+			'dpce-arrows-pos-' . sanitize_html_class( isset( $settings['arrows_position'] ) ? $settings['arrows_position'] : 'center' ),
 			'dpce-dots-' . sanitize_html_class( isset( $settings['dots_icon'] ) ? $settings['dots_icon'] : 'circle' ),
 		);
 
