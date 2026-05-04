@@ -1,0 +1,73 @@
+/* Slider Wrapper */
+.dps-post-slider-wrapper {
+    position: relative;
+    padding: 0 30px; /* Space for arrows */
+}
+
+/* Slick Slider Custom Arrows */
+.dps-post-slider-wrapper .slick-prev,
+.dps-post-slider-wrapper .slick-next {
+    width: 40px;
+    height: 40px;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+}
+.dps-post-slider-wrapper .slick-prev:before,
+.dps-post-slider-wrapper .slick-next:before {
+    font-size: 20px;
+    color: #fff;
+    opacity: 1;
+}
+.dps-post-slider-wrapper .slick-prev {
+    left: -15px;
+}
+.dps-post-slider-wrapper .slick-next {
+    right: -15px;
+}
+.dps-post-slider-wrapper .slick-prev:hover,
+.dps-post-slider-wrapper .slick-next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Individual Slide Styling */
+.dps-slide {
+    padding: 0 15px; /* Gutter between slides */
+}
+
+.dps-slide-inner {
+    border: 1px solid #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Post Thumbnail */
+.dps-post-thumbnail img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Post Content */
+.dps-post-content {
+    padding: 20px;
+}
+
+.dps-post-title {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.dps-post-title a {
+    text-decoration: none;
+    color: #333;
+}
+
+.dps-post-excerpt {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
