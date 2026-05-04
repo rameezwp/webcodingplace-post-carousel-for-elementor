@@ -3,7 +3,7 @@
  * Plugin Name:       Dynamic Post Carousel for Elementor
  * Description:       Display posts, custom post types or taxonomy terms in a beautiful, fully responsive Slick-powered carousel widget for Elementor with 50+ ready-made templates.
  * Plugin URI:        https://webcodingplace.com/dynamic-post-carousel-for-elementor
- * Version:           1.0.0
+ * Version:           1.0
  * Author:            WebCodingPlace
  * Author URI:        https://webcodingplace.com/
  * License:           GPL-2.0-or-later
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'DPCE_VERSION' ) ) {
-	define( 'DPCE_VERSION', '1.0.0' );
+	define( 'DPCE_VERSION', '1.0' );
 }
 if ( ! defined( 'DPCE_FILE' ) ) {
 	define( 'DPCE_FILE', __FILE__ );
@@ -75,15 +75,7 @@ final class DPCE_Plugin {
 	 * Constructor.
 	 */
 	private function __construct() {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'plugins_loaded', array( $this, 'init' ) );
-	}
-
-	/**
-	 * Load translations.
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain( 'dynamic-post-carousel-for-elementor', false, dirname( plugin_basename( DPCE_FILE ) ) . '/languages' );
 	}
 
 	/**

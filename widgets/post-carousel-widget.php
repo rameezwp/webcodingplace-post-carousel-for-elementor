@@ -71,7 +71,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * @return array
 	 */
 	public function get_style_depends() {
-		return array( 'dpce-slick', 'dpce-frontend' );
+		return array( 'dpce-slick', 'dpce-frontend', 'dpce-slick-theme' );
 	}
 
 	/**

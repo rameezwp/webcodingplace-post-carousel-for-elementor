@@ -2,9 +2,9 @@
 Contributors: webcodingplace
 Tags: elementor, carousel, slider, posts, slick
 Requires at least: 5.6
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,14 +37,6 @@ Templates fire action hooks (`dpce_carousel_thumbnail`, `dpce_carousel_title`, `
 2. Activate **Dynamic Post Carousel for Elementor** through the *Plugins* menu in WordPress.
 3. Edit any page with Elementor and search for **Dynamic Post Carousel** in the widget panel.
 
-= Required vendor files =
-
-This plugin uses Slick Carousel for the slider. Place the official Slick distribution files at:
-
-* `assets/vendor/slick/slick.min.js`
-* `assets/vendor/slick/slick.css`
-* `assets/vendor/slick/slick-theme.css` (optional)
-
 == Frequently Asked Questions ==
 
 = Does this plugin require Elementor Pro? =
@@ -57,10 +49,5 @@ Yes. Hook into the `dpce_styles` filter to register a new style, then add a `tem
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0 =
 * Initial release.
-
-== Upgrade Notice ==
-
-= 1.0.0 =
-Initial release.
