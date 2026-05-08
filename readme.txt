@@ -1,4 +1,4 @@
-=== Dynamic Post Carousel for Elementor ===
+=== WCP Post Carousel for Elementor ===
 Contributors: webcodingplace
 Tags: elementor, carousel, slider, posts, slick
 Requires at least: 5.6
@@ -12,7 +12,7 @@ Display posts, custom post types or taxonomy terms in a beautiful, fully respons
 
 == Description ==
 
-Dynamic Post Carousel for Elementor adds a single, deeply configurable carousel widget that lets you slide any post type — including WooCommerce products, portfolios, events, custom post types and taxonomy terms — through ready-made templates. Pick a heading source from any post field or meta key, trim it to a word count, swap the read-more text and target, choose your image size, lazy-load thumbnails, enable social sharing and apply your own CSS, all from the Elementor editor.
+WCP Post Carousel for Elementor adds a single, deeply configurable carousel widget that lets you slide any post type — including WooCommerce products, portfolios, events, custom post types and taxonomy terms — through ready-made templates. Pick a heading source from any post field or meta key, trim it to a word count, swap the read-more text and target, choose your image size, lazy-load thumbnails, enable social sharing and apply your own CSS, all from the Elementor editor.
 
 = Highlights =
 
@@ -29,13 +29,13 @@ Dynamic Post Carousel for Elementor adds a single, deeply configurable carousel 
 
 = Developers =
 
-Templates fire action hooks (`dpce_carousel_thumbnail`, `dpce_carousel_title`, `dpce_carousel_desc`, `dpce_carousel_read_more`, `dpce_carousel_meta`, `dpce_carousel_share`) so you can override individual pieces without forking. Drop a `dynamic-post-carousel-for-elementor/style-{id}.php` file into your theme to override a bundled template.
+Templates fire action hooks (`dpce_carousel_thumbnail`, `dpce_carousel_title`, `dpce_carousel_desc`, `dpce_carousel_read_more`, `dpce_carousel_meta`, `dpce_carousel_share`) so you can override individual pieces without forking. Drop a `wcp-post-carousel-for-elementor/style-{id}.php` file into your theme to override a bundled template.
 
 == Installation ==
 
 1. Upload the plugin folder to `/wp-content/plugins/`.
-2. Activate **Dynamic Post Carousel for Elementor** through the *Plugins* menu in WordPress.
-3. Edit any page with Elementor and search for **Dynamic Post Carousel** in the widget panel.
+2. Activate **WCP Post Carousel for Elementor** through the *Plugins* menu in WordPress.
+3. Edit any page with Elementor and search for **WCP Post Carousel** in the widget panel.
 
 == Frequently Asked Questions ==
 
@@ -46,6 +46,55 @@ No. It works with the free Elementor plugin (3.0 or newer).
 = Can I add my own templates? =
 
 Yes. Hook into the `dpce_styles` filter to register a new style, then add a `templates/style-{id}.php` file (or override one from your theme).
+
+= Is this plugin affiliated with Elementor? =
+
+No. WCP Post Carousel for Elementor is an independent plugin developed by WebCodingPlace. It is built to work with the Elementor page builder but is not affiliated with, sponsored by, or endorsed by Elementor Ltd. "Elementor" is a trademark of Elementor Ltd.
+
+== External services ==
+
+This plugin generates outbound share URLs for the optional **Social Sharing** feature in the carousel widget. When the *Enable Social Sharing* setting is turned on (it is OFF by default), the carousel renders a row of links that point to the share endpoints listed below. **No data is sent automatically.** Data is only transmitted to a third party when an end-user clicks one of those share links in their browser, and the only data appended to the URL is the post's public permalink and post title.
+
+= Facebook =
+Used to let visitors share a post on Facebook.
+Endpoint: https://www.facebook.com/sharer/sharer.php
+Data sent on click: post URL.
+Terms of service: https://www.facebook.com/legal/terms
+Privacy policy: https://www.facebook.com/privacy/policy
+
+= X (Twitter) =
+Used to let visitors share a post on X.
+Endpoint: https://twitter.com/intent/tweet
+Data sent on click: post URL, post title.
+Terms of service: https://twitter.com/en/tos
+Privacy policy: https://twitter.com/en/privacy
+
+= LinkedIn =
+Used to let visitors share a post on LinkedIn.
+Endpoint: https://www.linkedin.com/sharing/share-offsite/
+Data sent on click: post URL.
+Terms of service: https://www.linkedin.com/legal/user-agreement
+Privacy policy: https://www.linkedin.com/legal/privacy-policy
+
+= WhatsApp =
+Used to let visitors share a post on WhatsApp.
+Endpoint: https://api.whatsapp.com/send
+Data sent on click: post URL, post title.
+Terms of service: https://www.whatsapp.com/legal/terms-of-service
+Privacy policy: https://www.whatsapp.com/legal/privacy-policy
+
+= Pinterest =
+Used to let visitors pin a post on Pinterest.
+Endpoint: https://pinterest.com/pin/create/button/
+Data sent on click: post URL, post title.
+Terms of service: https://policy.pinterest.com/en/terms-of-service
+Privacy policy: https://policy.pinterest.com/en/privacy-policy
+
+The Email option uses a standard `mailto:` link handled by the visitor's local email client and does not contact any third-party server.
+
+== Third-party libraries ==
+
+This plugin bundles **Slick Carousel** (https://kenwheeler.github.io/slick/) by Ken Wheeler, distributed under the MIT license. Files are loaded locally from `assets/vendor/slick/` and no remote requests are made.
 
 == Changelog ==
 

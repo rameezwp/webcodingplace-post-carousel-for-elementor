@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: Dynamic Post Carousel for Elementor\n"
+"Project-Id-Version: WCP Post Carousel for Elementor\n"
 "POT-Creation-Date: 2026-05-04 13:25+0500\n"
 "PO-Revision-Date: 2026-05-04 13:25+0500\n"
 "Last-Translator: \n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Generator: Poedit 2.4.3\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: dynamic-post-carousel-for-elementor.php\n"
+"X-Poedit-WPHeader: wcp-post-carousel-for-elementor.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
@@ -22,31 +22,31 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
 #. translators: 1: plugin name, 2: required plugin name
-#: dynamic-post-carousel-for-elementor.php:194
+#: wcp-post-carousel-for-elementor.php:194
 #, php-format
 msgid "\"%1$s\" requires \"%2$s\" to be installed and active."
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-#: dynamic-post-carousel-for-elementor.php:195
-#: dynamic-post-carousel-for-elementor.php:211
-#: dynamic-post-carousel-for-elementor.php:228
-msgid "Dynamic Post Carousel for Elementor"
+#: wcp-post-carousel-for-elementor.php:195
+#: wcp-post-carousel-for-elementor.php:211
+#: wcp-post-carousel-for-elementor.php:228
+msgid "WCP Post Carousel for Elementor"
 msgstr ""
 
-#: dynamic-post-carousel-for-elementor.php:196
-#: dynamic-post-carousel-for-elementor.php:212
+#: wcp-post-carousel-for-elementor.php:196
+#: wcp-post-carousel-for-elementor.php:212
 msgid "Elementor"
 msgstr ""
 
 #. translators: 1: plugin name, 2: required plugin name, 3: minimum version
-#: dynamic-post-carousel-for-elementor.php:210
+#: wcp-post-carousel-for-elementor.php:210
 #, php-format
 msgid "\"%1$s\" requires \"%2$s\" version %3$s or greater."
 msgstr ""
 
 #. translators: 1: plugin name, 2: required PHP version
-#: dynamic-post-carousel-for-elementor.php:227
+#: wcp-post-carousel-for-elementor.php:227
 #, php-format
 msgid "\"%1$s\" requires PHP version %2$s or greater."
 msgstr ""
@@ -148,7 +148,7 @@ msgid "Full"
 msgstr ""
 
 #: widgets/post-carousel-widget.php:38
-msgid "Dynamic Post Carousel"
+msgid "WCP Post Carousel"
 msgstr ""
 
 #: widgets/post-carousel-widget.php:103
@@ -504,7 +504,7 @@ msgid "No posts match the current settings."
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://webcodingplace.com/dynamic-post-carousel-for-elementor"
+msgid "https://webcodingplace.com/wcp-post-carousel-for-elementor"
 msgstr ""
 
 #. Description of the plugin/theme

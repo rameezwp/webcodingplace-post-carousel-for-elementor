@@ -113,13 +113,13 @@ function dpce_get_field_choices() {
 	return apply_filters(
 		'dpce_field_choices',
 		array(
-			'title'   => esc_html__( 'Post Title', 'dynamic-post-carousel-for-elementor' ),
-			'excerpt' => esc_html__( 'Post Excerpt', 'dynamic-post-carousel-for-elementor' ),
-			'content' => esc_html__( 'Post Content', 'dynamic-post-carousel-for-elementor' ),
-			'author'  => esc_html__( 'Author Name', 'dynamic-post-carousel-for-elementor' ),
-			'date'    => esc_html__( 'Post Date', 'dynamic-post-carousel-for-elementor' ),
-			'meta'    => esc_html__( 'Custom Meta Key', 'dynamic-post-carousel-for-elementor' ),
-			'none'    => esc_html__( 'None / Hide', 'dynamic-post-carousel-for-elementor' ),
+			'title'   => esc_html__( 'Post Title', 'wcp-post-carousel-for-elementor' ),
+			'excerpt' => esc_html__( 'Post Excerpt', 'wcp-post-carousel-for-elementor' ),
+			'content' => esc_html__( 'Post Content', 'wcp-post-carousel-for-elementor' ),
+			'author'  => esc_html__( 'Author Name', 'wcp-post-carousel-for-elementor' ),
+			'date'    => esc_html__( 'Post Date', 'wcp-post-carousel-for-elementor' ),
+			'meta'    => esc_html__( 'Custom Meta Key', 'wcp-post-carousel-for-elementor' ),
+			'none'    => esc_html__( 'None / Hide', 'wcp-post-carousel-for-elementor' ),
 		)
 	);
 }
@@ -230,10 +230,10 @@ function dpce_get_terms_for_select( $taxonomy, $limit = 500 ) {
  */
 function dpce_get_image_sizes() {
 	$sizes = array(
-		'thumbnail' => esc_html__( 'Thumbnail', 'dynamic-post-carousel-for-elementor' ),
-		'medium'    => esc_html__( 'Medium', 'dynamic-post-carousel-for-elementor' ),
-		'large'     => esc_html__( 'Large', 'dynamic-post-carousel-for-elementor' ),
-		'full'      => esc_html__( 'Full', 'dynamic-post-carousel-for-elementor' ),
+		'thumbnail' => esc_html__( 'Thumbnail', 'wcp-post-carousel-for-elementor' ),
+		'medium'    => esc_html__( 'Medium', 'wcp-post-carousel-for-elementor' ),
+		'large'     => esc_html__( 'Large', 'wcp-post-carousel-for-elementor' ),
+		'full'      => esc_html__( 'Full', 'wcp-post-carousel-for-elementor' ),
 	);
 
 	$additional = wp_get_additional_image_sizes();
