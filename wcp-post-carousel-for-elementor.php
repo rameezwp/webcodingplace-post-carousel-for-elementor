@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name:       Dynamic Post Carousel for Elementor
+ * Plugin Name:       WCP Post Carousel for Elementor
  * Description:       Display posts, custom post types or taxonomy terms in a beautiful, fully responsive Slick-powered carousel widget for Elementor with 50+ ready-made templates.
- * Plugin URI:        https://webcodingplace.com/dynamic-post-carousel-for-elementor
+ * Plugin URI:        https://webcodingplace.com/wcp-post-carousel-for-elementor
  * Version:           1.0
  * Author:            WebCodingPlace
  * Author URI:        https://webcodingplace.com/
  * License:           GPL-2.0-or-later
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       dynamic-post-carousel-for-elementor
+ * Text Domain:       wcp-post-carousel-for-elementor
  * Domain Path:       /languages
  * Requires at least: 5.6
  * Requires PHP:      7.0
@@ -183,9 +183,9 @@ final class DPCE_Plugin {
 		}
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required plugin name */
-			esc_html__( '"%1$s" requires "%2$s" to be installed and active.', 'dynamic-post-carousel-for-elementor' ),
-			'<strong>' . esc_html__( 'Dynamic Post Carousel for Elementor', 'dynamic-post-carousel-for-elementor' ) . '</strong>',
-			'<strong>' . esc_html__( 'Elementor', 'dynamic-post-carousel-for-elementor' ) . '</strong>'
+			esc_html__( '"%1$s" requires "%2$s" to be installed and active.', 'wcp-post-carousel-for-elementor' ),
+			'<strong>' . esc_html__( 'WCP Post Carousel for Elementor', 'wcp-post-carousel-for-elementor' ) . '</strong>',
+			'<strong>' . esc_html__( 'Elementor', 'wcp-post-carousel-for-elementor' ) . '</strong>'
 		);
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', wp_kses_post( $message ) );
 	}
@@ -199,9 +199,9 @@ final class DPCE_Plugin {
 		}
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required plugin name, 3: minimum version */
-			esc_html__( '"%1$s" requires "%2$s" version %3$s or greater.', 'dynamic-post-carousel-for-elementor' ),
-			'<strong>' . esc_html__( 'Dynamic Post Carousel for Elementor', 'dynamic-post-carousel-for-elementor' ) . '</strong>',
-			'<strong>' . esc_html__( 'Elementor', 'dynamic-post-carousel-for-elementor' ) . '</strong>',
+			esc_html__( '"%1$s" requires "%2$s" version %3$s or greater.', 'wcp-post-carousel-for-elementor' ),
+			'<strong>' . esc_html__( 'WCP Post Carousel for Elementor', 'wcp-post-carousel-for-elementor' ) . '</strong>',
+			'<strong>' . esc_html__( 'Elementor', 'wcp-post-carousel-for-elementor' ) . '</strong>',
 			DPCE_MIN_ELEMENTOR_VERSION
 		);
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', wp_kses_post( $message ) );
@@ -216,8 +216,8 @@ final class DPCE_Plugin {
 		}
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required PHP version */
-			esc_html__( '"%1$s" requires PHP version %2$s or greater.', 'dynamic-post-carousel-for-elementor' ),
-			'<strong>' . esc_html__( 'Dynamic Post Carousel for Elementor', 'dynamic-post-carousel-for-elementor' ) . '</strong>',
+			esc_html__( '"%1$s" requires PHP version %2$s or greater.', 'wcp-post-carousel-for-elementor' ),
+			'<strong>' . esc_html__( 'WCP Post Carousel for Elementor', 'wcp-post-carousel-for-elementor' ) . '</strong>',
 			DPCE_MIN_PHP_VERSION
 		);
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', wp_kses_post( $message ) );
