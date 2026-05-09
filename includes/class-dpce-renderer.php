@@ -201,12 +201,12 @@ class DPCE_Renderer {
 		);
 
 		$labels = array(
-			'facebook'  => __( 'Share on Facebook', 'wcp-post-carousel-for-elementor' ),
-			'twitter'   => __( 'Share on Twitter', 'wcp-post-carousel-for-elementor' ),
-			'linkedin'  => __( 'Share on LinkedIn', 'wcp-post-carousel-for-elementor' ),
-			'whatsapp'  => __( 'Share on WhatsApp', 'wcp-post-carousel-for-elementor' ),
-			'pinterest' => __( 'Share on Pinterest', 'wcp-post-carousel-for-elementor' ),
-			'email'     => __( 'Share by Email', 'wcp-post-carousel-for-elementor' ),
+			'facebook'  => __( 'Share on Facebook', 'webcodingplace-post-carousel-for-elementor' ),
+			'twitter'   => __( 'Share on Twitter', 'webcodingplace-post-carousel-for-elementor' ),
+			'linkedin'  => __( 'Share on LinkedIn', 'webcodingplace-post-carousel-for-elementor' ),
+			'whatsapp'  => __( 'Share on WhatsApp', 'webcodingplace-post-carousel-for-elementor' ),
+			'pinterest' => __( 'Share on Pinterest', 'webcodingplace-post-carousel-for-elementor' ),
+			'email'     => __( 'Share by Email', 'webcodingplace-post-carousel-for-elementor' ),
 		);
 
 		echo '<div class="dpce-share">';

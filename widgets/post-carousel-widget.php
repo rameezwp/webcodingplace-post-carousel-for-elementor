@@ -1,6 +1,6 @@
 <?php
 /**
- * Elementor widget: WCP Post Carousel.
+ * Elementor widget: WebCodingPlace Post Carousel.
  *
  * @package DPCE
  */
@@ -35,7 +35,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * @return string
 	 */
 	public function get_title() {
-		return esc_html__( 'WCP Post Carousel', 'wcp-post-carousel-for-elementor' );
+		return esc_html__( 'WebCodingPlace Post Carousel', 'webcodingplace-post-carousel-for-elementor' );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_post',
 			array(
-				'label' => esc_html__( 'Post / Content', 'wcp-post-carousel-for-elementor' ),
+				'label' => esc_html__( 'Post / Content', 'webcodingplace-post-carousel-for-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			)
 		);
@@ -108,12 +108,12 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'display_by',
 			array(
-				'label'   => esc_html__( 'Display By', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Display By', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'post_type',
 				'options' => array(
-					'post_type' => esc_html__( 'Post Type', 'wcp-post-carousel-for-elementor' ),
-					'taxonomy'  => esc_html__( 'Taxonomy', 'wcp-post-carousel-for-elementor' ),
+					'post_type' => esc_html__( 'Post Type', 'webcodingplace-post-carousel-for-elementor' ),
+					'taxonomy'  => esc_html__( 'Taxonomy', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 			)
 		);
@@ -122,7 +122,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'post_type',
 			array(
-				'label'     => esc_html__( 'Choose Post Type', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Choose Post Type', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'post',
 				'options'   => dpce_get_post_types(),
@@ -136,8 +136,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'posts__' . $pt_slug,
 				array(
 					/* translators: %s: post type label */
-					'label'       => sprintf( esc_html__( 'Select %s', 'wcp-post-carousel-for-elementor' ), $pt_label ),
-					'description' => esc_html__( 'Leave empty to include all.', 'wcp-post-carousel-for-elementor' ),
+					'label'       => sprintf( esc_html__( 'Select %s', 'webcodingplace-post-carousel-for-elementor' ), $pt_label ),
+					'description' => esc_html__( 'Leave empty to include all.', 'webcodingplace-post-carousel-for-elementor' ),
 					'type'        => Controls_Manager::SELECT2,
 					'multiple'    => true,
 					'label_block' => true,
@@ -154,7 +154,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'taxonomy',
 			array(
-				'label'     => esc_html__( 'Choose Taxonomy', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Choose Taxonomy', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'category',
 				'options'   => dpce_get_taxonomies(),
@@ -168,7 +168,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'terms__' . $tax_slug,
 				array(
 					/* translators: %s: taxonomy label */
-					'label'       => sprintf( esc_html__( 'Select %s Terms', 'wcp-post-carousel-for-elementor' ), $tax_label ),
+					'label'       => sprintf( esc_html__( 'Select %s Terms', 'webcodingplace-post-carousel-for-elementor' ), $tax_label ),
 					'type'        => Controls_Manager::SELECT2,
 					'multiple'    => true,
 					'label_block' => true,
@@ -184,7 +184,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'posts_per_page',
 			array(
-				'label'   => esc_html__( 'Number of Posts', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Number of Posts', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 8,
 				'min'     => -1,
@@ -195,15 +195,15 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'orderby',
 			array(
-				'label'   => esc_html__( 'Order By', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Order By', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'date',
 				'options' => array(
-					'date'       => esc_html__( 'Date', 'wcp-post-carousel-for-elementor' ),
-					'title'      => esc_html__( 'Title', 'wcp-post-carousel-for-elementor' ),
-					'menu_order' => esc_html__( 'Menu Order', 'wcp-post-carousel-for-elementor' ),
-					'rand'       => esc_html__( 'Random', 'wcp-post-carousel-for-elementor' ),
-					'comment_count' => esc_html__( 'Comment Count', 'wcp-post-carousel-for-elementor' ),
+					'date'       => esc_html__( 'Date', 'webcodingplace-post-carousel-for-elementor' ),
+					'title'      => esc_html__( 'Title', 'webcodingplace-post-carousel-for-elementor' ),
+					'menu_order' => esc_html__( 'Menu Order', 'webcodingplace-post-carousel-for-elementor' ),
+					'rand'       => esc_html__( 'Random', 'webcodingplace-post-carousel-for-elementor' ),
+					'comment_count' => esc_html__( 'Comment Count', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 			)
 		);
@@ -211,12 +211,12 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'order',
 			array(
-				'label'   => esc_html__( 'Order', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Order', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'DESC',
 				'options' => array(
-					'DESC' => esc_html__( 'Descending', 'wcp-post-carousel-for-elementor' ),
-					'ASC'  => esc_html__( 'Ascending', 'wcp-post-carousel-for-elementor' ),
+					'DESC' => esc_html__( 'Descending', 'webcodingplace-post-carousel-for-elementor' ),
+					'ASC'  => esc_html__( 'Ascending', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 			)
 		);
@@ -225,9 +225,9 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'exclude_ids',
 			array(
-				'label'       => esc_html__( 'Exclude Post IDs', 'wcp-post-carousel-for-elementor' ),
+				'label'       => esc_html__( 'Exclude Post IDs', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'        => Controls_Manager::TEXT,
-				'description' => esc_html__( 'Comma-separated list of post IDs to exclude.', 'wcp-post-carousel-for-elementor' ),
+				'description' => esc_html__( 'Comma-separated list of post IDs to exclude.', 'webcodingplace-post-carousel-for-elementor' ),
 				'placeholder' => '12, 34, 56',
 			)
 		);
@@ -236,7 +236,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'heading_field',
 			array(
-				'label'   => esc_html__( 'Heading Source', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Heading Source', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'title',
 				'options' => dpce_get_field_choices(),
@@ -246,7 +246,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'heading_meta_key',
 			array(
-				'label'       => esc_html__( 'Heading Meta Key', 'wcp-post-carousel-for-elementor' ),
+				'label'       => esc_html__( 'Heading Meta Key', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'placeholder' => 'my_meta_key',
 				'condition'   => array( 'heading_field' => 'meta' ),
@@ -256,7 +256,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'heading_max_words',
 			array(
-				'label'   => esc_html__( 'Heading Max Words', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Heading Max Words', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 0,
 				'min'     => 0,
@@ -268,7 +268,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'desc_field',
 			array(
-				'label'   => esc_html__( 'Description Source', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Description Source', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'excerpt',
 				'options' => dpce_get_field_choices(),
@@ -278,7 +278,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'desc_meta_key',
 			array(
-				'label'       => esc_html__( 'Description Meta Key', 'wcp-post-carousel-for-elementor' ),
+				'label'       => esc_html__( 'Description Meta Key', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'placeholder' => 'my_meta_key',
 				'condition'   => array( 'desc_field' => 'meta' ),
@@ -288,7 +288,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'desc_max_words',
 			array(
-				'label'   => esc_html__( 'Description Max Words', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Description Max Words', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 20,
 				'min'     => 0,
@@ -300,7 +300,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'trim_append',
 			array(
-				'label'   => esc_html__( 'Append to Trimmed Text', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Append to Trimmed Text', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::TEXT,
 				'default' => '...',
 			)
@@ -310,10 +310,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'desc_render_shortcodes',
 			array(
-				'label'        => esc_html__( 'Render Shortcodes / HTML in Description', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Render Shortcodes / HTML in Description', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'wcp-post-carousel-for-elementor' ),
-				'label_off'    => esc_html__( 'No', 'wcp-post-carousel-for-elementor' ),
+				'label_on'     => esc_html__( 'Yes', 'webcodingplace-post-carousel-for-elementor' ),
+				'label_off'    => esc_html__( 'No', 'webcodingplace-post-carousel-for-elementor' ),
 				'return_value' => 'yes',
 				'default'      => '',
 				'condition'    => array( 'desc_field!' => array( 'title', 'date', 'author', 'none' ) ),
@@ -324,16 +324,16 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'read_more_txt',
 			array(
-				'label'   => esc_html__( 'Read More Button Text', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Read More Button Text', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::TEXT,
-				'default' => esc_html__( 'Read More', 'wcp-post-carousel-for-elementor' ),
+				'default' => esc_html__( 'Read More', 'webcodingplace-post-carousel-for-elementor' ),
 			)
 		);
 
 		$this->add_control(
 			'read_more_classes',
 			array(
-				'label'       => esc_html__( 'Read More Extra CSS Classes', 'wcp-post-carousel-for-elementor' ),
+				'label'       => esc_html__( 'Read More Extra CSS Classes', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => 'dpce-button',
 				'placeholder' => 'dpce-button my-class',
@@ -343,12 +343,12 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'read_more_target',
 			array(
-				'label'   => esc_html__( 'Link Target', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Link Target', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => '_self',
 				'options' => array(
-					'_self'  => esc_html__( 'Same Tab', 'wcp-post-carousel-for-elementor' ),
-					'_blank' => esc_html__( 'New Tab', 'wcp-post-carousel-for-elementor' ),
+					'_self'  => esc_html__( 'Same Tab', 'webcodingplace-post-carousel-for-elementor' ),
+					'_blank' => esc_html__( 'New Tab', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 			)
 		);
@@ -363,7 +363,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_slider',
 			array(
-				'label' => esc_html__( 'Slider', 'wcp-post-carousel-for-elementor' ),
+				'label' => esc_html__( 'Slider', 'webcodingplace-post-carousel-for-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			)
 		);
@@ -371,7 +371,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'cols_desktop',
 			array(
-				'label'   => esc_html__( 'Columns - Desktop', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Columns - Desktop', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 3,
 				'min'     => 1,
@@ -381,7 +381,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'cols_tablet',
 			array(
-				'label'   => esc_html__( 'Columns - Tablet', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Columns - Tablet', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 2,
 				'min'     => 1,
@@ -391,7 +391,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'cols_mobile',
 			array(
-				'label'   => esc_html__( 'Columns - Mobile', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Columns - Mobile', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 1,
 				'min'     => 1,
@@ -401,7 +401,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'slides_to_scroll',
 			array(
-				'label'   => esc_html__( 'Slides to Scroll', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Slides to Scroll', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 1,
 				'min'     => 1,
@@ -411,7 +411,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'speed',
 			array(
-				'label'   => esc_html__( 'Animation Speed (ms)', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Animation Speed (ms)', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 500,
 				'min'     => 50,
@@ -421,7 +421,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'infinite',
 			array(
-				'label'        => esc_html__( 'Infinite Scroll', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Infinite Scroll', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => 'yes',
@@ -430,7 +430,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'vertical',
 			array(
-				'label'        => esc_html__( 'Vertical Mode', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Vertical Mode', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
@@ -439,7 +439,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_responsive_control(
 			'space_between',
 			array(
-				'label'      => esc_html__( 'Space Between Posts (px)', 'wcp-post-carousel-for-elementor' ),
+				'label'      => esc_html__( 'Space Between Posts (px)', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => array( 'px' ),
 				'range'      => array( 'px' => array( 'min' => 0, 'max' => 100 ) ),
@@ -453,7 +453,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'autoplay',
 			array(
-				'label'        => esc_html__( 'Autoplay', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Autoplay', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
@@ -462,7 +462,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'autoplay_speed',
 			array(
-				'label'     => esc_html__( 'Autoplay Speed (ms)', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Autoplay Speed (ms)', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 3000,
 				'min'       => 500,
@@ -473,7 +473,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'dots',
 			array(
-				'label'        => esc_html__( 'Show Dots', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Show Dots', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => 'yes',
@@ -482,13 +482,13 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'dots_icon',
 			array(
-				'label'     => esc_html__( 'Dots Style', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Dots Style', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'circle',
 				'options'   => array(
-					'circle' => esc_html__( 'Circle', 'wcp-post-carousel-for-elementor' ),
-					'square' => esc_html__( 'Square', 'wcp-post-carousel-for-elementor' ),
-					'dash'   => esc_html__( 'Dash', 'wcp-post-carousel-for-elementor' ),
+					'circle' => esc_html__( 'Circle', 'webcodingplace-post-carousel-for-elementor' ),
+					'square' => esc_html__( 'Square', 'webcodingplace-post-carousel-for-elementor' ),
+					'dash'   => esc_html__( 'Dash', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 				'condition' => array( 'dots' => 'yes' ),
 			)
@@ -496,7 +496,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'arrows',
 			array(
-				'label'        => esc_html__( 'Show Arrows', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Show Arrows', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => 'yes',
@@ -505,14 +505,14 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'arrows_style',
 			array(
-				'label'     => esc_html__( 'Arrows Style', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Arrows Style', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'chevron',
 				'options'   => array(
-					'chevron' => esc_html__( 'Chevron', 'wcp-post-carousel-for-elementor' ),
-					'arrow'   => esc_html__( 'Arrow', 'wcp-post-carousel-for-elementor' ),
-					'circle'  => esc_html__( 'Circled Chevron', 'wcp-post-carousel-for-elementor' ),
-					'square'  => esc_html__( 'Square', 'wcp-post-carousel-for-elementor' ),
+					'chevron' => esc_html__( 'Chevron', 'webcodingplace-post-carousel-for-elementor' ),
+					'arrow'   => esc_html__( 'Arrow', 'webcodingplace-post-carousel-for-elementor' ),
+					'circle'  => esc_html__( 'Circled Chevron', 'webcodingplace-post-carousel-for-elementor' ),
+					'square'  => esc_html__( 'Square', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 				'condition' => array( 'arrows' => 'yes' ),
 			)
@@ -520,17 +520,17 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'arrows_position',
 			array(
-				'label'     => esc_html__( 'Arrows Position', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Arrows Position', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'center',
 				'options'   => array(
-					'center'       => esc_html__( 'Center (Sides)', 'wcp-post-carousel-for-elementor' ),
-					'top-left'     => esc_html__( 'Top Left', 'wcp-post-carousel-for-elementor' ),
-					'top-right'    => esc_html__( 'Top Right', 'wcp-post-carousel-for-elementor' ),
-					'top-center'   => esc_html__( 'Top Center', 'wcp-post-carousel-for-elementor' ),
-					'bottom-left'  => esc_html__( 'Bottom Left', 'wcp-post-carousel-for-elementor' ),
-					'bottom-right' => esc_html__( 'Bottom Right', 'wcp-post-carousel-for-elementor' ),
-					'bottom-center' => esc_html__( 'Bottom Center', 'wcp-post-carousel-for-elementor' ),
+					'center'       => esc_html__( 'Center (Sides)', 'webcodingplace-post-carousel-for-elementor' ),
+					'top-left'     => esc_html__( 'Top Left', 'webcodingplace-post-carousel-for-elementor' ),
+					'top-right'    => esc_html__( 'Top Right', 'webcodingplace-post-carousel-for-elementor' ),
+					'top-center'   => esc_html__( 'Top Center', 'webcodingplace-post-carousel-for-elementor' ),
+					'bottom-left'  => esc_html__( 'Bottom Left', 'webcodingplace-post-carousel-for-elementor' ),
+					'bottom-right' => esc_html__( 'Bottom Right', 'webcodingplace-post-carousel-for-elementor' ),
+					'bottom-center' => esc_html__( 'Bottom Center', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 				'condition' => array( 'arrows' => 'yes' ),
 			)
@@ -538,7 +538,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'rtl',
 			array(
-				'label'        => esc_html__( 'RTL Mode', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'RTL Mode', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
@@ -547,7 +547,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'pause_on_hover',
 			array(
-				'label'        => esc_html__( 'Pause on Hover', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Pause on Hover', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => 'yes',
@@ -565,7 +565,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_appearance',
 			array(
-				'label' => esc_html__( 'Appearance', 'wcp-post-carousel-for-elementor' ),
+				'label' => esc_html__( 'Appearance', 'webcodingplace-post-carousel-for-elementor' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			)
 		);
@@ -573,7 +573,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'style_id',
 			array(
-				'label'   => esc_html__( 'Template Style', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Template Style', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => '1',
 				'options' => DPCE_Styles::get_choices(),
@@ -583,7 +583,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'post_bg_color',
 			array(
-				'label'     => esc_html__( 'Post Background Color', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Post Background Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .dpce-slide-inner' => 'background-color: {{VALUE}};',
@@ -594,7 +594,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'title_color',
 			array(
-				'label'     => esc_html__( 'Title Color', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Title Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .dpce-title, {{WRAPPER}} .dpce-title a' => 'color: {{VALUE}};',
@@ -606,7 +606,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			array(
 				'name'     => 'title_typography',
-				'label'    => esc_html__( 'Title Typography', 'wcp-post-carousel-for-elementor' ),
+				'label'    => esc_html__( 'Title Typography', 'webcodingplace-post-carousel-for-elementor' ),
 				'selector' => '{{WRAPPER}} .dpce-title, {{WRAPPER}} .dpce-title a',
 			)
 		);
@@ -614,7 +614,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'desc_color',
 			array(
-				'label'     => esc_html__( 'Description Color', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Description Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .dpce-desc' => 'color: {{VALUE}};',
@@ -626,7 +626,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			array(
 				'name'     => 'desc_typography',
-				'label'    => esc_html__( 'Description Typography', 'wcp-post-carousel-for-elementor' ),
+				'label'    => esc_html__( 'Description Typography', 'webcodingplace-post-carousel-for-elementor' ),
 				'selector' => '{{WRAPPER}} .dpce-desc',
 			)
 		);
@@ -642,7 +642,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'card_radius',
 			array(
-				'label'      => esc_html__( 'Border Radius', 'wcp-post-carousel-for-elementor' ),
+				'label'      => esc_html__( 'Border Radius', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => array( 'px', '%' ),
 				'selectors'  => array(
@@ -662,7 +662,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'arrow_color',
 			array(
-				'label'     => esc_html__( 'Arrows Color', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Arrows Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .slick-prev:before, {{WRAPPER}} .slick-next:before' => 'color: {{VALUE}};',
@@ -674,7 +674,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'arrow_bg',
 			array(
-				'label'     => esc_html__( 'Arrows Background', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Arrows Background', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .slick-prev, {{WRAPPER}} .slick-next' => 'background-color: {{VALUE}};',
@@ -686,7 +686,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'dots_color',
 			array(
-				'label'     => esc_html__( 'Dots Color', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Dots Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .slick-dots li button:before' => 'color: {{VALUE}};',
@@ -699,10 +699,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'custom_css',
 			array(
-				'label'       => esc_html__( 'Custom CSS', 'wcp-post-carousel-for-elementor' ),
+				'label'       => esc_html__( 'Custom CSS', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'        => Controls_Manager::CODE,
 				'language'    => 'css',
-				'description' => esc_html__( 'Use {{WRAPPER}} as the widget selector.', 'wcp-post-carousel-for-elementor' ),
+				'description' => esc_html__( 'Use {{WRAPPER}} as the widget selector.', 'webcodingplace-post-carousel-for-elementor' ),
 				'rows'        => 8,
 			)
 		);
@@ -711,7 +711,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'_per_style_heading',
 			array(
-				'label' => esc_html__( 'Style Specific Settings', 'wcp-post-carousel-for-elementor' ),
+				'label' => esc_html__( 'Style Specific Settings', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'  => Controls_Manager::HEADING,
 			)
 		);
@@ -774,7 +774,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->start_controls_section(
 			'section_advanced',
 			array(
-				'label' => esc_html__( 'Advanced', 'wcp-post-carousel-for-elementor' ),
+				'label' => esc_html__( 'Advanced', 'webcodingplace-post-carousel-for-elementor' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			)
 		);
@@ -782,7 +782,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'image_size',
 			array(
-				'label'   => esc_html__( 'Image Size', 'wcp-post-carousel-for-elementor' ),
+				'label'   => esc_html__( 'Image Size', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'medium_large',
 				'options' => dpce_get_image_sizes(),
@@ -792,7 +792,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'lazy_load',
 			array(
-				'label'        => esc_html__( 'Lazy Load Images', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Lazy Load Images', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => 'yes',
@@ -802,7 +802,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'placeholder_image',
 			array(
-				'label' => esc_html__( 'Placeholder Image', 'wcp-post-carousel-for-elementor' ),
+				'label' => esc_html__( 'Placeholder Image', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'  => Controls_Manager::MEDIA,
 			)
 		);
@@ -810,8 +810,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'disable_current_post',
 			array(
-				'label'        => esc_html__( 'Hide Current Post', 'wcp-post-carousel-for-elementor' ),
-				'description'  => esc_html__( 'Skip the current post when the carousel is rendered on a singular page.', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Hide Current Post', 'webcodingplace-post-carousel-for-elementor' ),
+				'description'  => esc_html__( 'Skip the current post when the carousel is rendered on a singular page.', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
@@ -821,7 +821,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'adaptive_height',
 			array(
-				'label'        => esc_html__( 'Adaptive Height', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Adaptive Height', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
@@ -831,7 +831,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'enable_share',
 			array(
-				'label'        => esc_html__( 'Enable Social Sharing', 'wcp-post-carousel-for-elementor' ),
+				'label'        => esc_html__( 'Enable Social Sharing', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
@@ -841,7 +841,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'share_networks',
 			array(
-				'label'       => esc_html__( 'Networks', 'wcp-post-carousel-for-elementor' ),
+				'label'       => esc_html__( 'Networks', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'        => Controls_Manager::SELECT2,
 				'multiple'    => true,
 				'label_block' => true,
@@ -851,7 +851,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 					'linkedin'  => 'LinkedIn',
 					'whatsapp'  => 'WhatsApp',
 					'pinterest' => 'Pinterest',
-					'email'     => esc_html__( 'Email', 'wcp-post-carousel-for-elementor' ),
+					'email'     => esc_html__( 'Email', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 				'default'     => array( 'facebook', 'twitter', 'linkedin' ),
 				'condition'   => array( 'enable_share' => 'yes' ),
@@ -861,7 +861,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'share_color',
 			array(
-				'label'     => esc_html__( 'Share Icon Color', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Share Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .dpce-share .dpce-share-link' => 'color: {{VALUE}};',
@@ -873,7 +873,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'share_bg',
 			array(
-				'label'     => esc_html__( 'Share Icon Background', 'wcp-post-carousel-for-elementor' ),
+				'label'     => esc_html__( 'Share Icon Background', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
 					'{{WRAPPER}} .dpce-share .dpce-share-link' => 'background-color: {{VALUE}};',
@@ -900,7 +900,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 
 		if ( ! $query->have_posts() ) {
 			if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-				echo '<p>' . esc_html__( 'No posts match the current settings.', 'wcp-post-carousel-for-elementor' ) . '</p>';
+				echo '<p>' . esc_html__( 'No posts match the current settings.', 'webcodingplace-post-carousel-for-elementor' ) . '</p>';
 			}
 			return;
 		}

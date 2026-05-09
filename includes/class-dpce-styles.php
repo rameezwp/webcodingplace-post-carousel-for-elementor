@@ -52,12 +52,12 @@ class DPCE_Styles {
 		$default_styles = array(
 			'1' => array(
 				'id'       => '1',
-				'name'     => esc_html__( 'Style 1 - Overlay Card', 'wcp-post-carousel-for-elementor' ),
+				'name'     => esc_html__( 'Style 1 - Overlay Card', 'webcodingplace-post-carousel-for-elementor' ),
 				'thumb'    => DPCE_URL . 'assets/images/style-1.svg',
 				'settings' => array(
 					array(
 						'id'        => 'icon_color',
-						'label'     => esc_html__( 'Link Icon Color', 'wcp-post-carousel-for-elementor' ),
+						'label'     => esc_html__( 'Link Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
 						'type'      => 'color',
 						'default'   => '#ffffff',
 						'selectors' => array(
@@ -66,7 +66,7 @@ class DPCE_Styles {
 					),
 					array(
 						'id'        => 'overlay_bg',
-						'label'     => esc_html__( 'Overlay Background', 'wcp-post-carousel-for-elementor' ),
+						'label'     => esc_html__( 'Overlay Background', 'webcodingplace-post-carousel-for-elementor' ),
 						'type'      => 'color',
 						'default'   => 'rgba(0,0,0,0.55)',
 						'selectors' => array(
@@ -77,12 +77,12 @@ class DPCE_Styles {
 			),
 			'2' => array(
 				'id'       => '2',
-				'name'     => esc_html__( 'Style 2 - Below Image', 'wcp-post-carousel-for-elementor' ),
+				'name'     => esc_html__( 'Style 2 - Below Image', 'webcodingplace-post-carousel-for-elementor' ),
 				'thumb'    => DPCE_URL . 'assets/images/style-2.svg',
 				'settings' => array(
 					array(
 						'id'        => 'card_radius',
-						'label'     => esc_html__( 'Card Border Radius (px)', 'wcp-post-carousel-for-elementor' ),
+						'label'     => esc_html__( 'Card Border Radius (px)', 'webcodingplace-post-carousel-for-elementor' ),
 						'type'      => 'number',
 						'default'   => 6,
 						'min'       => 0,
@@ -95,12 +95,12 @@ class DPCE_Styles {
 			),
 			'3' => array(
 				'id'       => '3',
-				'name'     => esc_html__( 'Style 3 - Side Meta', 'wcp-post-carousel-for-elementor' ),
+				'name'     => esc_html__( 'Style 3 - Side Meta', 'webcodingplace-post-carousel-for-elementor' ),
 				'thumb'    => DPCE_URL . 'assets/images/style-3.svg',
 				'settings' => array(
 					array(
 						'id'        => 'meta_color',
-						'label'     => esc_html__( 'Meta Text Color', 'wcp-post-carousel-for-elementor' ),
+						'label'     => esc_html__( 'Meta Text Color', 'webcodingplace-post-carousel-for-elementor' ),
 						'type'      => 'color',
 						'default'   => '#888888',
 						'selectors' => array(
@@ -151,7 +151,7 @@ class DPCE_Styles {
 	 * Resolve the absolute path to a style template file.
 	 *
 	 * Allows themes/child-plugins to override templates by placing
-	 * `wcp-post-carousel-for-elementor/style-{id}.php` in their theme.
+	 * `webcodingplace-post-carousel-for-elementor/style-{id}.php` in their theme.
 	 *
 	 * @param string $id Style id.
 	 * @return string|null
@@ -160,7 +160,7 @@ class DPCE_Styles {
 		$id   = sanitize_file_name( $id );
 		$file = 'style-' . $id . '.php';
 
-		$located = locate_template( array( 'wcp-post-carousel-for-elementor/' . $file ) );
+		$located = locate_template( array( 'webcodingplace-post-carousel-for-elementor/' . $file ) );
 		if ( $located && file_exists( $located ) ) {
 			return $located;
 		}
