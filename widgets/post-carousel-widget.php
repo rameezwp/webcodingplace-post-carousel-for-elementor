@@ -696,17 +696,6 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			)
 		);
 
-		$this->add_control(
-			'custom_css',
-			array(
-				'label'       => esc_html__( 'Custom CSS', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'        => Controls_Manager::CODE,
-				'language'    => 'css',
-				'description' => esc_html__( 'Use {{WRAPPER}} as the widget selector.', 'webcodingplace-post-carousel-for-elementor' ),
-				'rows'        => 8,
-			)
-		);
-
 		// Per-style settings, conditionally rendered.
 		$this->add_control(
 			'_per_style_heading',
@@ -946,23 +935,6 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			'dpce-dots-' . sanitize_html_class( isset( $settings['dots_icon'] ) ? $settings['dots_icon'] : 'circle' ),
 		);
 
-		// Per-instance custom CSS — attached to the already-enqueued frontend
-		// stylesheet via wp_add_inline_style() instead of a raw <style> tag,
-		// so it flows through the standard WP enqueue pipeline.
-		if ( ! empty( $settings['custom_css'] ) ) {
-			$widget_id = 'elementor-element-' . $this->get_id();
-			$css = str_replace( '{{WRAPPER}}', '.' . $widget_id, $settings['custom_css'] );
-			// Strip tag-like sequences as defense-in-depth.
-			$css = preg_replace( '#</?[a-z][^>]*>#i', '', $css );
-			$css = wp_strip_all_tags( $css );
-
-			if ( '' !== trim( (string) $css ) ) {
-				if ( ! wp_style_is( 'dpce-frontend', 'enqueued' ) ) {
-					wp_enqueue_style( 'dpce-frontend' );
-				}
-				wp_add_inline_style( 'dpce-frontend', $css );
-			}
-		}
 		?>
 		<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>"
 			data-slick="<?php echo esc_attr( wp_json_encode( $slick_options ) ); ?>">

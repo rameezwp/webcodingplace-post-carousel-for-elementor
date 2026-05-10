@@ -4,7 +4,7 @@ Tags: elementor, carousel, slider, posts, slick
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 1.1
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,7 +25,7 @@ WebCodingPlace Post Carousel for Elementor adds a single, deeply configurable ca
 * Slick-powered slider with full responsive column control, autoplay, dots, arrows, RTL, vertical mode and adaptive height
 * Pluggable template registry — add your own styles via the `dpce_styles` filter and drop a PHP template in your theme
 * Per-style appearance controls auto-generated from the styles array
-* Custom CSS box, social sharing buttons, placeholder image and "hide current post" support
+* Social sharing buttons, placeholder image and "hide current post" support
 
 = Developers =
 
@@ -97,6 +97,11 @@ The Email option uses a standard `mailto:` link handled by the visitor's local e
 This plugin bundles **Slick Carousel** (https://kenwheeler.github.io/slick/) by Ken Wheeler, distributed under the MIT license. Files are loaded locally from `assets/vendor/slick/` and no remote requests are made.
 
 == Changelog ==
+
+= 1.2 =
+* Removed the per-widget Custom CSS field per WordPress.org review guidance against arbitrary CSS insertion. Use theme/Customizer CSS or the dedicated style-specific controls in the Appearance tab instead.
+* Documented external services (social-share endpoints) and added non-affiliation FAQ.
+* Renamed plugin to **WebCodingPlace Post Carousel for Elementor**.
 
 = 1.1 =
 * Bug fixes.
