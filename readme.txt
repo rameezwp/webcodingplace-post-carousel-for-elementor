@@ -4,7 +4,7 @@ Tags: elementor, carousel, slider, posts, slick
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 1.0
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +97,9 @@ The Email option uses a standard `mailto:` link handled by the visitor's local e
 This plugin bundles **Slick Carousel** (https://kenwheeler.github.io/slick/) by Ken Wheeler, distributed under the MIT license. Files are loaded locally from `assets/vendor/slick/` and no remote requests are made.
 
 == Changelog ==
+
+= 1.1 =
+* Bug fixes.
 
 = 1.0 =
 * Initial release.

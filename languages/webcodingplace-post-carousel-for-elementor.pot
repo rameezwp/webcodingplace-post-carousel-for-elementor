@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: WebCodingPlace Post Carousel for Elementor\n"
-"POT-Creation-Date: 2026-05-04 13:25+0500\n"
+"POT-Creation-Date: 2026-05-09 11:03+0500\n"
 "PO-Revision-Date: 2026-05-04 13:25+0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -20,36 +20,6 @@ msgstr ""
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
-
-#. translators: 1: plugin name, 2: required plugin name
-#: webcodingplace-post-carousel-for-elementor.php:194
-#, php-format
-msgid "\"%1$s\" requires \"%2$s\" to be installed and active."
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-#: webcodingplace-post-carousel-for-elementor.php:195
-#: webcodingplace-post-carousel-for-elementor.php:211
-#: webcodingplace-post-carousel-for-elementor.php:228
-msgid "WebCodingPlace Post Carousel for Elementor"
-msgstr ""
-
-#: webcodingplace-post-carousel-for-elementor.php:196
-#: webcodingplace-post-carousel-for-elementor.php:212
-msgid "Elementor"
-msgstr ""
-
-#. translators: 1: plugin name, 2: required plugin name, 3: minimum version
-#: webcodingplace-post-carousel-for-elementor.php:210
-#, php-format
-msgid "\"%1$s\" requires \"%2$s\" version %3$s or greater."
-msgstr ""
-
-#. translators: 1: plugin name, 2: required PHP version
-#: webcodingplace-post-carousel-for-elementor.php:227
-#, php-format
-msgid "\"%1$s\" requires PHP version %2$s or greater."
-msgstr ""
 
 #: includes/class-dpce-renderer.php:204
 msgid "Share on Facebook"
@@ -145,6 +115,36 @@ msgstr ""
 
 #: includes/helpers.php:236
 msgid "Full"
+msgstr ""
+
+#. translators: 1: plugin name, 2: required plugin name
+#: webcodingplace-post-carousel-for-elementor.php:183
+#, php-format
+msgid "\"%1$s\" requires \"%2$s\" to be installed and active."
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+#: webcodingplace-post-carousel-for-elementor.php:184
+#: webcodingplace-post-carousel-for-elementor.php:197
+#: webcodingplace-post-carousel-for-elementor.php:211
+msgid "WebCodingPlace Post Carousel for Elementor"
+msgstr ""
+
+#: webcodingplace-post-carousel-for-elementor.php:185
+#: webcodingplace-post-carousel-for-elementor.php:198
+msgid "Elementor"
+msgstr ""
+
+#. translators: 1: plugin name, 2: required plugin name, 3: minimum version
+#: webcodingplace-post-carousel-for-elementor.php:196
+#, php-format
+msgid "\"%1$s\" requires \"%2$s\" version %3$s or greater."
+msgstr ""
+
+#. translators: 1: plugin name, 2: required PHP version
+#: webcodingplace-post-carousel-for-elementor.php:210
+#, php-format
+msgid "\"%1$s\" requires PHP version %2$s or greater."
 msgstr ""
 
 #: widgets/post-carousel-widget.php:38
@@ -388,118 +388,150 @@ msgid "Circled Chevron"
 msgstr ""
 
 #: widgets/post-carousel-widget.php:523
-msgid "RTL Mode"
+msgid "Arrows Position"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:527
+msgid "Center (Sides)"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:528
+msgid "Top Left"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:529
+msgid "Top Right"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:530
+msgid "Top Center"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:531
+msgid "Bottom Left"
 msgstr ""
 
 #: widgets/post-carousel-widget.php:532
-msgid "Pause on Hover"
+msgid "Bottom Right"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:533
+msgid "Bottom Center"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:541
+msgid "RTL Mode"
 msgstr ""
 
 #: widgets/post-carousel-widget.php:550
-msgid "Appearance"
-msgstr ""
-
-#: widgets/post-carousel-widget.php:558
-msgid "Template Style"
+msgid "Pause on Hover"
 msgstr ""
 
 #: widgets/post-carousel-widget.php:568
+msgid "Appearance"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:576
+msgid "Template Style"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:586
 msgid "Post Background Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:579
+#: widgets/post-carousel-widget.php:597
 msgid "Title Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:591
+#: widgets/post-carousel-widget.php:609
 msgid "Title Typography"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:599
+#: widgets/post-carousel-widget.php:617
 msgid "Description Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:611
+#: widgets/post-carousel-widget.php:629
 msgid "Description Typography"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:627
+#: widgets/post-carousel-widget.php:645
 msgid "Border Radius"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:647
+#: widgets/post-carousel-widget.php:665
 msgid "Arrows Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:659
+#: widgets/post-carousel-widget.php:677
 msgid "Arrows Background"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:671
+#: widgets/post-carousel-widget.php:689
 msgid "Dots Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:684
+#: widgets/post-carousel-widget.php:702
 msgid "Custom CSS"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:687
+#: widgets/post-carousel-widget.php:705
 msgid "Use {{WRAPPER}} as the widget selector."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:696
+#: widgets/post-carousel-widget.php:714
 msgid "Style Specific Settings"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:759
+#: widgets/post-carousel-widget.php:777
 msgid "Advanced"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:767
+#: widgets/post-carousel-widget.php:785
 msgid "Image Size"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:777
+#: widgets/post-carousel-widget.php:795
 msgid "Lazy Load Images"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:787
+#: widgets/post-carousel-widget.php:805
 msgid "Placeholder Image"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:795
+#: widgets/post-carousel-widget.php:813
 msgid "Hide Current Post"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:796
+#: widgets/post-carousel-widget.php:814
 msgid "Skip the current post when the carousel is rendered on a singular page."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:806
+#: widgets/post-carousel-widget.php:824
 msgid "Adaptive Height"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:816
+#: widgets/post-carousel-widget.php:834
 msgid "Enable Social Sharing"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:826
+#: widgets/post-carousel-widget.php:844
 msgid "Networks"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:836
+#: widgets/post-carousel-widget.php:854
 msgid "Email"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:846
+#: widgets/post-carousel-widget.php:864
 msgid "Share Icon Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:858
+#: widgets/post-carousel-widget.php:876
 msgid "Share Icon Background"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:885
+#: widgets/post-carousel-widget.php:903
 msgid "No posts match the current settings."
 msgstr ""
 
