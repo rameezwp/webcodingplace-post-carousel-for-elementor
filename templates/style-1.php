@@ -13,19 +13,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<figure class="dpce-style-1 dpce-wrapper">
-	<?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-	<i class="dpce-icon dashicons dashicons-admin-links" aria-hidden="true"></i>
-	<figcaption class="dpce-caption">
-		<h3 class="dpce-title"><?php do_action( 'dpce_carousel_title', $post_id, $carousel_settings ); ?></h3>
-		<div class="dpce-desc">
-			<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings ); ?>
-		</div>
-		<?php do_action( 'dpce_carousel_read_more', $post_id, $carousel_settings ); ?>
-		<?php do_action( 'dpce_carousel_share', $post_id, $carousel_settings ); ?>
-	</figcaption>
-	<a class="dpce-overlay-link"
-		target="<?php echo esc_attr( $carousel_settings['read_more_target'] ); ?>"
-		href="<?php echo esc_url( get_permalink( $post_id ) ); ?>"
-		aria-label="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"></a>
-</figure>
+
+<article class="dpce-style-1 dpce-wrapper">
+  <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
+  <div class="date">
+  	<span class="day"><?php echo get_the_date( 'd' ); ?></span>
+  	<span class="month"><?php echo get_the_date( 'M' ); ?></span>
+  </div>
+  <i class="fa fa-link"></i>
+  <div class="dpce-body">
+    <h3 class="dpce-title"><?php do_action( 'dpce_carousel_title', $post_id, $carousel_settings ); ?></h3>
+    <p class="dpce-desc">
+		<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings ); ?>
+    </p>
+  </div>
+  <a class="dpce-overlay-link"
+  	target="<?php echo esc_attr( $carousel_settings['read_more_target'] ); ?>"
+  	href="<?php echo esc_url( get_permalink( $post_id ) ); ?>"
+  	aria-label="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"></a>
+</article>

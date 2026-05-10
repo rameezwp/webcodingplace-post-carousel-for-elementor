@@ -47,10 +47,6 @@ No. It works with the free Elementor plugin (3.0 or newer).
 
 Yes. Hook into the `dpce_styles` filter to register a new style, then add a `templates/style-{id}.php` file (or override one from your theme).
 
-= Is this plugin affiliated with Elementor? =
-
-No. WebCodingPlace Post Carousel for Elementor is an independent plugin developed by WebCodingPlace. It is built to work with the Elementor page builder but is not affiliated with, sponsored by, or endorsed by Elementor Ltd. "Elementor" is a trademark of Elementor Ltd.
-
 == External services ==
 
 This plugin generates outbound share URLs for the optional **Social Sharing** feature in the carousel widget. When the *Enable Social Sharing* setting is turned on (it is OFF by default), the carousel renders a row of links that point to the share endpoints listed below. **No data is sent automatically.** Data is only transmitted to a third party when an end-user clicks one of those share links in their browser, and the only data appended to the URL is the post's public permalink and post title.
@@ -99,9 +95,7 @@ This plugin bundles **Slick Carousel** (https://kenwheeler.github.io/slick/) by 
 == Changelog ==
 
 = 1.2 =
-* Removed the per-widget Custom CSS field per WordPress.org review guidance against arbitrary CSS insertion. Use theme/Customizer CSS or the dedicated style-specific controls in the Appearance tab instead.
-* Documented external services (social-share endpoints) and added non-affiliation FAQ.
-* Renamed plugin to **WebCodingPlace Post Carousel for Elementor**.
+* Documented external services (social-share endpoints).
 
 = 1.1 =
 * Bug fixes.
