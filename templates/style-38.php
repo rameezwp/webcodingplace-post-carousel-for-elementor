@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <article class="dpce-style-38 dpce-wrapper">
   <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-  <i class="fa fa-share"></i>
+  <?php echo dpce_icon( 'share' ); ?>
   <div class="dpce-body">
     <h3 class="dpce-title">
     	<?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?>

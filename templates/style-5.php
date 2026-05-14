@@ -20,11 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) {
     <h3 class="dpce-desc">
       <?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
     </h3>
-    <footer class="rpc_footer">
+    <footer class="dpce-footer">
       <div class="date"><?php echo get_the_date(); ?></div>
       <div class="icons">
         <div class="views">
-          <i class="fa fa-comments"></i>
+          <?php echo dpce_icon( 'comments' ); ?>
         <?php
           $comments = wp_count_comments(get_the_id());
           echo esc_attr( $comments->total_comments );

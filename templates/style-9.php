@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <article class="dpce-style-9 dpce-wrapper">
   <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-  <div class="date rpc_date">
+  <div class="date dpce-date">
     <?php echo get_the_date( 'F d, Y', $post_id ); ?>
   </div>
   <div class="dpce-body">

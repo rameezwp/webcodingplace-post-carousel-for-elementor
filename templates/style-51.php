@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <article class="dpce-style-51 dpce-wrapper">
   <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-  <div class="price rpc_price">
+  <div class="price dpce-price">
       <?php
         if (function_exists('wc_get_product')) {
           $product = wc_get_product($post_id);

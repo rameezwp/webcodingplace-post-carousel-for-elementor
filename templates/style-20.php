@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
   <div class="image">
   <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
   </div>
-  <div class="position rpc_date">
+  <div class="position dpce-date">
   <?php printf( _x( '%s ago', '%s = human-readable time difference', 'webcodingplace-post-carousel-for-elementor' ), human_time_diff( get_the_time( 'U' ), time() ) ); ?>
   </div>
 	<?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>

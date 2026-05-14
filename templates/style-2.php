@@ -23,6 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
 		</div>
 	</div>
-	<div class="hover"><i class="fa fa-link"></i></div>
+	<div class="hover"><?php echo dpce_icon( 'link' ); ?></div>
 	<?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

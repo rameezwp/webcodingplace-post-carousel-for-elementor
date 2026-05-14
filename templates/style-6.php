@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
   </div>
   <div class="dpce-body">
-    <div class="date rpc_date">
+    <div class="date dpce-date">
       <span class="day"><?php echo get_the_date( 'd' ); ?></span>
       <span class="month"><?php echo get_the_date( 'M' ); ?></span>
     </div>
@@ -25,13 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
       <?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
     </p>
     <footer>
-      <div class="views"><i class="fa fa-comments"></i>
+      <div class="views"><?php echo dpce_icon( 'comments' ); ?>
         <?php
           $comments = wp_count_comments(get_the_id());
           echo esc_attr( $comments->total_comments );
         ?>
       </div>
-      <div class="love"><i class="fa fa-user"></i>
+      <div class="love"><?php echo dpce_icon( 'user' ); ?>
         <?php echo get_the_author(); ?>
       </div>
     </footer>

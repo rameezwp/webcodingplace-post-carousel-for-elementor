@@ -3,7 +3,7 @@
  * Plugin Name:       WebCodingPlace Post Carousel for Elementor
  * Description:       Display posts, custom post types or taxonomy terms in a beautiful, fully responsive Slick-powered carousel widget for Elementor with 50+ ready-made templates.
  * Plugin URI:        https://webcodingplace.com/webcodingplace-post-carousel-for-elementor
- * Version:           1.2
+ * Version:           1.4
  * Author:            WebCodingPlace
  * Author URI:        https://webcodingplace.com/
  * License:           GPL-2.0-or-later
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'DPCE_VERSION' ) ) {
-	define( 'DPCE_VERSION', '1.2' );
+	define( 'DPCE_VERSION', '1.4' );
 }
 if ( ! defined( 'DPCE_FILE' ) ) {
 	define( 'DPCE_FILE', __FILE__ );

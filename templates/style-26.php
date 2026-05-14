@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     <h3 class="dpce-title">
     	<?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?>
     </h3>
-    <i class="fa fa-link"></i>
+    <?php echo dpce_icon( 'link' ); ?>
   </div>
   <?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <article class="dpce-style-10 dpce-wrapper">
   <div class="image">
     <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-    <i class="fa fa-link"></i>
+    <?php echo dpce_icon( 'link' ); ?>
     <div class="date">
       <span class="day"><?php echo get_the_date( 'd' ); ?></span>
       <span class="month"><?php echo get_the_date( 'M' ); ?></span>

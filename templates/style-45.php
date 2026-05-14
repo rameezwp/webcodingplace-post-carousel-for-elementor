@@ -10,13 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="dpce-style-45 dpce-wrapper">
-	<div class="rpc-post-image">
+	<div class="dpce-post-image">
 		<a href="<?php echo get_permalink($post_id); ?>" target="<?php echo esc_attr($carousel_settings['read_more_target']); ?>">
 			<?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
 		</a>
 
-		<span class="rpc-comment-box">
-			<span class="rpc-post-comment">
+		<span class="dpce-comment-box">
+			<span class="dpce-post-comment">
 				<?php
 					$comments = wp_count_comments(get_the_id());
 					echo esc_attr( $comments->total_comments );
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</span>
 	</div>
 
-	<div class="rpc-post-category">
+	<div class="dpce-post-category">
 	<?php $categories = get_the_category();
 		$limit = 1;
 		$separator = ' ';
@@ -41,22 +41,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 		} ?>
 	</div>
 
-	<h3 class="rpc-post-title">
-		<a href="<?php the_permalink(); ?>" target="<?php echo esc_attr($carousel_settings['read_more_target']); ?>" class="rpc-title">
+	<h3 class="dpce-post-title">
+		<a href="<?php the_permalink(); ?>" target="<?php echo esc_attr($carousel_settings['read_more_target']); ?>" class="dpce-title">
 			<?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?>
 		</a>
 	</h3>
-	<span class="rpc-post-meta">
-		<i class="fa fa-user"></i>
+	<span class="dpce-post-meta">
+		<?php echo dpce_icon( 'user' ); ?>
 		<?php the_author_posts_link(); ?>
 	</span>
-	<span class="rpc-post-date rpc-date">
-		<i class="fa fa-clock-o"></i>
+	<span class="dpce-post-date dpce-date">
+		<?php echo dpce_icon( 'clock' ); ?>
 		<?php echo get_the_date() ?>
 	</span>
 
 	<div class="clearfix"></div>
-	<div class="rpc-post-para rpc-content dpce-desc">
+	<div class="dpce-post-para dpce-content dpce-desc">
         <?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
 	</div>
 </div>

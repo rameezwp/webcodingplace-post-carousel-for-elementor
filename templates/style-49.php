@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
   <div class="dpce-body">
     <h3 class="dpce-title"><?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?></h3>
     <p class="dpce-desc"><?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?></p>
-    <div class="price rpc_price">
+    <div class="price dpce-price">
       <?php
         if (function_exists('wc_get_product')) {
           $product = wc_get_product($post_id);
@@ -23,6 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) {
       ?>
     </div>
   </div>
-  <i class="fa fa-cart-plus ajax_add_to_cart add_to_cart_button" data-product_id="<?php echo intval($post_id); ?>"></i>
+  <span class="ajax_add_to_cart add_to_cart_button" data-product_id="<?php echo intval($post_id); ?>"><?php echo dpce_icon( 'cart-plus' ); ?></span>
   <?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

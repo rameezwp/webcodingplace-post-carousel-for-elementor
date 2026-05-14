@@ -111,6 +111,19 @@ class DPCE_Styles {
 			),
 		);
 
+		// Auto-register styles 4..51. Each ships with an empty `settings` array;
+		// add per-style controls later by pushing into $default_styles[$id]['settings']
+		// or by hooking into the `dpce_styles` filter below.
+		for ( $i = 4; $i <= 51; $i++ ) {
+			$default_styles[ (string) $i ] = array(
+				'id'       => (string) $i,
+				/* translators: %d: template style number. */
+				'name'     => sprintf( esc_html__( 'Style %d', 'webcodingplace-post-carousel-for-elementor' ), $i ),
+				'thumb'    => DPCE_URL . 'assets/images/style-' . $i . '.svg',
+				'settings' => array(),
+			);
+		}
+
 		/**
 		 * Filter the registered carousel styles.
 		 *

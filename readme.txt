@@ -4,7 +4,7 @@ Tags: elementor, carousel, slider, posts, slick
 Requires at least: 5.6
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 1.2
+Stable tag: 1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,12 @@ The Email option uses a standard `mailto:` link handled by the visitor's local e
 This plugin bundles **Slick Carousel** (https://kenwheeler.github.io/slick/) by Ken Wheeler, distributed under the MIT license. Files are loaded locally from `assets/vendor/slick/` and no remote requests are made.
 
 == Changelog ==
+
+= 1.4 =
+* All 51 carousel templates now ship with dpce-* markup, action hooks and styles registry entries.
+* New "Link Area" setting: link the whole card or only the Read More button.
+* Replaced Font Awesome with bundled inline SVG icons so no external icon font is required.
+* Normalized remaining rpc-* / rpc_* CSS classes to dpce-* equivalents.
 
 = 1.2 =
 * Documented external services (social-share endpoints).
