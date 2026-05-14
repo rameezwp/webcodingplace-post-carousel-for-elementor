@@ -1,7 +1,18 @@
-<div class="rpc-style-45 rpc-wrapper">
+<?php
+/**
+ * Template: Style 45.
+ *
+ * @package DPCE
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
+<div class="dpce-style-45 dpce-wrapper">
 	<div class="rpc-post-image">
 		<a href="<?php echo get_permalink($post_id); ?>" target="<?php echo esc_attr($carousel_settings['read_more_target']); ?>">
-			<?php do_action( 'rpc_carousel_thumbnail', $post_id, $carousel_settings ); ?>
+			<?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
 		</a>
 
 		<span class="rpc-comment-box">
@@ -32,7 +43,7 @@
 
 	<h3 class="rpc-post-title">
 		<a href="<?php the_permalink(); ?>" target="<?php echo esc_attr($carousel_settings['read_more_target']); ?>" class="rpc-title">
-			<?php do_action( 'rpc_carousel_title', $post_id,  $carousel_settings ); ?>
+			<?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?>
 		</a>
 	</h3>
 	<span class="rpc-post-meta">
@@ -45,7 +56,7 @@
 	</span>
 
 	<div class="clearfix"></div>
-	<div class="rpc-post-para rpc-content rpc_desc">
-        <?php do_action( 'rpc_carousel_desc', $post_id, $carousel_settings); ?>
+	<div class="rpc-post-para rpc-content dpce-desc">
+        <?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
 	</div>
 </div>

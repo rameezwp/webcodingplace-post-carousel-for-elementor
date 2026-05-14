@@ -1,6 +1,6 @@
 <?php
 /**
- * Template: Style 2 — Below Image (Classic Card).
+ * Template: Style 2.
  *
  * @package DPCE
  */
@@ -17,15 +17,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="dpce-body">
 		<h3 class="dpce-title">
-			<?php do_action( 'rpc_carousel_title', $post_id,  $carousel_settings ); ?>
+			<?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?>
 		</h3>
 		<div class="dpce-desc">
-			<?php do_action( 'rpc_carousel_desc', $post_id, $carousel_settings); ?>
+			<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
 		</div>
 	</div>
-	<div class="hover"><i class="fa fa-link"></i></i></div>
-	<a class="dpce-overlay-link"
-		target="<?php echo esc_attr( $carousel_settings['read_more_target'] ); ?>"
-		href="<?php echo esc_url( get_permalink( $post_id ) ); ?>"
-		aria-label="<?php echo esc_attr( get_the_title( $post_id ) ); ?>"></a>
+	<div class="hover"><i class="fa fa-link"></i></div>
+	<?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

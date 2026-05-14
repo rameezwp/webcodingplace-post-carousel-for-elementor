@@ -1,17 +1,28 @@
-<figure class="rpc-style-6 rpc-wrapper">
+<?php
+/**
+ * Template: Style 6.
+ *
+ * @package DPCE
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
+<article class="dpce-style-6 dpce-wrapper">
   <div class="image">
-    <?php do_action( 'rpc_carousel_thumbnail', $post_id, $carousel_settings ); ?>
+    <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
   </div>
-  <figcaption class="rpc_bg">
+  <div class="dpce-body">
     <div class="date rpc_date">
       <span class="day"><?php echo get_the_date( 'd' ); ?></span>
       <span class="month"><?php echo get_the_date( 'M' ); ?></span>
     </div>
-    <h3 class="rpc_title">
-      <?php do_action( 'rpc_carousel_title', $post_id,  $carousel_settings ); ?>
+    <h3 class="dpce-title">
+      <?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?>
     </h3>
-    <p class="rpc_desc">
-      <?php do_action( 'rpc_carousel_desc', $post_id, $carousel_settings); ?>
+    <p class="dpce-desc">
+      <?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
     </p>
     <footer>
       <div class="views"><i class="fa fa-comments"></i>
@@ -24,6 +35,6 @@
         <?php echo get_the_author(); ?>
       </div>
     </footer>
-  </figcaption>
-  <a target="<?php echo esc_attr($carousel_settings['read_more_target']); ?>" href="<?php the_permalink(); ?>"></a>
-</figure>
+  </div>
+  <?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
+</article>

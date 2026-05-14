@@ -353,6 +353,20 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'link_area',
+			array(
+				'label'       => esc_html__( 'Link Area', 'webcodingplace-post-carousel-for-elementor' ),
+				'description' => esc_html__( 'Choose whether the entire card or only the Read More button links to the post.', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'        => Controls_Manager::SELECT,
+				'default'     => 'card',
+				'options'     => array(
+					'card'   => esc_html__( 'Whole Card', 'webcodingplace-post-carousel-for-elementor' ),
+					'button' => esc_html__( 'Read More Button Only', 'webcodingplace-post-carousel-for-elementor' ),
+				),
+			)
+		);
+
 		$this->end_controls_section();
 	}
 
@@ -985,6 +999,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			'read_more_txt'         => isset( $settings['read_more_txt'] ) ? $settings['read_more_txt'] : '',
 			'read_more_classes'     => isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button',
 			'read_more_target'      => isset( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self',
+			'link_area'             => isset( $settings['link_area'] ) && in_array( $settings['link_area'], array( 'card', 'button' ), true ) ? $settings['link_area'] : 'card',
 			'image_size'            => isset( $settings['image_size'] ) ? $settings['image_size'] : 'medium_large',
 			'lazy_load'             => 'yes' === ( isset( $settings['lazy_load'] ) ? $settings['lazy_load'] : 'yes' ),
 			'placeholder_image'     => $placeholder,

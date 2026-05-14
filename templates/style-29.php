@@ -1,12 +1,23 @@
-<figure class="rpc-style-29 rpc-wrapper">
-  <?php do_action( 'rpc_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-  <figcaption>
-    <h3 class="rpc_title">
-    	<?php do_action( 'rpc_carousel_title', $post_id,  $carousel_settings ); ?>
+<?php
+/**
+ * Template: Style 29.
+ *
+ * @package DPCE
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
+<article class="dpce-style-29 dpce-wrapper">
+  <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
+  <div class="dpce-body">
+    <h3 class="dpce-title">
+    	<?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?>
     </h3>
-    <h5 class="rpc_desc">
-    	<?php do_action( 'rpc_carousel_desc', $post_id, $carousel_settings); ?>
+    <h5 class="dpce-desc">
+    	<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
     </h5>
-  </figcaption>
-  <a target="<?php echo esc_attr($carousel_settings['read_more_target']); ?>" href="<?php the_permalink(); ?>"></a>
-</figure>
+  </div>
+  <?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
+</article>

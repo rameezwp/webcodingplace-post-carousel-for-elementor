@@ -1,12 +1,24 @@
-<figure class="rpc-style-17 rpc-wrapper">
-  <?php do_action( 'rpc_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-  <figcaption class="rpc_bg">
-    <h3 class="rpc_title"><?php do_action( 'rpc_carousel_title', $post_id,  $carousel_settings ); ?></h3>
-    <p class="rpc_desc">
-      <?php do_action( 'rpc_carousel_desc', $post_id, $carousel_settings); ?>
+<?php
+/**
+ * Template: Style 17.
+ *
+ * @package DPCE
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+?>
+<article class="dpce-style-17 dpce-wrapper">
+  <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
+  <div class="dpce-body">
+    <h3 class="dpce-title"><?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?></h3>
+    <p class="dpce-desc">
+      <?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
     </p>
     <div class="icons">
-      <?php do_action( 'rpc_social_share_icons', $post_id, $carousel_settings ); ?> 
+      <?php do_action( 'dpce_carousel_share', $post_id, $carousel_settings ); ?> 
     </div>
-  </figcaption>
-</figure>
+  </div>
+	<?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
+</article>
