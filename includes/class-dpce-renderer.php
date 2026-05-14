@@ -46,6 +46,7 @@ class DPCE_Renderer {
 		add_action( 'dpce_carousel_title', array( $this, 'render_title' ), 10, 2 );
 		add_action( 'dpce_carousel_desc', array( $this, 'render_desc' ), 10, 2 );
 		add_action( 'dpce_carousel_read_more', array( $this, 'render_read_more' ), 10, 2 );
+		add_action( 'dpce_carousel_overlay', array( $this, 'render_overlay' ), 10, 2 );
 		add_action( 'dpce_carousel_meta', array( $this, 'render_meta' ), 10, 2 );
 		add_action( 'dpce_carousel_share', array( $this, 'render_share' ), 10, 2 );
 	}
@@ -140,6 +141,13 @@ class DPCE_Renderer {
 	 * @param array $settings Carousel settings.
 	 */
 	public function render_read_more( $post_id, $settings ) {
+		// When the entire card links to the post, the read-more button is
+		// suppressed so we do not render two overlapping anchors.
+		$link_area = isset( $settings['link_area'] ) ? $settings['link_area'] : 'card';
+		if ( 'button' !== $link_area ) {
+			return;
+		}
+
 		$text = isset( $settings['read_more_txt'] ) ? trim( (string) $settings['read_more_txt'] ) : '';
 		if ( '' === $text ) {
 			return;
@@ -154,6 +162,28 @@ class DPCE_Renderer {
 			esc_attr( $target ),
 			'_blank' === $target ? 'noopener noreferrer' : 'follow',
 			esc_html( $text )
+		);
+	}
+
+	/**
+	 * Render the absolute overlay anchor that turns the whole card into a
+	 * link to the post. Suppressed when "Link Area" is set to button-only.
+	 *
+	 * @param int   $post_id  Post ID.
+	 * @param array $settings Carousel settings.
+	 */
+	public function render_overlay( $post_id, $settings ) {
+		$link_area = isset( $settings['link_area'] ) ? $settings['link_area'] : 'card';
+		if ( 'card' !== $link_area ) {
+			return;
+		}
+		$target = ! empty( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self';
+		printf(
+			'<a class="dpce-overlay-link" href="%1$s" target="%2$s" rel="%3$s" aria-label="%4$s"></a>',
+			esc_url( get_permalink( $post_id ) ),
+			esc_attr( $target ),
+			'_blank' === $target ? 'noopener noreferrer' : 'follow',
+			esc_attr( get_the_title( $post_id ) )
 		);
 	}
 
@@ -201,12 +231,12 @@ class DPCE_Renderer {
 		);
 
 		$labels = array(
-			'facebook'  => __( 'Share on Facebook', 'wcp-post-carousel-for-elementor' ),
-			'twitter'   => __( 'Share on Twitter', 'wcp-post-carousel-for-elementor' ),
-			'linkedin'  => __( 'Share on LinkedIn', 'wcp-post-carousel-for-elementor' ),
-			'whatsapp'  => __( 'Share on WhatsApp', 'wcp-post-carousel-for-elementor' ),
-			'pinterest' => __( 'Share on Pinterest', 'wcp-post-carousel-for-elementor' ),
-			'email'     => __( 'Share by Email', 'wcp-post-carousel-for-elementor' ),
+			'facebook'  => __( 'Share on Facebook', 'webcodingplace-post-carousel-for-elementor' ),
+			'twitter'   => __( 'Share on Twitter', 'webcodingplace-post-carousel-for-elementor' ),
+			'linkedin'  => __( 'Share on LinkedIn', 'webcodingplace-post-carousel-for-elementor' ),
+			'whatsapp'  => __( 'Share on WhatsApp', 'webcodingplace-post-carousel-for-elementor' ),
+			'pinterest' => __( 'Share on Pinterest', 'webcodingplace-post-carousel-for-elementor' ),
+			'email'     => __( 'Share by Email', 'webcodingplace-post-carousel-for-elementor' ),
 		);
 
 		echo '<div class="dpce-share">';

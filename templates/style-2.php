@@ -1,6 +1,6 @@
 <?php
 /**
- * Template: Style 2 — Below Image (Classic Card).
+ * Template: Style 2.
  *
  * @package DPCE
  */
@@ -11,17 +11,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <article class="dpce-style-2 dpce-wrapper">
 	<?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-	<div class="dpce-body">
-		<h3 class="dpce-title">
-			<a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>"
-				target="<?php echo esc_attr( $carousel_settings['read_more_target'] ); ?>">
-				<?php do_action( 'dpce_carousel_title', $post_id, $carousel_settings ); ?>
-			</a>
-		</h3>
-		<div class="dpce-desc">
-			<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings ); ?>
-		</div>
-		<?php do_action( 'dpce_carousel_read_more', $post_id, $carousel_settings ); ?>
-		<?php do_action( 'dpce_carousel_share', $post_id, $carousel_settings ); ?>
+	<div class="date dpce-date">
+		<span class="day"><?php echo get_the_date( 'd' ); ?></span>
+		<span class="month"><?php echo get_the_date( 'M' ); ?></span>
 	</div>
+	<div class="dpce-body">
+		<?php dpce_render_title( $post_id, $carousel_settings ); ?>
+		<div class="dpce-desc">
+			<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
+		</div>
+	</div>
+	<div class="hover"><?php echo wp_kses_post( dpce_icon( 'link' ) ); ?></div>
+	<?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

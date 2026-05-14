@@ -52,12 +52,12 @@ class DPCE_Styles {
 		$default_styles = array(
 			'1' => array(
 				'id'       => '1',
-				'name'     => esc_html__( 'Style 1 - Overlay Card', 'wcp-post-carousel-for-elementor' ),
+				'name'     => esc_html__( 'Style 1', 'webcodingplace-post-carousel-for-elementor' ),
 				'thumb'    => DPCE_URL . 'assets/images/style-1.svg',
 				'settings' => array(
 					array(
 						'id'        => 'icon_color',
-						'label'     => esc_html__( 'Link Icon Color', 'wcp-post-carousel-for-elementor' ),
+						'label'     => esc_html__( 'Link Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
 						'type'      => 'color',
 						'default'   => '#ffffff',
 						'selectors' => array(
@@ -65,42 +65,48 @@ class DPCE_Styles {
 						),
 					),
 					array(
-						'id'        => 'overlay_bg',
-						'label'     => esc_html__( 'Overlay Background', 'wcp-post-carousel-for-elementor' ),
+						'id'        => 'icon_bg',
+						'label'     => esc_html__( 'Icon Background', 'webcodingplace-post-carousel-for-elementor' ),
 						'type'      => 'color',
-						'default'   => 'rgba(0,0,0,0.55)',
+						'default'   => '#000',
 						'selectors' => array(
-							'{{WRAPPER}} .dpce-style-1 .dpce-caption' => 'background-color: {{VALUE}};',
+							'{{WRAPPER}} .dpce-style-1 .dpce-icon' => 'background-color: {{VALUE}};',
+						),
+					),
+					array(
+						'id'        => 'day_bg',
+						'label'     => esc_html__( 'Day Background', 'webcodingplace-post-carousel-for-elementor' ),
+						'type'      => 'color',
+						'default'   => '#000',
+						'selectors' => array(
+							'{{WRAPPER}} .dpce-style-1 .day' => 'background-color: {{VALUE}};',
+						),
+					),
+					array(
+						'id'        => 'month_bg',
+						'label'     => esc_html__( 'Month Background', 'webcodingplace-post-carousel-for-elementor' ),
+						'type'      => 'color',
+						'default'   => '#514A4A',
+						'selectors' => array(
+							'{{WRAPPER}} .dpce-style-1 .month' => 'background-color: {{VALUE}};',
 						),
 					),
 				),
 			),
 			'2' => array(
 				'id'       => '2',
-				'name'     => esc_html__( 'Style 2 - Below Image', 'wcp-post-carousel-for-elementor' ),
+				'name'     => esc_html__( 'Style 2', 'webcodingplace-post-carousel-for-elementor' ),
 				'thumb'    => DPCE_URL . 'assets/images/style-2.svg',
-				'settings' => array(
-					array(
-						'id'        => 'card_radius',
-						'label'     => esc_html__( 'Card Border Radius (px)', 'wcp-post-carousel-for-elementor' ),
-						'type'      => 'number',
-						'default'   => 6,
-						'min'       => 0,
-						'max'       => 60,
-						'selectors' => array(
-							'{{WRAPPER}} .dpce-style-2' => 'border-radius: {{VALUE}}px; overflow: hidden;',
-						),
-					),
-				),
+				'settings' => array(),
 			),
 			'3' => array(
 				'id'       => '3',
-				'name'     => esc_html__( 'Style 3 - Side Meta', 'wcp-post-carousel-for-elementor' ),
+				'name'     => esc_html__( 'Style 3', 'webcodingplace-post-carousel-for-elementor' ),
 				'thumb'    => DPCE_URL . 'assets/images/style-3.svg',
 				'settings' => array(
 					array(
 						'id'        => 'meta_color',
-						'label'     => esc_html__( 'Meta Text Color', 'wcp-post-carousel-for-elementor' ),
+						'label'     => esc_html__( 'Meta Text Color', 'webcodingplace-post-carousel-for-elementor' ),
 						'type'      => 'color',
 						'default'   => '#888888',
 						'selectors' => array(
@@ -110,6 +116,19 @@ class DPCE_Styles {
 				),
 			),
 		);
+
+		// Auto-register styles 4..51. Each ships with an empty `settings` array;
+		// add per-style controls later by pushing into $default_styles[$id]['settings']
+		// or by hooking into the `dpce_styles` filter below.
+		for ( $i = 4; $i <= 51; $i++ ) {
+			$default_styles[ (string) $i ] = array(
+				'id'       => (string) $i,
+				/* translators: %d: template style number. */
+				'name'     => sprintf( esc_html__( 'Style %d', 'webcodingplace-post-carousel-for-elementor' ), $i ),
+				'thumb'    => DPCE_URL . 'assets/images/style-' . $i . '.svg',
+				'settings' => array(),
+			);
+		}
 
 		/**
 		 * Filter the registered carousel styles.
@@ -151,7 +170,7 @@ class DPCE_Styles {
 	 * Resolve the absolute path to a style template file.
 	 *
 	 * Allows themes/child-plugins to override templates by placing
-	 * `wcp-post-carousel-for-elementor/style-{id}.php` in their theme.
+	 * `webcodingplace-post-carousel-for-elementor/style-{id}.php` in their theme.
 	 *
 	 * @param string $id Style id.
 	 * @return string|null
@@ -160,7 +179,7 @@ class DPCE_Styles {
 		$id   = sanitize_file_name( $id );
 		$file = 'style-' . $id . '.php';
 
-		$located = locate_template( array( 'wcp-post-carousel-for-elementor/' . $file ) );
+		$located = locate_template( array( 'dpce/' . $file ) );
 		if ( $located && file_exists( $located ) ) {
 			return $located;
 		}
