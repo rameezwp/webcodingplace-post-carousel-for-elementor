@@ -52,7 +52,7 @@ class DPCE_Styles {
 		$default_styles = array(
 			'1' => array(
 				'id'       => '1',
-				'name'     => esc_html__( 'Style 1 - Overlay Card', 'webcodingplace-post-carousel-for-elementor' ),
+				'name'     => esc_html__( 'Style 1', 'webcodingplace-post-carousel-for-elementor' ),
 				'thumb'    => DPCE_URL . 'assets/images/style-1.svg',
 				'settings' => array(
 					array(
@@ -65,37 +65,43 @@ class DPCE_Styles {
 						),
 					),
 					array(
-						'id'        => 'overlay_bg',
-						'label'     => esc_html__( 'Overlay Background', 'webcodingplace-post-carousel-for-elementor' ),
+						'id'        => 'icon_bg',
+						'label'     => esc_html__( 'Icon Background', 'webcodingplace-post-carousel-for-elementor' ),
 						'type'      => 'color',
-						'default'   => 'rgba(0,0,0,0.55)',
+						'default'   => '#000',
 						'selectors' => array(
-							'{{WRAPPER}} .dpce-style-1 .dpce-caption' => 'background-color: {{VALUE}};',
+							'{{WRAPPER}} .dpce-style-1 .dpce-icon' => 'background-color: {{VALUE}};',
+						),
+					),
+					array(
+						'id'        => 'day_bg',
+						'label'     => esc_html__( 'Day Background', 'webcodingplace-post-carousel-for-elementor' ),
+						'type'      => 'color',
+						'default'   => '#000',
+						'selectors' => array(
+							'{{WRAPPER}} .dpce-style-1 .day' => 'background-color: {{VALUE}};',
+						),
+					),
+					array(
+						'id'        => 'month_bg',
+						'label'     => esc_html__( 'Month Background', 'webcodingplace-post-carousel-for-elementor' ),
+						'type'      => 'color',
+						'default'   => '#514A4A',
+						'selectors' => array(
+							'{{WRAPPER}} .dpce-style-1 .month' => 'background-color: {{VALUE}};',
 						),
 					),
 				),
 			),
 			'2' => array(
 				'id'       => '2',
-				'name'     => esc_html__( 'Style 2 - Below Image', 'webcodingplace-post-carousel-for-elementor' ),
+				'name'     => esc_html__( 'Style 2', 'webcodingplace-post-carousel-for-elementor' ),
 				'thumb'    => DPCE_URL . 'assets/images/style-2.svg',
-				'settings' => array(
-					array(
-						'id'        => 'card_radius',
-						'label'     => esc_html__( 'Card Border Radius (px)', 'webcodingplace-post-carousel-for-elementor' ),
-						'type'      => 'number',
-						'default'   => 6,
-						'min'       => 0,
-						'max'       => 60,
-						'selectors' => array(
-							'{{WRAPPER}} .dpce-style-2' => 'border-radius: {{VALUE}}px; overflow: hidden;',
-						),
-					),
-				),
+				'settings' => array(),
 			),
 			'3' => array(
 				'id'       => '3',
-				'name'     => esc_html__( 'Style 3 - Side Meta', 'webcodingplace-post-carousel-for-elementor' ),
+				'name'     => esc_html__( 'Style 3', 'webcodingplace-post-carousel-for-elementor' ),
 				'thumb'    => DPCE_URL . 'assets/images/style-3.svg',
 				'settings' => array(
 					array(
@@ -173,7 +179,7 @@ class DPCE_Styles {
 		$id   = sanitize_file_name( $id );
 		$file = 'style-' . $id . '.php';
 
-		$located = locate_template( array( 'webcodingplace-post-carousel-for-elementor/' . $file ) );
+		$located = locate_template( array( 'dpce/' . $file ) );
 		if ( $located && file_exists( $located ) ) {
 			return $located;
 		}

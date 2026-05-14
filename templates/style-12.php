@@ -23,13 +23,13 @@ if ( ! defined( 'ABSPATH' ) ) {
     </p>
   </div>
   <footer>
-    <div class="views"><?php echo dpce_icon( 'comments' ); ?>
+    <div class="views"><?php echo wp_kses_post( dpce_icon( 'comments' )); ?>
         <?php
           $comments = wp_count_comments(get_the_id());
           echo esc_attr( $comments->total_comments );
         ?>
     </div>
-    <div class="love"><?php echo dpce_icon( 'user' ); ?><?php echo get_the_author(); ?></div>
+    <div class="love"><?php echo wp_kses_post( dpce_icon( 'user' )); ?><?php echo get_the_author(); ?></div>
   </footer>
     <?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

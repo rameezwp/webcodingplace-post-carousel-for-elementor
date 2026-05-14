@@ -959,7 +959,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 
 		$wrapper_classes = array(
 			'dpce-carousel',
-			'dpce-style-' . sanitize_html_class( $style_id ),
+			'dpce-wrapper-' . sanitize_html_class( $style_id ),
 			'dpce-arrows-' . sanitize_html_class( isset( $settings['arrows_style'] ) ? $settings['arrows_style'] : 'chevron' ),
 			'dpce-arrows-pos-' . sanitize_html_class( isset( $settings['arrows_position'] ) ? $settings['arrows_position'] : 'center' ),
 			'dpce-dots-' . sanitize_html_class( isset( $settings['dots_icon'] ) ? $settings['dots_icon'] : 'circle' ),

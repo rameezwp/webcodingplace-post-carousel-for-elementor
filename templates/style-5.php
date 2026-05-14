@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       <div class="date"><?php echo get_the_date(); ?></div>
       <div class="icons">
         <div class="views">
-          <?php echo dpce_icon( 'comments' ); ?>
+          <?php echo wp_kses_post( dpce_icon( 'comments' )); ?>
         <?php
           $comments = wp_count_comments(get_the_id());
           echo esc_attr( $comments->total_comments );

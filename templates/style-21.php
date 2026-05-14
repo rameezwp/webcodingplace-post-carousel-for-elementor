@@ -21,7 +21,22 @@ if ( ! defined( 'ABSPATH' ) ) {
   </div>
   <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
   <div class="position dpce-date">
-    <?php printf( _x( '%s ago', '%s = human-readable time difference', 'webcodingplace-post-carousel-for-elementor' ), human_time_diff( get_the_time( 'U' ), time() ) ); ?>
+    <?php
+    printf(
+      /* translators: %s: Human-readable time difference. */
+      esc_html_x(
+        '%s ago',
+        '%s = human-readable time difference',
+        'webcodingplace-post-carousel-for-elementor'
+      ),
+      esc_html(
+        human_time_diff(
+          get_the_time( 'U' ),
+          current_time( 'timestamp' )
+        )
+      )
+    );
+    ?>
   </div>
 	<?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

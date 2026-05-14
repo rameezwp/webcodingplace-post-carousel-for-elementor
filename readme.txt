@@ -12,7 +12,7 @@ Display posts, custom post types or taxonomy terms in a beautiful, fully respons
 
 == Description ==
 
-WebCodingPlace Post Carousel for Elementor adds a single, deeply configurable carousel widget that lets you slide any post type — including WooCommerce products, portfolios, events, custom post types and taxonomy terms — through ready-made templates. Pick a heading source from any post field or meta key, trim it to a word count, swap the read-more text and target, choose your image size, lazy-load thumbnails, enable social sharing and apply your own CSS, all from the Elementor editor.
+WebCodingPlace Post Carousel for Elementor adds a single, deeply configurable carousel widget that lets you slide any post type, including WooCommerce products, portfolios, events, custom post types and taxonomy terms through ready-made templates. Pick a heading source from any post field or meta key, trim it to a word count, swap the read-more text and target, choose your image size, lazy-load thumbnails, enable social sharing and apply your own CSS, all from the Elementor editor.
 
 = Highlights =
 
@@ -29,7 +29,7 @@ WebCodingPlace Post Carousel for Elementor adds a single, deeply configurable ca
 
 = Developers =
 
-Templates fire action hooks (`dpce_carousel_thumbnail`, `dpce_carousel_title`, `dpce_carousel_desc`, `dpce_carousel_read_more`, `dpce_carousel_meta`, `dpce_carousel_share`) so you can override individual pieces without forking. Drop a `webcodingplace-post-carousel-for-elementor/style-{id}.php` file into your theme to override a bundled template.
+Templates fire action hooks (`dpce_carousel_thumbnail`, `dpce_carousel_title`, `dpce_carousel_desc`, `dpce_carousel_read_more`, `dpce_carousel_meta`, `dpce_carousel_share`) so you can override individual pieces without forking. Drop a `dpce/style-{id}.php` file into your theme to override a bundled template.
 
 == Installation ==
 
@@ -95,10 +95,9 @@ This plugin bundles **Slick Carousel** (https://kenwheeler.github.io/slick/) by 
 == Changelog ==
 
 = 1.4 =
-* All 51 carousel templates now ship with dpce-* markup, action hooks and styles registry entries.
+* 51 carousel templates added.
 * New "Link Area" setting: link the whole card or only the Read More button.
 * Replaced Font Awesome with bundled inline SVG icons so no external icon font is required.
-* Normalized remaining rpc-* / rpc_* CSS classes to dpce-* equivalents.
 
 = 1.2 =
 * Documented external services (social-share endpoints).

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: WebCodingPlace Post Carousel for Elementor\n"
-"POT-Creation-Date: 2026-05-09 11:03+0500\n"
+"POT-Creation-Date: 2026-05-14 12:18+0500\n"
 "PO-Revision-Date: 2026-05-04 13:25+0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -21,32 +21,32 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 
-#: includes/class-dpce-renderer.php:204
+#: includes/class-dpce-renderer.php:234
 msgid "Share on Facebook"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:205
+#: includes/class-dpce-renderer.php:235
 msgid "Share on Twitter"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:206
+#: includes/class-dpce-renderer.php:236
 msgid "Share on LinkedIn"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:207
+#: includes/class-dpce-renderer.php:237
 msgid "Share on WhatsApp"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:208
+#: includes/class-dpce-renderer.php:238
 msgid "Share on Pinterest"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:209
+#: includes/class-dpce-renderer.php:239
 msgid "Share by Email"
 msgstr ""
 
 #: includes/class-dpce-styles.php:55
-msgid "Style 1 - Overlay Card"
+msgid "Style 1"
 msgstr ""
 
 #: includes/class-dpce-styles.php:60
@@ -54,23 +54,33 @@ msgid "Link Icon Color"
 msgstr ""
 
 #: includes/class-dpce-styles.php:69
-msgid "Overlay Background"
+msgid "Icon Background"
 msgstr ""
 
-#: includes/class-dpce-styles.php:80
-msgid "Style 2 - Below Image"
+#: includes/class-dpce-styles.php:78
+msgid "Day Background"
 msgstr ""
 
-#: includes/class-dpce-styles.php:85
-msgid "Card Border Radius (px)"
+#: includes/class-dpce-styles.php:87
+msgid "Month Background"
 msgstr ""
 
 #: includes/class-dpce-styles.php:98
-msgid "Style 3 - Side Meta"
+msgid "Style 2"
 msgstr ""
 
-#: includes/class-dpce-styles.php:103
+#: includes/class-dpce-styles.php:104
+msgid "Style 3"
+msgstr ""
+
+#: includes/class-dpce-styles.php:109
 msgid "Meta Text Color"
+msgstr ""
+
+#. translators: %d: template style number.
+#: includes/class-dpce-styles.php:127
+#, php-format
+msgid "Style %d"
 msgstr ""
 
 #: includes/helpers.php:116
@@ -115,6 +125,12 @@ msgstr ""
 
 #: includes/helpers.php:236
 msgid "Full"
+msgstr ""
+
+#: templates/style-20.php:30 templates/style-21.php:28
+#, php-format
+msgctxt "%s = human-readable time difference"
+msgid "%s ago"
 msgstr ""
 
 #. translators: 1: plugin name, 2: required plugin name
@@ -251,287 +267,301 @@ msgstr ""
 msgid "Heading Max Words"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:271
+#: widgets/post-carousel-widget.php:270
+msgid "Heading HTML Tag"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:287
 msgid "Description Source"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:281
+#: widgets/post-carousel-widget.php:297
 msgid "Description Meta Key"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:291
+#: widgets/post-carousel-widget.php:307
 msgid "Description Max Words"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:303
+#: widgets/post-carousel-widget.php:319
 msgid "Append to Trimmed Text"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:313
+#: widgets/post-carousel-widget.php:329
 msgid "Render Shortcodes / HTML in Description"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:315
+#: widgets/post-carousel-widget.php:331
 msgid "Yes"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:316
+#: widgets/post-carousel-widget.php:332
 msgid "No"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:327
+#: widgets/post-carousel-widget.php:343
 msgid "Read More Button Text"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:329
+#: widgets/post-carousel-widget.php:345
 msgid "Read More"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:336
+#: widgets/post-carousel-widget.php:352
 msgid "Read More Extra CSS Classes"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:346
+#: widgets/post-carousel-widget.php:362
 msgid "Link Target"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:350
+#: widgets/post-carousel-widget.php:366
 msgid "Same Tab"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:351
+#: widgets/post-carousel-widget.php:367
 msgid "New Tab"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:366
+#: widgets/post-carousel-widget.php:375
+msgid "Link Area"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:376
+msgid ""
+"Choose whether the entire card or only the Read More button links to the "
+"post."
+msgstr ""
+
+#: widgets/post-carousel-widget.php:380
+msgid "Whole Card"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:381
+msgid "Read More Button Only"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:396
 msgid "Slider"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:374
+#: widgets/post-carousel-widget.php:404
 msgid "Columns - Desktop"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:384
+#: widgets/post-carousel-widget.php:414
 msgid "Columns - Tablet"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:394
+#: widgets/post-carousel-widget.php:424
 msgid "Columns - Mobile"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:404
+#: widgets/post-carousel-widget.php:434
 msgid "Slides to Scroll"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:414
+#: widgets/post-carousel-widget.php:444
 msgid "Animation Speed (ms)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:424
+#: widgets/post-carousel-widget.php:454
 msgid "Infinite Scroll"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:433
+#: widgets/post-carousel-widget.php:463
 msgid "Vertical Mode"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:442
+#: widgets/post-carousel-widget.php:472
 msgid "Space Between Posts (px)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:456
+#: widgets/post-carousel-widget.php:486
 msgid "Autoplay"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:465
+#: widgets/post-carousel-widget.php:495
 msgid "Autoplay Speed (ms)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:476
+#: widgets/post-carousel-widget.php:506
 msgid "Show Dots"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:485
+#: widgets/post-carousel-widget.php:515
 msgid "Dots Style"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:489
+#: widgets/post-carousel-widget.php:519
 msgid "Circle"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:490 widgets/post-carousel-widget.php:515
+#: widgets/post-carousel-widget.php:520 widgets/post-carousel-widget.php:545
 msgid "Square"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:491
+#: widgets/post-carousel-widget.php:521
 msgid "Dash"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:499
+#: widgets/post-carousel-widget.php:529
 msgid "Show Arrows"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:508
+#: widgets/post-carousel-widget.php:538
 msgid "Arrows Style"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:512
+#: widgets/post-carousel-widget.php:542
 msgid "Chevron"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:513
+#: widgets/post-carousel-widget.php:543
 msgid "Arrow"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:514
+#: widgets/post-carousel-widget.php:544
 msgid "Circled Chevron"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:523
+#: widgets/post-carousel-widget.php:553
 msgid "Arrows Position"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:527
+#: widgets/post-carousel-widget.php:557
 msgid "Center (Sides)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:528
+#: widgets/post-carousel-widget.php:558
 msgid "Top Left"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:529
+#: widgets/post-carousel-widget.php:559
 msgid "Top Right"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:530
+#: widgets/post-carousel-widget.php:560
 msgid "Top Center"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:531
+#: widgets/post-carousel-widget.php:561
 msgid "Bottom Left"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:532
+#: widgets/post-carousel-widget.php:562
 msgid "Bottom Right"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:533
+#: widgets/post-carousel-widget.php:563
 msgid "Bottom Center"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:541
+#: widgets/post-carousel-widget.php:571
 msgid "RTL Mode"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:550
+#: widgets/post-carousel-widget.php:580
 msgid "Pause on Hover"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:568
+#: widgets/post-carousel-widget.php:598
 msgid "Appearance"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:576
+#: widgets/post-carousel-widget.php:606
 msgid "Template Style"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:586
+#: widgets/post-carousel-widget.php:616
 msgid "Post Background Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:597
+#: widgets/post-carousel-widget.php:627
 msgid "Title Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:609
+#: widgets/post-carousel-widget.php:639
 msgid "Title Typography"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:617
+#: widgets/post-carousel-widget.php:647
 msgid "Description Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:629
+#: widgets/post-carousel-widget.php:659
 msgid "Description Typography"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:645
+#: widgets/post-carousel-widget.php:675
 msgid "Border Radius"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:665
+#: widgets/post-carousel-widget.php:695
 msgid "Arrows Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:677
+#: widgets/post-carousel-widget.php:707
 msgid "Arrows Background"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:689
+#: widgets/post-carousel-widget.php:719
 msgid "Dots Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:702
-msgid "Custom CSS"
-msgstr ""
-
-#: widgets/post-carousel-widget.php:705
-msgid "Use {{WRAPPER}} as the widget selector."
-msgstr ""
-
-#: widgets/post-carousel-widget.php:714
+#: widgets/post-carousel-widget.php:733
 msgid "Style Specific Settings"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:777
+#: widgets/post-carousel-widget.php:796
 msgid "Advanced"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:785
+#: widgets/post-carousel-widget.php:804
 msgid "Image Size"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:795
+#: widgets/post-carousel-widget.php:814
 msgid "Lazy Load Images"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:805
+#: widgets/post-carousel-widget.php:824
 msgid "Placeholder Image"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:813
+#: widgets/post-carousel-widget.php:832
 msgid "Hide Current Post"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:814
+#: widgets/post-carousel-widget.php:833
 msgid "Skip the current post when the carousel is rendered on a singular page."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:824
+#: widgets/post-carousel-widget.php:843
 msgid "Adaptive Height"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:834
+#: widgets/post-carousel-widget.php:853
 msgid "Enable Social Sharing"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:844
+#: widgets/post-carousel-widget.php:863
 msgid "Networks"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:854
+#: widgets/post-carousel-widget.php:873
 msgid "Email"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:864
+#: widgets/post-carousel-widget.php:883
 msgid "Share Icon Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:876
+#: widgets/post-carousel-widget.php:895
 msgid "Share Icon Background"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:903
+#: widgets/post-carousel-widget.php:922
 msgid "No posts match the current settings."
 msgstr ""
 

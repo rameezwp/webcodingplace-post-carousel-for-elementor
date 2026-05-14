@@ -303,15 +303,15 @@ function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 
 	$inner = tag_escape( $args['inner_wrap'] );
 
-	echo '<' . $tag . ' class="' . esc_attr( $class ) . '">';
+	echo '<' . esc_attr($tag) . ' class="' . esc_attr( $class ) . '">';
 	if ( $inner ) {
-		echo '<' . $inner . '>';
+		echo '<' . esc_attr($inner) . '>';
 	}
 	do_action( 'dpce_carousel_title', $post_id, $carousel_settings );
 	if ( $inner ) {
-		echo '</' . $inner . '>';
+		echo '</' . esc_attr($inner) . '>';
 	}
-	echo '</' . $tag . '>';
+	echo '</' . esc_attr($tag) . '>';
 }
 
 /**

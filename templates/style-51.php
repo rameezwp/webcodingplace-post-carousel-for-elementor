@@ -14,8 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
   <div class="price dpce-price">
       <?php
         if (function_exists('wc_get_product')) {
-          $product = wc_get_product($post_id);
-          echo ($product) ? $product->get_price_html() : '' ;
+          $dpce_product = wc_get_product($post_id);
+          echo ($dpce_product) ? wp_kses_post($dpce_product->get_price_html()) : '' ;
         }
       ?>  	
   </div>
