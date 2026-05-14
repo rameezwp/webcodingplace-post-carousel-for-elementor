@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     		<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
     	</span>
     </p>
-    <h2 class="dpce-title"><span><?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?></span></h2>
+    <?php dpce_render_title( $post_id, $carousel_settings, array( 'inner_wrap' => 'span' ) ); ?>
     <div class="icons">
     	<?php do_action( 'dpce_carousel_share', $post_id, $carousel_settings ); ?> 
     </div>

@@ -264,6 +264,22 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'title_tag',
+			array(
+				'label'   => esc_html__( 'Heading HTML Tag', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'h3',
+				'options' => array(
+					'h2' => 'H2',
+					'h3' => 'H3',
+					'h4' => 'H4',
+					'h5' => 'H5',
+					'h6' => 'H6',
+				),
+			)
+		);
+
 		// 9-10. Description.
 		$this->add_control(
 			'desc_field',
@@ -991,6 +1007,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			'heading_field'         => isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title',
 			'heading_meta_key'      => isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '',
 			'heading_max_words'     => isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0,
+			'title_tag'             => isset( $settings['title_tag'] ) && in_array( $settings['title_tag'], array( 'h2', 'h3', 'h4', 'h5', 'h6' ), true ) ? $settings['title_tag'] : 'h3',
 			'desc_field'            => isset( $settings['desc_field'] ) ? $settings['desc_field'] : 'excerpt',
 			'desc_meta_key'         => isset( $settings['desc_meta_key'] ) ? $settings['desc_meta_key'] : '',
 			'desc_max_words'        => isset( $settings['desc_max_words'] ) ? (int) $settings['desc_max_words'] : 20,

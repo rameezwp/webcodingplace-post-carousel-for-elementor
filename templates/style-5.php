@@ -14,9 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
   </div>
   <div class="dpce-body">
-    <h5 class="dpce-title">
-      <?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?>
-    </h5>
+    <?php dpce_render_title( $post_id, $carousel_settings ); ?>
     <h3 class="dpce-desc">
       <?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
     </h3>

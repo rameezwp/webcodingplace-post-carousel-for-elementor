@@ -266,6 +266,55 @@ function dpce_parse_id_list( $value ) {
 }
 
 /**
+ * Render the title heading element for a carousel slide.
+ *
+ * Templates call this to get the correct heading tag (driven by the widget's
+ * Heading HTML Tag setting) with the `dpce-title` class baked in. The actual
+ * text comes from the dpce_carousel_title action so the existing trim / meta
+ * key plumbing keeps working.
+ *
+ * @param int    $post_id           Post ID.
+ * @param array  $carousel_settings Settings forwarded by the widget.
+ * @param array  $args              Optional args: 'inner_wrap' (string, e.g. 'span')
+ *                                  to wrap the title text, 'extra_class' (string).
+ */
+function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
+	if ( is_string( $args ) ) {
+		$args = array( 'extra_class' => $args );
+	}
+	$args = wp_parse_args(
+		(array) $args,
+		array(
+			'inner_wrap'  => '',
+			'extra_class' => '',
+		)
+	);
+
+	$tag = isset( $carousel_settings['title_tag'] ) ? $carousel_settings['title_tag'] : 'h3';
+	$tag = tag_escape( $tag );
+	if ( ! in_array( $tag, array( 'h2', 'h3', 'h4', 'h5', 'h6' ), true ) ) {
+		$tag = 'h3';
+	}
+
+	$class = 'dpce-title';
+	if ( '' !== trim( (string) $args['extra_class'] ) ) {
+		$class .= ' ' . preg_replace( '/[^a-z0-9 _-]/i', '', $args['extra_class'] );
+	}
+
+	$inner = tag_escape( $args['inner_wrap'] );
+
+	echo '<' . $tag . ' class="' . esc_attr( $class ) . '">';
+	if ( $inner ) {
+		echo '<' . $inner . '>';
+	}
+	do_action( 'dpce_carousel_title', $post_id, $carousel_settings );
+	if ( $inner ) {
+		echo '</' . $inner . '>';
+	}
+	echo '</' . $tag . '>';
+}
+
+/**
  * Inline SVG icon registry.
  *
  * Templates render icons via this helper instead of Font Awesome so the
