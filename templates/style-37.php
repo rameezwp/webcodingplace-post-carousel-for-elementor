@@ -11,6 +11,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <article class="dpce-style-37 dpce-wrapper">
   <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-  <span class="dpce-title"><?php echo wp_kses_post( dpce_icon( 'share' )); ?><?php do_action( 'dpce_carousel_title', $post_id,  $carousel_settings ); ?></span>
+  <span class="dpce-title">
+    <?php do_action( 'dpce_carousel_icon', $post_id, $carousel_settings ); ?>
+    <?php dpce_render_title( $post_id, $carousel_settings ); ?>
+  </span>
   <?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

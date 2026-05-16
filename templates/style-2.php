@@ -21,6 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
 		</div>
 	</div>
-	<div class="hover"><?php echo wp_kses_post( dpce_icon( 'link' ) ); ?></div>
+	<div class="hover">
+		<?php do_action( 'dpce_carousel_icon', $post_id, $carousel_settings ); ?>
+	</div>
 	<?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <article class="dpce-style-38 dpce-wrapper">
   <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-  <?php echo wp_kses_post( dpce_icon( 'share' )); ?>
+  <?php do_action( 'dpce_carousel_icon', $post_id, $carousel_settings ); ?>
   <div class="dpce-body">
     <?php dpce_render_title( $post_id, $carousel_settings ); ?>
   </div>

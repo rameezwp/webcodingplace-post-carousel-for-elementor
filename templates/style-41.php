@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     	<?php do_action( 'dpce_carousel_share', $post_id, $carousel_settings ); ?> 
     </div>
   </div>
-  <div class="dpce-body">
+  <div class="dpce-body dpce-bg">
     <?php dpce_render_title( $post_id, $carousel_settings ); ?>
     <p class="dpce-desc">
       <?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>

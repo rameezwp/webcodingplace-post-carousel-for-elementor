@@ -611,12 +611,54 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		);
 
 		$this->add_control(
+			'accent_color',
+			array(
+				'label'     => esc_html__( 'Accent Color', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .dpce-date' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-1 .dpce-icon' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-2 .hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-4' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-6:after' => 'border-color:transparent transparent transparent {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-10 .dpce-body:before' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-10:before' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-14 .dpce-body:before' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-18' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-21:after' => 'background-color: {{VALUE}};border-right: 4px solid {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-22 .dpce-body .dpce-title' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-23:before' => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-23:after' => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-24 .hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-26 .dpce-title' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-31 .dpce-body:after, {{WRAPPER}} .dpce-style-31 .dpce-body:before' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-31:after, {{WRAPPER}} .dpce-style-31:before' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-33:before' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-34' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-36' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-38 .dpce-title' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-39 .dpce-title, {{WRAPPER}} .dpce-style-39:before, {{WRAPPER}} .dpce-style-39:after' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-40' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-41:before, {{WRAPPER}} .dpce-style-41:after' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-42' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-51, {{WRAPPER}} .dpce-style-51 .dpce-title, {{WRAPPER}} .dpce-style-51 a, {{WRAPPER}} .dpce-style-51 .price' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-51 .dpce-title:before' => 'border-color: transparent transparent transparent {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-51 .price:before' => 'border-color: transparent {{VALUE}} transparent;',
+				),
+			)
+		);
+
+		$this->add_control(
 			'post_bg_color',
 			array(
 				'label'     => esc_html__( 'Post Background Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .dpce-slide-inner' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-bg' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-8 .dpce-body:before' => 'background-image: linear-gradient(to bottom, transparent 0%, {{VALUE}} 100%);',
+					'{{WRAPPER}} .dpce-style-9 .date:before' => 'border-color: transparent {{VALUE}} transparent transparent;',
+					'{{WRAPPER}} .dpce-style-9 .dpce-body:before' => 'border-color: transparent transparent transparent {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-9 .date' => 'background-color: {{VALUE}};',
 				),
 			)
 		);
@@ -735,6 +777,39 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			)
 		);
 
+		$this->add_control(
+		    'style_icon',
+		    [
+		        'label' => __( 'Icon', 'webcodingplace-post-carousel-for-elementor' ),
+		        'type' => Controls_Manager::ICONS,
+		        'fa4compatibility' => 'icon',
+		        'default' => [
+		            'value' => 'fas fa-star',
+		            'library' => 'solid',
+		        ],
+		        'condition' => [
+		            'style_id' => [ '1', '2','10', '15', '24', '26', '30', '37', '38', '48', '49', 
+		            '50' ],
+		        ],
+		    ]
+		);
+
+		$this->add_control(
+		    'style_icon_color',
+		    [
+		        'label' => __( 'Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
+		        'type' => Controls_Manager::COLOR,
+		        'selectors' => [
+		            '{{WRAPPER}} .dpce-icon' => 'color: {{VALUE}};',
+		            '{{WRAPPER}} .dpce-icon' => 'fill: {{VALUE}};',
+		        ],
+		        'condition' => [
+		            'style_id' => [ '1', '2', '10', '15', '24', '26', '30', '37', '38', '48', '49', 
+		            '50' ],
+		        ],
+		    ]
+		);
+
 		foreach ( DPCE_Styles::all() as $style_id => $style ) {
 			if ( empty( $style['settings'] ) || ! is_array( $style['settings'] ) ) {
 				continue;
@@ -768,6 +843,9 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 						break;
 					case 'number':
 						$args['type'] = Controls_Manager::NUMBER;
+						break;
+					case 'icon':
+						$args['type'] = Controls_Manager::ICONS;
 						break;
 					case 'slider':
 						$args['type'] = Controls_Manager::SLIDER;
@@ -1023,6 +1101,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			'enable_share'          => 'yes' === ( isset( $settings['enable_share'] ) ? $settings['enable_share'] : '' ),
 			'share_networks'        => isset( $settings['share_networks'] ) ? (array) $settings['share_networks'] : array(),
 			'style_id'              => isset( $settings['style_id'] ) ? $settings['style_id'] : '1',
+			'style_icon'              => isset( $settings['style_icon'] ) ? $settings['style_icon'] : '',
+			'style_icon_color'              => isset( $settings['style_icon_color'] ) ? $settings['style_icon_color'] : '',
 		);
 	}
 

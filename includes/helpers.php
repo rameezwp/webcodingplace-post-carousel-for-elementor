@@ -313,38 +313,3 @@ function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 	}
 	echo '</' . esc_attr($tag) . '>';
 }
-
-/**
- * Inline SVG icon registry.
- *
- * Templates render icons via this helper instead of Font Awesome so the
- * plugin has zero external icon-font dependencies. Each icon paints in
- * `currentColor`, so CSS color rules on the parent or per-style settings
- * still drive the colour.
- *
- * @param string $name  Icon slug (link, comments, user, share, cart-plus, plus, clock).
- * @param string $class Optional extra CSS class.
- * @return string Safe HTML.
- */
-function dpce_icon( $name, $class = '' ) {
-	$icons = array(
-		'link'      => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 1 0-7.07-7.07l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 1 0 7.07 7.07l1.5-1.5"/></svg>',
-		'comments'  => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
-		'user'      => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-		'share'     => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
-		'cart-plus' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="21" r="1.5"/><circle cx="18" cy="21" r="1.5"/><path d="M3 3h2l2.4 12.59a2 2 0 0 0 2 1.41h8.4a2 2 0 0 0 2-1.59L21 8H6"/><line x1="12" y1="11" x2="18" y2="11"/><line x1="15" y1="8" x2="15" y2="14"/></svg>',
-		'plus'      => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
-		'clock'     => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-	);
-
-	if ( ! isset( $icons[ $name ] ) ) {
-		return '';
-	}
-
-	$classes = 'dpce-icon dpce-icon-' . sanitize_html_class( $name );
-	if ( '' !== $class ) {
-		$classes .= ' ' . preg_replace( '/[^a-z0-9 _-]/i', '', $class );
-	}
-
-	return str_replace( '<svg ', '<svg class="' . esc_attr( $classes ) . '" ', $icons[ $name ] );
-}

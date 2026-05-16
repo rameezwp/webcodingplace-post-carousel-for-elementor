@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="dpce-style-45 dpce-wrapper">
+<div class="dpce-style-45 dpce-wrapper dpce-bg">
 	<div class="dpce-post-image">
 		<a href="<?php echo esc_url(get_permalink($post_id)); ?>" target="<?php echo esc_attr($carousel_settings['read_more_target']); ?>">
 			<?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
@@ -56,11 +56,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</a>
 	</h3>
 	<span class="dpce-post-meta">
-		<?php echo wp_kses_post( dpce_icon( 'user' )); ?>
+		<?php do_action( 'dpce_carousel_icon', $post_id, $carousel_settings, 'far fa-comments' ); ?>
 		<?php the_author_posts_link(); ?>
 	</span>
-	<span class="dpce-post-date dpce-date">
-		<?php echo wp_kses_post( dpce_icon( 'clock' )); ?>
+	<span class="dpce-post-date">
+		<?php do_action( 'dpce_carousel_icon', $post_id, $carousel_settings, 'far fa-clock' ); ?>
 		<?php echo get_the_date() ?>
 	</span>
 

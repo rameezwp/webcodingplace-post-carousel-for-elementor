@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="dpce-style-47 dpce-wrapper">
+<div class="dpce-style-47 dpce-wrapper dpce-bg">
     <a target="<?php echo esc_attr($carousel_settings['read_more_target']); ?>" href="<?php the_permalink(); ?>">
     	<?php dpce_render_title( $post_id, $carousel_settings ); ?>
     </a>

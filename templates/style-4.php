@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <article class="dpce-style-4 dpce-wrapper">
-  <div class="dpce-body">
+  <div class="dpce-body dpce-bg">
   	<?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
     <?php dpce_render_title( $post_id, $carousel_settings ); ?>
     <p class="dpce-desc">

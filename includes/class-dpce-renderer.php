@@ -49,6 +49,7 @@ class DPCE_Renderer {
 		add_action( 'dpce_carousel_overlay', array( $this, 'render_overlay' ), 10, 2 );
 		add_action( 'dpce_carousel_meta', array( $this, 'render_meta' ), 10, 2 );
 		add_action( 'dpce_carousel_share', array( $this, 'render_share' ), 10, 2 );
+		add_action( 'dpce_carousel_icon', array( $this, 'render_icon' ), 10, 4 );
 	}
 
 	/**
@@ -188,6 +189,40 @@ class DPCE_Renderer {
 	}
 
 	/**
+	 * Inline SVG icon registry.
+	 *
+	 * @param string $name  Icon slug (link, comments, user, share, cart-plus, plus, clock).
+	 * @param string $class Optional extra CSS class.
+	 * @return string Safe HTML.
+	 */
+	function render_icon( $post_id, $settings, $icon = '', $class = 'dpce-custom-icon' ) {
+		if ($icon) {
+			\Elementor\Icons_Manager::render_icon(
+				[
+				    'library' => 'fa-regular',
+				    'value'   => esc_attr($icon),
+				],
+			    [
+			        'aria-hidden' => 'true',
+			        'class' => esc_attr($class),
+			    ]
+			);
+		}
+
+		if ( ! empty( $settings['style_icon']['value'] ) ) {
+
+			\Elementor\Icons_Manager::render_icon(
+			    $settings['style_icon'],
+			    [
+			        'aria-hidden' => 'true',
+			        'class' => 'dpce-icon'
+			    ]
+			);
+		}
+	}
+
+
+	/**
 	 * Render compact post meta (date + author) used by some templates.
 	 *
 	 * @param int   $post_id  Post ID.
@@ -230,6 +265,15 @@ class DPCE_Renderer {
 			'email'    => 'mailto:?subject=' . $title . '&body=' . $url,
 		);
 
+		$icons = [
+		    'facebook'  => [ 'value' => 'fab fa-facebook-f',  'library' => 'fa-brands' ],
+		    'twitter'   => [ 'value' => 'fab fa-x-twitter',   'library' => 'fa-brands' ],
+		    'linkedin'  => [ 'value' => 'fab fa-linkedin-in', 'library' => 'fa-brands' ],
+		    'whatsapp'  => [ 'value' => 'fab fa-whatsapp',    'library' => 'fa-brands' ],
+		    'pinterest' => [ 'value' => 'fab fa-pinterest-p', 'library' => 'fa-brands' ],
+		    'email'     => [ 'value' => 'fas fa-envelope',     'library' => 'fa-solid' ],
+		];
+
 		$labels = array(
 			'facebook'  => __( 'Share on Facebook', 'webcodingplace-post-carousel-for-elementor' ),
 			'twitter'   => __( 'Share on Twitter', 'webcodingplace-post-carousel-for-elementor' ),
@@ -240,18 +284,34 @@ class DPCE_Renderer {
 		);
 
 		echo '<div class="dpce-share">';
+
 		foreach ( $networks as $network ) {
-			if ( ! isset( $urls[ $network ] ) ) {
-				continue;
-			}
-			printf(
-				'<a class="dpce-share-link dpce-share-%1$s" target="_blank" rel="noopener noreferrer" href="%2$s" aria-label="%3$s"><span>%4$s</span></a>',
-				esc_attr( $network ),
-				esc_url( $urls[ $network ] ),
-				esc_attr( $labels[ $network ] ),
-				esc_html( ucfirst( $network ) )
-			);
+
+		    if ( ! isset( $urls[ $network ] ) ) {
+		        continue;
+		    }
+
+		    printf(
+		        '<a class="dpce-share-link dpce-share-%1$s"
+		            target="_blank"
+		            rel="noopener noreferrer"
+		            href="%2$s"
+		            aria-label="%3$s">',
+		        esc_attr( $network ),
+		        esc_url( $urls[ $network ] ),
+		        esc_attr( $labels[ $network ] )
+		    );
+
+		    if ( isset( $icons[ $network ] ) ) {
+		        \Elementor\Icons_Manager::render_icon(
+		            $icons[ $network ],
+		            [ 'aria-hidden' => 'true', 'class' => 'dpce-social-icon' ]
+		        );
+		    }
+
+		    echo '</a>';
 		}
+
 		echo '</div>';
 	}
 }

@@ -8,18 +8,6 @@
  *   thumb    (string, optional) - URL to a preview image.
  *   settings (array,  optional) - per-style appearance settings.
  *
- * Each entry in `settings` is rendered as an Elementor control inside the
- * Appearance tab and conditionally bound to the chosen style. The `selectors`
- * key is used to write the resulting CSS rule.
- *
- *   array(
- *       'id'        => 'icon_color',                // unique within style
- *       'label'     => __( 'Icon Color', '...' ),
- *       'type'      => 'color' | 'text' | 'number' | 'slider',
- *       'default'   => '#1abc9c',
- *       'selectors' => array( '{{WRAPPER}} .fa' => 'color: {{VALUE}};' ),
- *   )
- *
  * @package DPCE
  */
 
@@ -49,78 +37,13 @@ class DPCE_Styles {
 			return self::$styles;
 		}
 
-		$default_styles = array(
-			'1' => array(
-				'id'       => '1',
-				'name'     => esc_html__( 'Style 1', 'webcodingplace-post-carousel-for-elementor' ),
-				'thumb'    => DPCE_URL . 'assets/images/style-1.svg',
-				'settings' => array(
-					array(
-						'id'        => 'icon_color',
-						'label'     => esc_html__( 'Link Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
-						'type'      => 'color',
-						'default'   => '#ffffff',
-						'selectors' => array(
-							'{{WRAPPER}} .dpce-style-1 .dpce-icon' => 'color: {{VALUE}};',
-						),
-					),
-					array(
-						'id'        => 'icon_bg',
-						'label'     => esc_html__( 'Icon Background', 'webcodingplace-post-carousel-for-elementor' ),
-						'type'      => 'color',
-						'default'   => '#000',
-						'selectors' => array(
-							'{{WRAPPER}} .dpce-style-1 .dpce-icon' => 'background-color: {{VALUE}};',
-						),
-					),
-					array(
-						'id'        => 'day_bg',
-						'label'     => esc_html__( 'Day Background', 'webcodingplace-post-carousel-for-elementor' ),
-						'type'      => 'color',
-						'default'   => '#000',
-						'selectors' => array(
-							'{{WRAPPER}} .dpce-style-1 .day' => 'background-color: {{VALUE}};',
-						),
-					),
-					array(
-						'id'        => 'month_bg',
-						'label'     => esc_html__( 'Month Background', 'webcodingplace-post-carousel-for-elementor' ),
-						'type'      => 'color',
-						'default'   => '#514A4A',
-						'selectors' => array(
-							'{{WRAPPER}} .dpce-style-1 .month' => 'background-color: {{VALUE}};',
-						),
-					),
-				),
-			),
-			'2' => array(
-				'id'       => '2',
-				'name'     => esc_html__( 'Style 2', 'webcodingplace-post-carousel-for-elementor' ),
-				'thumb'    => DPCE_URL . 'assets/images/style-2.svg',
-				'settings' => array(),
-			),
-			'3' => array(
-				'id'       => '3',
-				'name'     => esc_html__( 'Style 3', 'webcodingplace-post-carousel-for-elementor' ),
-				'thumb'    => DPCE_URL . 'assets/images/style-3.svg',
-				'settings' => array(
-					array(
-						'id'        => 'meta_color',
-						'label'     => esc_html__( 'Meta Text Color', 'webcodingplace-post-carousel-for-elementor' ),
-						'type'      => 'color',
-						'default'   => '#888888',
-						'selectors' => array(
-							'{{WRAPPER}} .dpce-style-3 .dpce-meta' => 'color: {{VALUE}};',
-						),
-					),
-				),
-			),
-		);
+		$default_styles = array();
+			
 
-		// Auto-register styles 4..51. Each ships with an empty `settings` array;
+		// Auto-register styles 1-51. Each ships with an empty `settings` array;
 		// add per-style controls later by pushing into $default_styles[$id]['settings']
 		// or by hooking into the `dpce_styles` filter below.
-		for ( $i = 4; $i <= 51; $i++ ) {
+		for ( $i = 1; $i <= 51; $i++ ) {
 			$default_styles[ (string) $i ] = array(
 				'id'       => (string) $i,
 				/* translators: %d: template style number. */
