@@ -14,6 +14,11 @@ Display posts, custom post types or taxonomy terms in a beautiful, fully respons
 
 WebCodingPlace Post Carousel for Elementor adds a single, deeply configurable carousel widget that lets you slide any post type, including WooCommerce products, portfolios, events, custom post types and taxonomy terms through ready-made templates. Pick a heading source from any post field or meta key, trim it to a word count, swap the read-more text and target, choose your image size, lazy-load thumbnails, enable social sharing and apply your own CSS, all from the Elementor editor.
 
+### Quick Links
+
+[Live Demos](https://classicaddons.com/elementor/posts-carousel-slider/).
+[More Details](https://webcodingplace.com/post-carousel-for-elementor).
+
 = Highlights =
 
 * Choose source: Post Type or Taxonomy
@@ -26,6 +31,13 @@ WebCodingPlace Post Carousel for Elementor adds a single, deeply configurable ca
 * Pluggable template registry — add your own styles via the `dpce_styles` filter and drop a PHP template in your theme
 * Per-style appearance controls auto-generated from the styles array
 * Social sharing buttons, placeholder image and "hide current post" support
+
+== Screenshots ==
+
+1. Post and Content Settings
+2. Styles and Typography Settings 
+3. Slider Settings
+4. Advanced Settings
 
 = Developers =
 
