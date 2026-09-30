@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string
  */
 function dpce_trim_words( $text, $words, $append = '...' ) {
-	$text = (string) $text;
+	$text  = (string) $text;
 	$words = (int) $words;
 
 	if ( $words <= 0 || '' === trim( wp_strip_all_tags( $text ) ) ) {
@@ -273,10 +273,10 @@ function dpce_parse_id_list( $value ) {
  * text comes from the dpce_carousel_title action so the existing trim / meta
  * key plumbing keeps working.
  *
- * @param int    $post_id           Post ID.
- * @param array  $carousel_settings Settings forwarded by the widget.
- * @param array  $args              Optional args: 'inner_wrap' (string, e.g. 'span')
- *                                  to wrap the title text, 'extra_class' (string).
+ * @param int   $post_id           Post ID.
+ * @param array $carousel_settings Settings forwarded by the widget.
+ * @param array $args              Optional args: 'inner_wrap' (string, e.g. 'span')
+ *                                 to wrap the title text, 'extra_class' (string).
  */
 function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 	if ( is_string( $args ) ) {
@@ -303,13 +303,13 @@ function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 
 	$inner = tag_escape( $args['inner_wrap'] );
 
-	echo '<' . esc_attr($tag) . ' class="' . esc_attr( $class ) . '">';
+	echo '<' . esc_attr( $tag ) . ' class="' . esc_attr( $class ) . '">';
 	if ( $inner ) {
-		echo '<' . esc_attr($inner) . '>';
+		echo '<' . esc_attr( $inner ) . '>';
 	}
 	do_action( 'dpce_carousel_title', $post_id, $carousel_settings );
 	if ( $inner ) {
-		echo '</' . esc_attr($inner) . '>';
+		echo '</' . esc_attr( $inner ) . '>';
 	}
-	echo '</' . esc_attr($tag) . '>';
+	echo '</' . esc_attr( $tag ) . '>';
 }

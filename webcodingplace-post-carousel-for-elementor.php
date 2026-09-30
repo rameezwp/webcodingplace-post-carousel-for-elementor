@@ -131,7 +131,7 @@ final class DPCE_Plugin {
 	 * Register frontend scripts.
 	 */
 	public function register_scripts() {
-		$slick_js = DPCE_PATH . 'assets/vendor/slick/slick.min.js';
+		$slick_js  = DPCE_PATH . 'assets/vendor/slick/slick.min.js';
 		$slick_url = DPCE_URL . 'assets/vendor/slick/slick.min.js';
 
 		// Only register slick if the vendor file is present (required for wordpress.org).
@@ -159,7 +159,7 @@ final class DPCE_Plugin {
 			wp_register_style( 'dpce-slick', $slick_url, array(), '1.8.1' );
 		}
 
-		$slick_theme = DPCE_PATH . 'assets/vendor/slick/slick-theme.css';
+		$slick_theme     = DPCE_PATH . 'assets/vendor/slick/slick-theme.css';
 		$slick_theme_url = DPCE_URL . 'assets/vendor/slick/slick-theme.css';
 
 		if ( file_exists( $slick_theme ) ) {

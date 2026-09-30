@@ -38,7 +38,6 @@ class DPCE_Styles {
 		}
 
 		$default_styles = array();
-			
 
 		// Auto-register styles 1-51. Each ships with an empty `settings` array;
 		// add per-style controls later by pushing into $default_styles[$id]['settings']

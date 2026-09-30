@@ -56,7 +56,7 @@ class DPCE_Query {
 				}
 			}
 		} else {
-			$post_type = isset( $settings['post_type'] ) ? $settings['post_type'] : 'post';
+			$post_type         = isset( $settings['post_type'] ) ? $settings['post_type'] : 'post';
 			$args['post_type'] = $post_type;
 
 			$post_type_key = 'posts__' . $post_type;

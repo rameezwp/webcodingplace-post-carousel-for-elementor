@@ -93,7 +93,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->register_advanced_section();
 	}
 
-	/* =====================================================
+	/*
+	=====================================================
 	 * SECTION 1 - POST / CONTENT
 	 * ===================================================== */
 	private function register_post_section() {
@@ -199,10 +200,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'date',
 				'options' => array(
-					'date'       => esc_html__( 'Date', 'webcodingplace-post-carousel-for-elementor' ),
-					'title'      => esc_html__( 'Title', 'webcodingplace-post-carousel-for-elementor' ),
-					'menu_order' => esc_html__( 'Menu Order', 'webcodingplace-post-carousel-for-elementor' ),
-					'rand'       => esc_html__( 'Random', 'webcodingplace-post-carousel-for-elementor' ),
+					'date'          => esc_html__( 'Date', 'webcodingplace-post-carousel-for-elementor' ),
+					'title'         => esc_html__( 'Title', 'webcodingplace-post-carousel-for-elementor' ),
+					'menu_order'    => esc_html__( 'Menu Order', 'webcodingplace-post-carousel-for-elementor' ),
+					'rand'          => esc_html__( 'Random', 'webcodingplace-post-carousel-for-elementor' ),
 					'comment_count' => esc_html__( 'Comment Count', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 			)
@@ -386,7 +387,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/* =====================================================
+	/*
+	=====================================================
 	 * SECTION 2 - SLIDER
 	 * ===================================================== */
 	private function register_slider_section() {
@@ -472,8 +474,16 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'      => esc_html__( 'Space Between Posts (px)', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => array( 'px' ),
-				'range'      => array( 'px' => array( 'min' => 0, 'max' => 100 ) ),
-				'default'    => array( 'unit' => 'px', 'size' => 15 ),
+				'range'      => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 100,
+					),
+				),
+				'default'    => array(
+					'unit' => 'px',
+					'size' => 15,
+				),
 				'selectors'  => array(
 					'{{WRAPPER}} .dpce-slide' => 'padding-left: calc({{SIZE}}{{UNIT}}/2); padding-right: calc({{SIZE}}{{UNIT}}/2);',
 					'{{WRAPPER}} .dpce-track' => 'margin-left: calc(-{{SIZE}}{{UNIT}}/2); margin-right: calc(-{{SIZE}}{{UNIT}}/2);',
@@ -554,12 +564,12 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'center',
 				'options'   => array(
-					'center'       => esc_html__( 'Center (Sides)', 'webcodingplace-post-carousel-for-elementor' ),
-					'top-left'     => esc_html__( 'Top Left', 'webcodingplace-post-carousel-for-elementor' ),
-					'top-right'    => esc_html__( 'Top Right', 'webcodingplace-post-carousel-for-elementor' ),
-					'top-center'   => esc_html__( 'Top Center', 'webcodingplace-post-carousel-for-elementor' ),
-					'bottom-left'  => esc_html__( 'Bottom Left', 'webcodingplace-post-carousel-for-elementor' ),
-					'bottom-right' => esc_html__( 'Bottom Right', 'webcodingplace-post-carousel-for-elementor' ),
+					'center'        => esc_html__( 'Center (Sides)', 'webcodingplace-post-carousel-for-elementor' ),
+					'top-left'      => esc_html__( 'Top Left', 'webcodingplace-post-carousel-for-elementor' ),
+					'top-right'     => esc_html__( 'Top Right', 'webcodingplace-post-carousel-for-elementor' ),
+					'top-center'    => esc_html__( 'Top Center', 'webcodingplace-post-carousel-for-elementor' ),
+					'bottom-left'   => esc_html__( 'Bottom Left', 'webcodingplace-post-carousel-for-elementor' ),
+					'bottom-right'  => esc_html__( 'Bottom Right', 'webcodingplace-post-carousel-for-elementor' ),
 					'bottom-center' => esc_html__( 'Bottom Center', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 				'condition' => array( 'arrows' => 'yes' ),
@@ -588,7 +598,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/* =====================================================
+	/*
+	=====================================================
 	 * SECTION 3 - APPEARANCE
 	 * ===================================================== */
 	private function register_appearance_section() {
@@ -616,31 +627,31 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'     => esc_html__( 'Accent Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .dpce-date' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-date'               => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-1 .dpce-icon' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-2 .hover' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-4' => 'border-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-6:after' => 'border-color:transparent transparent transparent {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-2 .hover'     => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-4'            => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-6:after'      => 'border-color:transparent transparent transparent {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-10 .dpce-body:before' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-10:before' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-10:before'    => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-14 .dpce-body:before' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-18' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-21:after' => 'background-color: {{VALUE}};border-right: 4px solid {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-18'           => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-21:after'     => 'background-color: {{VALUE}};border-right: 4px solid {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-22 .dpce-body .dpce-title' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-23:before' => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-23:after' => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-24 .hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-23:before'    => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-23:after'     => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-24 .hover'    => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-26 .dpce-title' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-31 .dpce-body:after, {{WRAPPER}} .dpce-style-31 .dpce-body:before' => 'background: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-31:after, {{WRAPPER}} .dpce-style-31:before' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-33:before' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-34' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-36' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-33:before'    => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-34'           => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-36'           => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-38 .dpce-title' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-39 .dpce-title, {{WRAPPER}} .dpce-style-39:before, {{WRAPPER}} .dpce-style-39:after' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-40' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-40'           => 'background: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-41:before, {{WRAPPER}} .dpce-style-41:after' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-42' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-42'           => 'background: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-51, {{WRAPPER}} .dpce-style-51 .dpce-title, {{WRAPPER}} .dpce-style-51 a, {{WRAPPER}} .dpce-style-51 .price' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-51 .dpce-title:before' => 'border-color: transparent transparent transparent {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-51 .price:before' => 'border-color: transparent {{VALUE}} transparent;',
@@ -654,7 +665,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'     => esc_html__( 'Post Background Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .dpce-bg' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-bg'            => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-8 .dpce-body:before' => 'background-image: linear-gradient(to bottom, transparent 0%, {{VALUE}} 100%);',
 					'{{WRAPPER}} .dpce-style-9 .date:before' => 'border-color: transparent {{VALUE}} transparent transparent;',
 					'{{WRAPPER}} .dpce-style-9 .dpce-body:before' => 'border-color: transparent transparent transparent {{VALUE}};',
@@ -778,36 +789,60 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		);
 
 		$this->add_control(
-		    'style_icon',
-		    [
-		        'label' => __( 'Icon', 'webcodingplace-post-carousel-for-elementor' ),
-		        'type' => Controls_Manager::ICONS,
-		        'fa4compatibility' => 'icon',
-		        'default' => [
-		            'value' => 'fas fa-star',
-		            'library' => 'solid',
-		        ],
-		        'condition' => [
-		            'style_id' => [ '1', '2','10', '15', '24', '26', '30', '37', '38', '48', '49', 
-		            '50' ],
-		        ],
-		    ]
+			'style_icon',
+			array(
+				'label'            => __( 'Icon', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'             => Controls_Manager::ICONS,
+				'fa4compatibility' => 'icon',
+				'default'          => array(
+					'value'   => 'fas fa-star',
+					'library' => 'solid',
+				),
+				'condition'        => array(
+					'style_id' => array(
+						'1',
+						'2',
+						'10',
+						'15',
+						'24',
+						'26',
+						'30',
+						'37',
+						'38',
+						'48',
+						'49',
+						'50',
+					),
+				),
+			)
 		);
 
 		$this->add_control(
-		    'style_icon_color',
-		    [
-		        'label' => __( 'Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
-		        'type' => Controls_Manager::COLOR,
-		        'selectors' => [
-		            '{{WRAPPER}} .dpce-icon' => 'color: {{VALUE}};',
-		            '{{WRAPPER}} .dpce-icon' => 'fill: {{VALUE}};',
-		        ],
-		        'condition' => [
-		            'style_id' => [ '1', '2', '10', '15', '24', '26', '30', '37', '38', '48', '49', 
-		            '50' ],
-		        ],
-		    ]
+			'style_icon_color',
+			array(
+				'label'     => __( 'Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .dpce-icon' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-icon' => 'fill: {{VALUE}};',
+				),
+				'condition' => array(
+					'style_id' => array(
+						'1',
+						'2',
+						'10',
+						'15',
+						'24',
+						'26',
+						'30',
+						'37',
+						'38',
+						'48',
+						'49',
+						'50',
+					),
+				),
+			)
 		);
 
 		foreach ( DPCE_Styles::all() as $style_id => $style ) {
@@ -819,7 +854,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 					continue;
 				}
 				$control_id = 'style_' . $style_id . '_' . $setting['id'];
-				$args = array(
+				$args       = array(
 					'label'     => isset( $setting['label'] ) ? $setting['label'] : $setting['id'],
 					'condition' => array( 'style_id' => (string) $style_id ),
 				);
@@ -848,7 +883,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 						$args['type'] = Controls_Manager::ICONS;
 						break;
 					case 'slider':
-						$args['type'] = Controls_Manager::SLIDER;
+						$args['type']       = Controls_Manager::SLIDER;
 						$args['size_units'] = array( 'px', '%' );
 						break;
 					case 'text':
@@ -864,7 +899,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/* =====================================================
+	/*
+	=====================================================
 	 * SECTION 4 - ADVANCED
 	 * ===================================================== */
 	private function register_advanced_section() {
@@ -982,11 +1018,12 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/* =====================================================
+	/*
+	=====================================================
 	 * RENDER
 	 * ===================================================== */
 	protected function render() {
-		$settings = $this->get_settings_for_display();
+		$settings     = $this->get_settings_for_display();
 		$raw_settings = $this->get_settings();
 
 		// Normalize relevant fields the renderer hooks expect.
@@ -1082,27 +1119,27 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		}
 
 		return array(
-			'heading_field'         => isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title',
-			'heading_meta_key'      => isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '',
-			'heading_max_words'     => isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0,
-			'title_tag'             => isset( $settings['title_tag'] ) && in_array( $settings['title_tag'], array( 'h2', 'h3', 'h4', 'h5', 'h6' ), true ) ? $settings['title_tag'] : 'h3',
-			'desc_field'            => isset( $settings['desc_field'] ) ? $settings['desc_field'] : 'excerpt',
-			'desc_meta_key'         => isset( $settings['desc_meta_key'] ) ? $settings['desc_meta_key'] : '',
-			'desc_max_words'        => isset( $settings['desc_max_words'] ) ? (int) $settings['desc_max_words'] : 20,
+			'heading_field'          => isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title',
+			'heading_meta_key'       => isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '',
+			'heading_max_words'      => isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0,
+			'title_tag'              => isset( $settings['title_tag'] ) && in_array( $settings['title_tag'], array( 'h2', 'h3', 'h4', 'h5', 'h6' ), true ) ? $settings['title_tag'] : 'h3',
+			'desc_field'             => isset( $settings['desc_field'] ) ? $settings['desc_field'] : 'excerpt',
+			'desc_meta_key'          => isset( $settings['desc_meta_key'] ) ? $settings['desc_meta_key'] : '',
+			'desc_max_words'         => isset( $settings['desc_max_words'] ) ? (int) $settings['desc_max_words'] : 20,
 			'desc_render_shortcodes' => 'yes' === ( isset( $settings['desc_render_shortcodes'] ) ? $settings['desc_render_shortcodes'] : '' ),
-			'trim_append'           => isset( $settings['trim_append'] ) ? $settings['trim_append'] : '...',
-			'read_more_txt'         => isset( $settings['read_more_txt'] ) ? $settings['read_more_txt'] : '',
-			'read_more_classes'     => isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button',
-			'read_more_target'      => isset( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self',
-			'link_area'             => isset( $settings['link_area'] ) && in_array( $settings['link_area'], array( 'card', 'button' ), true ) ? $settings['link_area'] : 'card',
-			'image_size'            => isset( $settings['image_size'] ) ? $settings['image_size'] : 'medium_large',
-			'lazy_load'             => 'yes' === ( isset( $settings['lazy_load'] ) ? $settings['lazy_load'] : 'yes' ),
-			'placeholder_image'     => $placeholder,
-			'enable_share'          => 'yes' === ( isset( $settings['enable_share'] ) ? $settings['enable_share'] : '' ),
-			'share_networks'        => isset( $settings['share_networks'] ) ? (array) $settings['share_networks'] : array(),
-			'style_id'              => isset( $settings['style_id'] ) ? $settings['style_id'] : '1',
-			'style_icon'              => isset( $settings['style_icon'] ) ? $settings['style_icon'] : '',
-			'style_icon_color'              => isset( $settings['style_icon_color'] ) ? $settings['style_icon_color'] : '',
+			'trim_append'            => isset( $settings['trim_append'] ) ? $settings['trim_append'] : '...',
+			'read_more_txt'          => isset( $settings['read_more_txt'] ) ? $settings['read_more_txt'] : '',
+			'read_more_classes'      => isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button',
+			'read_more_target'       => isset( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self',
+			'link_area'              => isset( $settings['link_area'] ) && in_array( $settings['link_area'], array( 'card', 'button' ), true ) ? $settings['link_area'] : 'card',
+			'image_size'             => isset( $settings['image_size'] ) ? $settings['image_size'] : 'medium_large',
+			'lazy_load'              => 'yes' === ( isset( $settings['lazy_load'] ) ? $settings['lazy_load'] : 'yes' ),
+			'placeholder_image'      => $placeholder,
+			'enable_share'           => 'yes' === ( isset( $settings['enable_share'] ) ? $settings['enable_share'] : '' ),
+			'share_networks'         => isset( $settings['share_networks'] ) ? (array) $settings['share_networks'] : array(),
+			'style_id'               => isset( $settings['style_id'] ) ? $settings['style_id'] : '1',
+			'style_icon'             => isset( $settings['style_icon'] ) ? $settings['style_icon'] : '',
+			'style_icon_color'       => isset( $settings['style_icon_color'] ) ? $settings['style_icon_color'] : '',
 		);
 	}
 

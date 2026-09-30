@@ -93,9 +93,9 @@ class DPCE_Renderer {
 	 * @param array $settings Carousel settings.
 	 */
 	public function render_title( $post_id, $settings ) {
-		$field = isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title';
-		$meta  = isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '';
-		$max   = isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0;
+		$field  = isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title';
+		$meta   = isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '';
+		$max    = isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0;
 		$append = isset( $settings['trim_append'] ) ? $settings['trim_append'] : '...';
 
 		$value = dpce_get_field_value( $post_id, $field, $meta );
@@ -196,27 +196,27 @@ class DPCE_Renderer {
 	 * @return string Safe HTML.
 	 */
 	function render_icon( $post_id, $settings, $icon = '', $class = 'dpce-custom-icon' ) {
-		if ($icon) {
+		if ( $icon ) {
 			\Elementor\Icons_Manager::render_icon(
-				[
-				    'library' => 'fa-regular',
-				    'value'   => esc_attr($icon),
-				],
-			    [
-			        'aria-hidden' => 'true',
-			        'class' => esc_attr($class),
-			    ]
+				array(
+					'library' => 'fa-regular',
+					'value'   => esc_attr( $icon ),
+				),
+				array(
+					'aria-hidden' => 'true',
+					'class'       => esc_attr( $class ),
+				)
 			);
 		}
 
 		if ( ! empty( $settings['style_icon']['value'] ) ) {
 
 			\Elementor\Icons_Manager::render_icon(
-			    $settings['style_icon'],
-			    [
-			        'aria-hidden' => 'true',
-			        'class' => 'dpce-icon'
-			    ]
+				$settings['style_icon'],
+				array(
+					'aria-hidden' => 'true',
+					'class'       => 'dpce-icon',
+				)
 			);
 		}
 	}
@@ -257,22 +257,40 @@ class DPCE_Renderer {
 		$title = rawurlencode( get_the_title( $post_id ) );
 
 		$urls = array(
-			'facebook' => 'https://www.facebook.com/sharer/sharer.php?u=' . $url,
-			'twitter'  => 'https://twitter.com/intent/tweet?url=' . $url . '&text=' . $title,
-			'linkedin' => 'https://www.linkedin.com/sharing/share-offsite/?url=' . $url,
-			'whatsapp' => 'https://api.whatsapp.com/send?text=' . $title . '%20' . $url,
+			'facebook'  => 'https://www.facebook.com/sharer/sharer.php?u=' . $url,
+			'twitter'   => 'https://twitter.com/intent/tweet?url=' . $url . '&text=' . $title,
+			'linkedin'  => 'https://www.linkedin.com/sharing/share-offsite/?url=' . $url,
+			'whatsapp'  => 'https://api.whatsapp.com/send?text=' . $title . '%20' . $url,
 			'pinterest' => 'https://pinterest.com/pin/create/button/?url=' . $url . '&description=' . $title,
-			'email'    => 'mailto:?subject=' . $title . '&body=' . $url,
+			'email'     => 'mailto:?subject=' . $title . '&body=' . $url,
 		);
 
-		$icons = [
-		    'facebook'  => [ 'value' => 'fab fa-facebook-f',  'library' => 'fa-brands' ],
-		    'twitter'   => [ 'value' => 'fab fa-x-twitter',   'library' => 'fa-brands' ],
-		    'linkedin'  => [ 'value' => 'fab fa-linkedin-in', 'library' => 'fa-brands' ],
-		    'whatsapp'  => [ 'value' => 'fab fa-whatsapp',    'library' => 'fa-brands' ],
-		    'pinterest' => [ 'value' => 'fab fa-pinterest-p', 'library' => 'fa-brands' ],
-		    'email'     => [ 'value' => 'fas fa-envelope',     'library' => 'fa-solid' ],
-		];
+		$icons = array(
+			'facebook'  => array(
+				'value'   => 'fab fa-facebook-f',
+				'library' => 'fa-brands',
+			),
+			'twitter'   => array(
+				'value'   => 'fab fa-x-twitter',
+				'library' => 'fa-brands',
+			),
+			'linkedin'  => array(
+				'value'   => 'fab fa-linkedin-in',
+				'library' => 'fa-brands',
+			),
+			'whatsapp'  => array(
+				'value'   => 'fab fa-whatsapp',
+				'library' => 'fa-brands',
+			),
+			'pinterest' => array(
+				'value'   => 'fab fa-pinterest-p',
+				'library' => 'fa-brands',
+			),
+			'email'     => array(
+				'value'   => 'fas fa-envelope',
+				'library' => 'fa-solid',
+			),
+		);
 
 		$labels = array(
 			'facebook'  => __( 'Share on Facebook', 'webcodingplace-post-carousel-for-elementor' ),
@@ -287,29 +305,32 @@ class DPCE_Renderer {
 
 		foreach ( $networks as $network ) {
 
-		    if ( ! isset( $urls[ $network ] ) ) {
-		        continue;
-		    }
+			if ( ! isset( $urls[ $network ] ) ) {
+				continue;
+			}
 
-		    printf(
-		        '<a class="dpce-share-link dpce-share-%1$s"
+			printf(
+				'<a class="dpce-share-link dpce-share-%1$s"
 		            target="_blank"
 		            rel="noopener noreferrer"
 		            href="%2$s"
 		            aria-label="%3$s">',
-		        esc_attr( $network ),
-		        esc_url( $urls[ $network ] ),
-		        esc_attr( $labels[ $network ] )
-		    );
+				esc_attr( $network ),
+				esc_url( $urls[ $network ] ),
+				esc_attr( $labels[ $network ] )
+			);
 
-		    if ( isset( $icons[ $network ] ) ) {
-		        \Elementor\Icons_Manager::render_icon(
-		            $icons[ $network ],
-		            [ 'aria-hidden' => 'true', 'class' => 'dpce-social-icon' ]
-		        );
-		    }
+			if ( isset( $icons[ $network ] ) ) {
+				\Elementor\Icons_Manager::render_icon(
+					$icons[ $network ],
+					array(
+						'aria-hidden' => 'true',
+						'class'       => 'dpce-social-icon',
+					)
+				);
+			}
 
-		    echo '</a>';
+			echo '</a>';
 		}
 
 		echo '</div>';
