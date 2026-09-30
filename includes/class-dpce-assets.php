@@ -94,7 +94,7 @@ class DPCE_Assets {
 	 * Styles a carousel needs.
 	 *
 	 * @param string|null $style_id Template id, or null when unknown (editor, preview).
-	 * @param string      $engine   "slick" or "swiper".
+	 * @param string      $engine   "slick", "swiper", or "none" for grid and list layouts.
 	 * @return string[] Style handles in load order.
 	 */
 	public static function get_style_handles( $style_id = null, $engine = 'slick' ) {
@@ -104,6 +104,9 @@ class DPCE_Assets {
 
 		if ( 'swiper' === $engine ) {
 			$handles = array( 'swiper', 'dpce-base', 'dpce-swiper' );
+		} elseif ( 'none' === $engine ) {
+			// Grid and list layouts: no slider styles.
+			$handles = array( 'dpce-base' );
 		} else {
 			// Same order 1.4 printed: Slick, Slick theme, then the plugin styles.
 			$handles = array( 'dpce-slick', 'dpce-slick-theme', 'dpce-base' );

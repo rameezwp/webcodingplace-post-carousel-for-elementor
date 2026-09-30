@@ -22,7 +22,7 @@ $dpce_show    = static function ( $key ) use ( $dpce_card ) {
 $dpce_product = DPCE_Woo::product( $post_id );
 ?>
 <article class="dpce-style-card dpce-wrapper<?php echo $dpce_product ? ' dpce-card--product' : ''; ?>">
-	<?php if ( $dpce_show( 'image' ) ) : ?>
+	<?php if ( $dpce_show( 'image' ) && ( has_post_thumbnail( $post_id ) || ! empty( $carousel_settings['placeholder_image'] ) ) ) : ?>
 		<div class="dpce-card__media">
 			<?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
 		</div>

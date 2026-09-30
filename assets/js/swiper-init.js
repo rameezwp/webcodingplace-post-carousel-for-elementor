@@ -65,6 +65,58 @@
 	}
 
 	/**
+	 * Number of "pages" and the current page, the same way dots count them.
+	 *
+	 * @param {Object} swiper Swiper instance.
+	 * @return {{pages: number, active: number}} Page info.
+	 */
+	function pageInfo( swiper ) {
+		var perGroup = Math.max( 1, swiper.params.slidesPerGroup || 1 );
+		var realCount = Array.prototype.filter.call( swiper.slides, function ( slide ) {
+			return ! slide.classList.contains( 'swiper-slide-duplicate' );
+		} ).length;
+		var pages = swiper.params.loop ? Math.ceil( realCount / perGroup ) : swiper.snapGrid.length;
+		var active = swiper.params.loop ? Math.floor( swiper.realIndex / perGroup ) : swiper.snapIndex;
+		return { pages: Math.max( 1, pages ), active: Math.min( active, Math.max( 0, pages - 1 ) ) };
+	}
+
+	/**
+	 * Numbers ("2 / 8") and progress bar pagination.
+	 *
+	 * @param {Object}      swiper Swiper instance.
+	 * @param {HTMLElement} el     Carousel element.
+	 */
+	function updateAltPagination( swiper, el ) {
+		var info = pageInfo( swiper );
+		var fraction = el.querySelector( '.dpce-fraction' );
+		var progress = el.querySelector( '.dpce-progress span' );
+		if ( fraction ) {
+			fraction.textContent = ( info.active + 1 ) + ' / ' + info.pages;
+		}
+		if ( progress ) {
+			progress.style.transform = 'scaleX(' + ( ( info.active + 1 ) / info.pages ) + ')';
+		}
+	}
+
+	/**
+	 * Freeze a news ticker exactly where it is.
+	 *
+	 * @param {Object} swiper Swiper instance.
+	 */
+	function freezeTicker( swiper ) {
+		var style = window.getComputedStyle( swiper.wrapperEl ).transform;
+		swiper.autoplay.stop();
+		if ( style && 'none' !== style && window.DOMMatrixReadOnly ) {
+			var matrix = new window.DOMMatrixReadOnly( style );
+			swiper.setTransition( 0 );
+			swiper.setTranslate( swiper.isHorizontal() ? matrix.m41 : matrix.m42 );
+		}
+		// The interrupted transition never fires its end event, so tell Swiper
+		// it is no longer animating; otherwise a looped carousel will not move again.
+		swiper.animating = false;
+	}
+
+	/**
 	 * Dots: one per "page", using the classic engine's markup.
 	 *
 	 * @param {Object}      swiper  Swiper instance.
@@ -170,6 +222,7 @@
 				if ( dots ) {
 					buildDots( swiper, dots, options );
 				}
+				updateAltPagination( swiper, el );
 			};
 			refresh();
 			swiper.on( 'slideChange', refresh );
@@ -199,8 +252,13 @@
 				return;
 			}
 
+			var isTicker = el.classList.contains( 'dpce-ticker' );
 			var stop = function () {
-				swiper.autoplay.stop();
+				if ( isTicker ) {
+					freezeTicker( swiper );
+				} else {
+					swiper.autoplay.stop();
+				}
 			};
 			var start = function () {
 				if ( ! userPaused ) {

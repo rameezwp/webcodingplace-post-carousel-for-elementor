@@ -185,6 +185,32 @@
   font-size: 0.85em;
 }
 
+/* ---------- Grid and list layouts (2.0) ---------- */
+.dpce-carousel.dpce-layout-grid .dpce-track,
+.dpce-carousel.dpce-layout-list .dpce-track {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 30px;
+}
+.dpce-carousel.dpce-layout-grid .dpce-track {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.dpce-carousel.dpce-layout-list .dpce-style-card {
+  flex-direction: row;
+}
+.dpce-carousel.dpce-layout-list .dpce-style-card .dpce-card__media {
+  flex: 0 0 38%;
+}
+.dpce-carousel.dpce-layout-list .dpce-style-card .dpce-thumbnail,
+.dpce-carousel.dpce-layout-list .dpce-style-card .dpce-thumbnail img {
+  height: 100%;
+}
+@media (max-width: 767px) {
+  .dpce-carousel.dpce-layout-list .dpce-style-card {
+    flex-direction: column;
+  }
+}
+
 /* ---------- Image hover effects (2.0) ---------- */
 .dpce-hover-zoom .dpce-thumbnail {
   overflow: hidden;
