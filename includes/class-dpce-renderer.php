@@ -291,7 +291,8 @@ class DPCE_Renderer {
 				'library' => 'fa-brands',
 			),
 			'twitter'   => array(
-				'value'   => 'fab fa-x-twitter',
+				// The X logo ships with Elementor 3.20 and newer.
+				'value'   => version_compare( ELEMENTOR_VERSION, '3.20.0', '>=' ) ? 'fab fa-x-twitter' : 'fab fa-twitter',
 				'library' => 'fa-brands',
 			),
 			'linkedin'  => array(

@@ -41,7 +41,10 @@ class DPCE_Assets {
 		wp_register_script( 'dpce-frontend', DPCE_URL . 'assets/js/main.js', array( 'jquery', 'dpce-slick' ), DPCE_VERSION, true );
 
 		// Modern engine: Elementor's own Swiper plus a small script without jQuery.
-		wp_register_script( 'dpce-swiper', DPCE_URL . 'assets/js/swiper-init.js', array( 'swiper' ), DPCE_VERSION, true );
+		// Some Elementor versions do not register a "swiper" script and load
+		// it on demand instead; the script then asks Elementor to load it.
+		$swiper_deps = wp_script_is( 'swiper', 'registered' ) ? array( 'swiper' ) : array();
+		wp_register_script( 'dpce-swiper', DPCE_URL . 'assets/js/swiper-init.js', $swiper_deps, DPCE_VERSION, true );
 	}
 
 	/**
