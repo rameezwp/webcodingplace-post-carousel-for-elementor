@@ -177,11 +177,15 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				array(
 					/* translators: %s: post type label */
 					'label'       => sprintf( esc_html__( 'Select %s', 'webcodingplace-post-carousel-for-elementor' ), $pt_label ),
-					'description' => esc_html__( 'Leave empty to include all.', 'webcodingplace-post-carousel-for-elementor' ),
-					'type'        => Controls_Manager::SELECT2,
+					'description' => esc_html__( 'Type to search. Leave empty to include all.', 'webcodingplace-post-carousel-for-elementor' ),
+					'type'        => DPCE_Query_Control::TYPE,
 					'multiple'    => true,
 					'label_block' => true,
-					'options'     => dpce_get_posts_for_select( $pt_slug ),
+					'options'     => array(),
+					'query'       => array(
+						'kind'   => 'post',
+						'source' => $pt_slug,
+					),
 					'condition'   => array(
 						'display_by' => 'post_type',
 						'post_type'  => $pt_slug,
@@ -209,10 +213,14 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				array(
 					/* translators: %s: taxonomy label */
 					'label'       => sprintf( esc_html__( 'Select %s Terms', 'webcodingplace-post-carousel-for-elementor' ), $tax_label ),
-					'type'        => Controls_Manager::SELECT2,
+					'type'        => DPCE_Query_Control::TYPE,
 					'multiple'    => true,
 					'label_block' => true,
-					'options'     => dpce_get_terms_for_select( $tax_slug ),
+					'options'     => array(),
+					'query'       => array(
+						'kind'   => 'term',
+						'source' => $tax_slug,
+					),
 					'condition'   => array(
 						'display_by' => 'taxonomy',
 						'taxonomy'   => $tax_slug,

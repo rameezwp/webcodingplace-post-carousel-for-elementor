@@ -100,6 +100,7 @@ final class DPCE_Plugin {
 		$this->includes();
 
 		add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ) );
+		add_action( 'elementor/controls/register', array( $this, 'register_controls' ) );
 	}
 
 	/**
@@ -111,10 +112,22 @@ final class DPCE_Plugin {
 		require_once DPCE_PATH . 'includes/class-dpce-renderer.php';
 		require_once DPCE_PATH . 'includes/class-dpce-query.php';
 		require_once DPCE_PATH . 'includes/class-dpce-assets.php';
+		require_once DPCE_PATH . 'includes/class-dpce-rest.php';
+		require_once DPCE_PATH . 'includes/controls/class-dpce-query-control.php';
 
 		// Boot renderer hooks.
 		DPCE_Renderer::instance();
 		DPCE_Assets::init();
+		DPCE_Rest::init();
+	}
+
+	/**
+	 * Register custom Elementor controls.
+	 *
+	 * @param \Elementor\Controls_Manager $controls_manager Controls manager.
+	 */
+	public function register_controls( $controls_manager ) {
+		$controls_manager->register( new DPCE_Query_Control() );
 	}
 
 	/**

@@ -28,6 +28,7 @@ class DPCE_Assets {
 	public static function init() {
 		add_action( 'elementor/frontend/after_register_scripts', array( __CLASS__, 'register_scripts' ) );
 		add_action( 'elementor/frontend/after_register_styles', array( __CLASS__, 'register_styles' ) );
+		add_action( 'elementor/editor/after_enqueue_scripts', array( __CLASS__, 'enqueue_editor_scripts' ) );
 		add_action( 'init', array( __CLASS__, 'maybe_upgrade' ), 20 );
 	}
 
@@ -111,6 +112,19 @@ class DPCE_Assets {
 	 */
 	public static function get_script_handles() {
 		return array( 'dpce-slick', 'dpce-frontend' );
+	}
+
+	/**
+	 * Editor only scripts (custom controls).
+	 */
+	public static function enqueue_editor_scripts() {
+		wp_enqueue_script(
+			'dpce-editor',
+			DPCE_URL . 'assets/js/editor.js',
+			array( 'jquery', 'wp-api-fetch', 'wp-url' ),
+			DPCE_VERSION,
+			true
+		);
 	}
 
 	/**

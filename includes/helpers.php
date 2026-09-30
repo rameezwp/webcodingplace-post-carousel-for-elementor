@@ -158,6 +158,8 @@ function dpce_get_taxonomies() {
 /**
  * Get all posts of a given post type as id => title.
  *
+ * @deprecated 2.0 The widget now searches posts over AJAX. Kept for code that calls it.
+ *
  * Capped to a sensible limit to avoid memory issues in the editor.
  *
  * @param string $post_type Post type slug.
@@ -193,6 +195,8 @@ function dpce_get_posts_for_select( $post_type, $limit = 200 ) {
 
 /**
  * Get all terms of a given taxonomy as id => name.
+ *
+ * @deprecated 2.0 The widget now searches terms over AJAX. Kept for code that calls it.
  *
  * @param string $taxonomy Taxonomy slug.
  * @param int    $limit    Max terms to return.
