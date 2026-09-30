@@ -46,10 +46,11 @@ Full hook documentation follows in `docs/HOOKS.md` (Phase 3).
 
 ### What I verified
 
-* WordPress 7.1.2 with Elementor 3.32.0 on PHP 8.4, using a test site with 8 posts, 6 featured images, 3 categories and 69 carousel pages (all 51 templates plus option combinations).
+* WordPress 7.1.2 on PHP 8.4, using a test site with 8 posts, 6 featured images, 3 categories and 69 carousel pages (all 51 templates plus option combinations).
+* Elementor versions: **3.18.3** (the new minimum), **3.32.0**, and **4.0.8** (the latest release). On each one: HTML compared with 1.4, the modern engine tested in Chromium, and the editor tested. Screenshots compared on 3.32.0 and 4.0.8. The plugin header now says "Elementor tested up to: 4.0". Elementor Pro was not tested (not available in the test environment), so its "tested up to" value is unchanged.
 * **HTML of every 1.4 carousel** rendered by 1.4 and by this branch, compared line by line. The only differences are the intended ones listed above.
 * **Screenshots of every 1.4 carousel** at 1280 px and 390 px wide, compared pixel by pixel against 1.4. Identical apart from the star icon now showing (template 48 in the test set), the placeholder alt text, and one case of sub-pixel text smoothing.
-* **Modern engine** in Chromium: arrows, dots, loop, no loop, vertical, RTL, autoplay with pause button, hover and focus pause, hidden loop copies, no console errors.
+* **Modern engine** in Chromium (including Elementor 3.18, where Swiper is loaded on demand): arrows, dots, loop, no loop, vertical, RTL, autoplay with pause button, hover and focus pause, hidden loop copies, no console errors.
 * **Editor** (Elementor 3.32): search field lists and labels saved posts, old carousels stay on the classic engine (also when duplicated), new carousels get the modern engine, both engines render in the preview, no JavaScript errors.
 * CI on GitHub: PHP 7.4 to 8.4 syntax, PHPCS (WordPress Coding Standards 3), PHPStan level 5 and the official Plugin Check action all pass.
 
