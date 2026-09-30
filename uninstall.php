@@ -1,9 +1,8 @@
 <?php
 /**
- * Uninstall handler.
+ * Uninstall handler: remove the options this plugin stores.
  *
- * The plugin currently stores no persistent options; the file is in place so
- * the site is left in a clean state if any are added in the future.
+ * Carousels themselves live in Elementor's page data and are not touched.
  *
  * @package DPCE
  */
@@ -11,3 +10,5 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
+
+delete_option( 'dpce_version' );

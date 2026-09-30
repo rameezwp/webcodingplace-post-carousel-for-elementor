@@ -100,8 +100,6 @@ final class DPCE_Plugin {
 		$this->includes();
 
 		add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ) );
-		add_action( 'elementor/frontend/after_register_scripts', array( $this, 'register_scripts' ) );
-		add_action( 'elementor/frontend/after_register_styles', array( $this, 'register_styles' ) );
 	}
 
 	/**
@@ -112,9 +110,11 @@ final class DPCE_Plugin {
 		require_once DPCE_PATH . 'includes/class-dpce-styles.php';
 		require_once DPCE_PATH . 'includes/class-dpce-renderer.php';
 		require_once DPCE_PATH . 'includes/class-dpce-query.php';
+		require_once DPCE_PATH . 'includes/class-dpce-assets.php';
 
 		// Boot renderer hooks.
 		DPCE_Renderer::instance();
+		DPCE_Assets::init();
 	}
 
 	/**
@@ -125,53 +125,6 @@ final class DPCE_Plugin {
 	public function register_widgets( $widgets_manager ) {
 		require_once DPCE_PATH . 'widgets/post-carousel-widget.php';
 		$widgets_manager->register( new \DPCE_Post_Carousel_Widget() );
-	}
-
-	/**
-	 * Register frontend scripts.
-	 */
-	public function register_scripts() {
-		$slick_js  = DPCE_PATH . 'assets/vendor/slick/slick.min.js';
-		$slick_url = DPCE_URL . 'assets/vendor/slick/slick.min.js';
-
-		// Only register slick if the vendor file is present (required for wordpress.org).
-		if ( file_exists( $slick_js ) ) {
-			wp_register_script( 'dpce-slick', $slick_url, array( 'jquery' ), '1.8.1', true );
-		}
-
-		wp_register_script(
-			'dpce-frontend',
-			DPCE_URL . 'assets/js/main.js',
-			array( 'jquery', 'dpce-slick' ),
-			DPCE_VERSION,
-			true
-		);
-	}
-
-	/**
-	 * Register frontend styles.
-	 */
-	public function register_styles() {
-		$slick_css = DPCE_PATH . 'assets/vendor/slick/slick.css';
-		$slick_url = DPCE_URL . 'assets/vendor/slick/slick.css';
-
-		if ( file_exists( $slick_css ) ) {
-			wp_register_style( 'dpce-slick', $slick_url, array(), '1.8.1' );
-		}
-
-		$slick_theme     = DPCE_PATH . 'assets/vendor/slick/slick-theme.css';
-		$slick_theme_url = DPCE_URL . 'assets/vendor/slick/slick-theme.css';
-
-		if ( file_exists( $slick_theme ) ) {
-			wp_register_style( 'dpce-slick-theme', $slick_theme_url, array( 'dpce-slick' ), '1.8.1' );
-		}
-
-		wp_register_style(
-			'dpce-frontend',
-			DPCE_URL . 'assets/css/main.css',
-			array( 'dpce-slick' ),
-			DPCE_VERSION
-		);
 	}
 
 	/**

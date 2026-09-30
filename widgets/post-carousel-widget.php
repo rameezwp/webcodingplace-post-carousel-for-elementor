@@ -89,10 +89,19 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	/**
 	 * Style dependencies.
 	 *
+	 * Elementor calls this per widget instance when it collects the assets
+	 * of a page, so only the stylesheet of the chosen template is loaded.
+	 * Without an instance (editor, preview) every template is loaded.
+	 *
 	 * @return array
 	 */
 	public function get_style_depends() {
-		return array( 'dpce-slick', 'dpce-frontend', 'dpce-slick-theme' );
+		if ( ! $this->get_id() || $this->is_editor_request() ) {
+			return DPCE_Assets::get_style_handles();
+		}
+
+		$style_id = $this->get_settings( 'style_id' );
+		return DPCE_Assets::get_style_handles( is_scalar( $style_id ) && '' !== (string) $style_id ? (string) $style_id : '1' );
 	}
 
 	/**
@@ -101,7 +110,17 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * @return array
 	 */
 	public function get_script_depends() {
-		return array( 'dpce-slick', 'dpce-frontend' );
+		return DPCE_Assets::get_script_handles();
+	}
+
+	/**
+	 * Whether we are inside the Elementor editor or its preview frame.
+	 *
+	 * @return bool
+	 */
+	private function is_editor_request() {
+		$elementor = \Elementor\Plugin::$instance;
+		return $elementor->editor->is_edit_mode() || $elementor->preview->is_preview_mode();
 	}
 
 	/**

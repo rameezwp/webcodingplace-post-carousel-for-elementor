@@ -19,3 +19,4 @@
 /phpstan.neon.dist
 /CLAUDE.md
 *.zip
+/bin
