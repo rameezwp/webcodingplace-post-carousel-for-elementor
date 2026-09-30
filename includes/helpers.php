@@ -76,7 +76,7 @@ function dpce_get_field_value( $post_id, $field, $meta_key = '' ) {
 
 		case 'author':
 			$post = get_post( $post_id );
-			return $post ? get_the_author_meta( 'display_name', $post->post_author ) : '';
+			return $post ? get_the_author_meta( 'display_name', (int) $post->post_author ) : '';
 
 		case 'date':
 			return get_the_date( '', $post_id );
@@ -236,11 +236,8 @@ function dpce_get_image_sizes() {
 		'full'      => esc_html__( 'Full', 'webcodingplace-post-carousel-for-elementor' ),
 	);
 
-	$additional = wp_get_additional_image_sizes();
-	if ( is_array( $additional ) ) {
-		foreach ( array_keys( $additional ) as $size ) {
-			$sizes[ $size ] = $size;
-		}
+	foreach ( array_keys( wp_get_additional_image_sizes() ) as $size ) {
+		$sizes[ $size ] = $size;
 	}
 
 	return apply_filters( 'dpce_image_sizes', $sizes );
@@ -249,7 +246,7 @@ function dpce_get_image_sizes() {
 /**
  * Convert comma/space separated IDs to a clean array of positive integers.
  *
- * @param string $value Raw input.
+ * @param string|array $value Raw input.
  * @return int[]
  */
 function dpce_parse_id_list( $value ) {
@@ -273,9 +270,9 @@ function dpce_parse_id_list( $value ) {
  * text comes from the dpce_carousel_title action so the existing trim / meta
  * key plumbing keeps working.
  *
- * @param int   $post_id           Post ID.
- * @param array $carousel_settings Settings forwarded by the widget.
- * @param array $args              Optional args: 'inner_wrap' (string, e.g. 'span')
+ * @param int          $post_id           Post ID.
+ * @param array        $carousel_settings Settings forwarded by the widget.
+ * @param array|string $args       Optional args: 'inner_wrap' (string, e.g. 'span')
  *                                 to wrap the title text, 'extra_class' (string).
  */
 function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
@@ -312,4 +309,56 @@ function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 		echo '</' . esc_attr( $inner ) . '>';
 	}
 	echo '</' . esc_attr( $tag ) . '>';
+}
+
+
+/**
+ * Get a safe link target from the widget settings.
+ *
+ * @param array $settings Carousel settings.
+ * @return string Either "_self" or "_blank".
+ */
+function dpce_get_link_target( $settings ) {
+	$target = isset( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self';
+	return '_blank' === $target ? '_blank' : '_self';
+}
+
+/**
+ * Build the target and rel attributes for post links.
+ *
+ * @param array $settings Carousel settings.
+ * @return string Attribute string with a leading space, already escaped.
+ */
+function dpce_link_target_attrs( $settings ) {
+	if ( '_blank' === dpce_get_link_target( $settings ) ) {
+		return ' target="_blank" rel="noopener noreferrer"';
+	}
+	return ' target="_self"';
+}
+
+/**
+ * Normalize an Elementor icon value.
+ *
+ * Versions up to 1.4 saved the default icon with the library "solid"
+ * instead of "fa-solid", so Elementor could not load it and the icon
+ * did not show on the front end. Map the short names to the real ones.
+ *
+ * @param mixed $icon Icon control value.
+ * @return array
+ */
+function dpce_normalize_icon( $icon ) {
+	if ( ! is_array( $icon ) || empty( $icon['value'] ) ) {
+		return array();
+	}
+
+	$map = array(
+		'solid'   => 'fa-solid',
+		'regular' => 'fa-regular',
+		'brands'  => 'fa-brands',
+	);
+	if ( isset( $icon['library'] ) && isset( $map[ $icon['library'] ] ) ) {
+		$icon['library'] = $map[ $icon['library'] ];
+	}
+
+	return $icon;
 }

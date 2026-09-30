@@ -1130,7 +1130,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			'trim_append'            => isset( $settings['trim_append'] ) ? $settings['trim_append'] : '...',
 			'read_more_txt'          => isset( $settings['read_more_txt'] ) ? $settings['read_more_txt'] : '',
 			'read_more_classes'      => isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button',
-			'read_more_target'       => isset( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self',
+			'read_more_target'       => dpce_get_link_target( $settings ),
 			'link_area'              => isset( $settings['link_area'] ) && in_array( $settings['link_area'], array( 'card', 'button' ), true ) ? $settings['link_area'] : 'card',
 			'image_size'             => isset( $settings['image_size'] ) ? $settings['image_size'] : 'medium_large',
 			'lazy_load'              => 'yes' === ( isset( $settings['lazy_load'] ) ? $settings['lazy_load'] : 'yes' ),

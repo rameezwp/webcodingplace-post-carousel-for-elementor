@@ -77,10 +77,10 @@ class DPCE_Renderer {
 		}
 
 		if ( ! empty( $settings['placeholder_image'] ) ) {
+			// The placeholder is decorative: the post title is printed right after it.
 			printf(
-				'<div class="dpce-thumbnail"><img class="dpce-thumbnail-img" src="%s" alt="%s"%s /></div>',
+				'<div class="dpce-thumbnail"><img class="dpce-thumbnail-img" src="%s" alt=""%s /></div>',
 				esc_url( $settings['placeholder_image'] ),
-				esc_attr( get_the_title( $post_id ) ),
 				! empty( $settings['lazy_load'] ) ? ' loading="lazy"' : ''
 			);
 		}
@@ -125,9 +125,10 @@ class DPCE_Renderer {
 		}
 
 		if ( ! empty( $settings['desc_render_shortcodes'] ) ) {
-			// Trim BEFORE running shortcodes so we don't break tag pairs.
+			// Trim before running shortcodes so tag pairs are not cut in half.
+			// HTML is only kept when no word limit is set, because trimming strips tags.
 			$value = dpce_trim_words( $value, $max, $append );
-			echo do_shortcode( wp_kses_post( $value ) );
+			echo do_shortcode( wp_kses_post( $value ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Input is filtered by wp_kses_post(); shortcode output is trusted, as in the_content.
 			return;
 		}
 
@@ -154,14 +155,12 @@ class DPCE_Renderer {
 			return;
 		}
 		$classes = isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button';
-		$target  = ! empty( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self';
 
 		printf(
-			'<a class="%1$s" href="%2$s" target="%3$s" rel="%4$s">%5$s</a>',
+			'<a class="%1$s" href="%2$s"%3$s>%4$s</a>',
 			esc_attr( $classes ),
-			esc_url( get_permalink( $post_id ) ),
-			esc_attr( $target ),
-			'_blank' === $target ? 'noopener noreferrer' : 'follow',
+			esc_url( (string) get_permalink( $post_id ) ),
+			dpce_link_target_attrs( $settings ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from an allowlist.
 			esc_html( $text )
 		);
 	}
@@ -178,41 +177,46 @@ class DPCE_Renderer {
 		if ( 'card' !== $link_area ) {
 			return;
 		}
-		$target = ! empty( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self';
 		printf(
-			'<a class="dpce-overlay-link" href="%1$s" target="%2$s" rel="%3$s" aria-label="%4$s"></a>',
-			esc_url( get_permalink( $post_id ) ),
-			esc_attr( $target ),
-			'_blank' === $target ? 'noopener noreferrer' : 'follow',
-			esc_attr( get_the_title( $post_id ) )
+			'<a class="dpce-overlay-link" href="%1$s"%2$s aria-label="%3$s"></a>',
+			esc_url( (string) get_permalink( $post_id ) ),
+			dpce_link_target_attrs( $settings ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from an allowlist.
+			esc_attr( wp_strip_all_tags( get_the_title( $post_id ) ) )
 		);
 	}
 
 	/**
-	 * Inline SVG icon registry.
+	 * Render an icon through Elementor's icon manager.
 	 *
-	 * @param string $name  Icon slug (link, comments, user, share, cart-plus, plus, clock).
-	 * @param string $class Optional extra CSS class.
-	 * @return string Safe HTML.
+	 * Templates pass a Font Awesome class in $icon for their fixed icons
+	 * (comments, clock and so on). The widget's own "Icon" control is
+	 * rendered after it when set.
+	 *
+	 * @param int    $post_id   Post ID.
+	 * @param array  $settings  Carousel settings.
+	 * @param string $icon      Optional Font Awesome class, for example "far fa-clock".
+	 * @param string $css_class CSS class for the fixed icon.
 	 */
-	function render_icon( $post_id, $settings, $icon = '', $class = 'dpce-custom-icon' ) {
+	public function render_icon( $post_id, $settings, $icon = '', $css_class = 'dpce-custom-icon' ) {
+		unset( $post_id );
+
 		if ( $icon ) {
 			\Elementor\Icons_Manager::render_icon(
 				array(
 					'library' => 'fa-regular',
-					'value'   => esc_attr( $icon ),
+					'value'   => (string) $icon,
 				),
 				array(
 					'aria-hidden' => 'true',
-					'class'       => esc_attr( $class ),
+					'class'       => (string) $css_class,
 				)
 			);
 		}
 
-		if ( ! empty( $settings['style_icon']['value'] ) ) {
-
+		$style_icon = isset( $settings['style_icon'] ) ? dpce_normalize_icon( $settings['style_icon'] ) : array();
+		if ( ! empty( $style_icon['value'] ) ) {
 			\Elementor\Icons_Manager::render_icon(
-				$settings['style_icon'],
+				$style_icon,
 				array(
 					'aria-hidden' => 'true',
 					'class'       => 'dpce-icon',
@@ -220,7 +224,6 @@ class DPCE_Renderer {
 			);
 		}
 	}
-
 
 	/**
 	 * Render compact post meta (date + author) used by some templates.
@@ -231,7 +234,7 @@ class DPCE_Renderer {
 	public function render_meta( $post_id, $settings ) {
 		unset( $settings );
 		$date   = get_the_date( '', $post_id );
-		$author = get_the_author_meta( 'display_name', get_post_field( 'post_author', $post_id ) );
+		$author = get_the_author_meta( 'display_name', (int) get_post_field( 'post_author', $post_id ) );
 
 		echo '<span class="dpce-meta-date">' . esc_html( $date ) . '</span>';
 		if ( $author ) {
@@ -253,8 +256,8 @@ class DPCE_Renderer {
 			? $settings['share_networks']
 			: array( 'facebook', 'twitter', 'linkedin' );
 
-		$url   = rawurlencode( get_permalink( $post_id ) );
-		$title = rawurlencode( get_the_title( $post_id ) );
+		$url   = rawurlencode( (string) get_permalink( $post_id ) );
+		$title = rawurlencode( wp_strip_all_tags( get_the_title( $post_id ) ) );
 
 		$urls = array(
 			'facebook'  => 'https://www.facebook.com/sharer/sharer.php?u=' . $url,
@@ -304,31 +307,24 @@ class DPCE_Renderer {
 		echo '<div class="dpce-share">';
 
 		foreach ( $networks as $network ) {
-
-			if ( ! isset( $urls[ $network ] ) ) {
+			if ( ! is_string( $network ) || ! isset( $urls[ $network ] ) ) {
 				continue;
 			}
 
 			printf(
-				'<a class="dpce-share-link dpce-share-%1$s"
-		            target="_blank"
-		            rel="noopener noreferrer"
-		            href="%2$s"
-		            aria-label="%3$s">',
+				'<a class="dpce-share-link dpce-share-%1$s" target="_blank" rel="noopener noreferrer" href="%2$s" aria-label="%3$s">',
 				esc_attr( $network ),
 				esc_url( $urls[ $network ] ),
 				esc_attr( $labels[ $network ] )
 			);
 
-			if ( isset( $icons[ $network ] ) ) {
-				\Elementor\Icons_Manager::render_icon(
-					$icons[ $network ],
-					array(
-						'aria-hidden' => 'true',
-						'class'       => 'dpce-social-icon',
-					)
-				);
-			}
+			\Elementor\Icons_Manager::render_icon(
+				$icons[ $network ],
+				array(
+					'aria-hidden' => 'true',
+					'class'       => 'dpce-social-icon',
+				)
+			);
 
 			echo '</a>';
 		}
