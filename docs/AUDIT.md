@@ -84,7 +84,7 @@ I found no uses of removed functions, dynamic properties, `${}` interpolation, i
 | `get_title()` | "WebCodingPlace Post Carousel". Brand first, so in the panel it sorts and reads as a brand, not as a job. Proposed: **"Post Carousel (WCP)"**. Keep `get_name()` unchanged. |
 | `get_categories()` | `general`. Fine for finding the widget. Optionally add our own category **as well** (search still works). |
 | `has_widget_inner_wrapper()` (3.24+, optimized markup) | Not declared. Leave it `true` for now. Our CSS does not depend on `.elementor-widget-container`, but third party CSS might. Revisit in 2.1. |
-| `is_dynamic_content()` (3.22+, element caching) | Not declared. **Must return `true`**, otherwise "Hide current post", random order and new posts can be served from Elementor's element cache. |
+| `is_dynamic_content()` (3.22+, element caching) | Not declared. Checked in Elementor's source during Phase 2: the base class already returns `true`, so widget output is never cached. No change needed. |
 | `get_style_depends()` / `get_script_depends()` | Used correctly, so assets already load only on pages with the widget. The CSS bundle is simply too large (see P2). |
 | Breakpoints | Hard coded (B6). Use `\Elementor\Plugin::$instance->breakpoints->get_active_breakpoints()` and `add_responsive_control()` for columns. |
 

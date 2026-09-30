@@ -91,8 +91,8 @@ class DPCE_Styles {
 	/**
 	 * Resolve the absolute path to a style template file.
 	 *
-	 * Allows themes/child-plugins to override templates by placing
-	 * `webcodingplace-post-carousel-for-elementor/style-{id}.php` in their theme.
+	 * Themes and child themes can override a template by placing
+	 * `dpce/style-{id}.php` in the theme folder.
 	 *
 	 * @param string $id Style id.
 	 * @return string|null

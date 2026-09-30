@@ -28,7 +28,6 @@ The goal is a release big enough to justify a fresh listing, new screenshots and
 | Split and minify CSS per template, drop `slick-theme.css` | About 100 KB down to under 10 KB per page | P2 |
 | Use Elementor breakpoints (including custom ones) | Correct columns on every device | B6 |
 | Image fixes: correct `sizes`, no lazy loading on the first visible slides, primed thumbnail cache | Better LCP and fewer queries | P5, P6 |
-| `is_dynamic_content()` returns true | Correct output with Elementor element caching | 1.5 |
 | Accessibility pass: focus styles, clone handling, reduced motion, pause control, translated labels | WCAG basics, fewer support threads | A1 to A7 |
 | Richer `get_keywords()`, title "Post Carousel (WCP)" | Easier to find in the Elementor panel | 1.5 |
 | CI: PHPCS (WPCS 3), PHPStan, PHP 7.4 to 8.4 lint, Plugin Check | Keeps quality from slipping | 1.7 |

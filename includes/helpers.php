@@ -287,11 +287,7 @@ function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 		)
 	);
 
-	$tag = isset( $carousel_settings['title_tag'] ) ? $carousel_settings['title_tag'] : 'h3';
-	$tag = tag_escape( $tag );
-	if ( ! in_array( $tag, array( 'h2', 'h3', 'h4', 'h5', 'h6' ), true ) ) {
-		$tag = 'h3';
-	}
+	$tag = dpce_get_title_tag( $carousel_settings );
 
 	$class = 'dpce-title';
 	if ( '' !== trim( (string) $args['extra_class'] ) ) {
@@ -361,4 +357,34 @@ function dpce_normalize_icon( $icon ) {
 	}
 
 	return $icon;
+}
+
+/**
+ * HTML tags allowed for card titles, as tag => label.
+ *
+ * @return array
+ */
+function dpce_get_title_tags() {
+	return array(
+		'h1'   => 'H1',
+		'h2'   => 'H2',
+		'h3'   => 'H3',
+		'h4'   => 'H4',
+		'h5'   => 'H5',
+		'h6'   => 'H6',
+		'div'  => 'div',
+		'p'    => 'p',
+		'span' => 'span',
+	);
+}
+
+/**
+ * Get the title tag from the settings, falling back to h3.
+ *
+ * @param array $settings Carousel settings.
+ * @return string
+ */
+function dpce_get_title_tag( $settings ) {
+	$tag = isset( $settings['title_tag'] ) ? (string) $settings['title_tag'] : 'h3';
+	return array_key_exists( $tag, dpce_get_title_tags() ) ? $tag : 'h3';
 }

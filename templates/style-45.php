@@ -49,11 +49,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</div>
 
-	<h3 class="dpce-post-title">
+	<?php $dpce_title_tag = dpce_get_title_tag( $carousel_settings ); ?>
+	<<?php echo tag_escape( $dpce_title_tag ); ?> class="dpce-post-title">
 		<a href="<?php the_permalink(); ?>" target="<?php echo esc_attr( $carousel_settings['read_more_target'] ); ?>" class="dpce-title">
 			<?php do_action( 'dpce_carousel_title', $post_id, $carousel_settings ); ?>
 		</a>
-	</h3>
+	</<?php echo tag_escape( $dpce_title_tag ); ?>>
 	<span class="dpce-post-meta">
 		<?php do_action( 'dpce_carousel_icon', $post_id, $carousel_settings, 'far fa-comments' ); ?>
 		<?php the_author_posts_link(); // Core template tag, escapes its own output. ?>
