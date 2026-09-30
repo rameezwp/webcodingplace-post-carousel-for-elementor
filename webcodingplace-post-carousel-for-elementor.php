@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       WebCodingPlace Post Carousel for Elementor
- * Description:       Display posts, custom post types or taxonomy terms in a beautiful, fully responsive Slick-powered carousel widget for Elementor with 50+ ready-made templates.
+ * Description:       Show posts, WooCommerce products and custom post types in a responsive carousel widget for Elementor, with 51 ready made templates.
  * Plugin URI:        https://webcodingplace.com/post-carousel-for-elementor
  * Version:           1.4
  * Author:            WebCodingPlace
@@ -10,8 +10,8 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       webcodingplace-post-carousel-for-elementor
  * Domain Path:       /languages
- * Requires at least: 5.6
- * Requires PHP:      7.0
+ * Requires at least: 6.3
+ * Requires PHP:      7.4
  * Requires Plugins:  elementor
  * Elementor tested up to: 3.32
  * Elementor Pro tested up to: 3.27
@@ -39,10 +39,10 @@ if ( ! defined( 'DPCE_TEMPLATES_PATH' ) ) {
 	define( 'DPCE_TEMPLATES_PATH', DPCE_PATH . 'templates/' );
 }
 if ( ! defined( 'DPCE_MIN_ELEMENTOR_VERSION' ) ) {
-	define( 'DPCE_MIN_ELEMENTOR_VERSION', '3.0.0' );
+	define( 'DPCE_MIN_ELEMENTOR_VERSION', '3.18.0' );
 }
 if ( ! defined( 'DPCE_MIN_PHP_VERSION' ) ) {
-	define( 'DPCE_MIN_PHP_VERSION', '7.0' );
+	define( 'DPCE_MIN_PHP_VERSION', '7.4' );
 }
 
 /**
@@ -82,18 +82,18 @@ final class DPCE_Plugin {
 	 * Initialize the plugin.
 	 */
 	public function init() {
+		if ( version_compare( PHP_VERSION, DPCE_MIN_PHP_VERSION, '<' ) ) {
+			add_action( 'admin_notices', array( $this, 'admin_notice_minimum_php' ) );
+			return;
+		}
+
 		if ( ! did_action( 'elementor/loaded' ) ) {
 			add_action( 'admin_notices', array( $this, 'admin_notice_missing_elementor' ) );
 			return;
 		}
 
-		if ( ! version_compare( ELEMENTOR_VERSION, DPCE_MIN_ELEMENTOR_VERSION, '>=' ) ) {
+		if ( ! defined( 'ELEMENTOR_VERSION' ) || ! version_compare( ELEMENTOR_VERSION, DPCE_MIN_ELEMENTOR_VERSION, '>=' ) ) {
 			add_action( 'admin_notices', array( $this, 'admin_notice_minimum_elementor' ) );
-			return;
-		}
-
-		if ( version_compare( PHP_VERSION, DPCE_MIN_PHP_VERSION, '<' ) ) {
-			add_action( 'admin_notices', array( $this, 'admin_notice_minimum_php' ) );
 			return;
 		}
 
@@ -178,6 +178,10 @@ final class DPCE_Plugin {
 	 * Admin notice: Elementor missing.
 	 */
 	public function admin_notice_missing_elementor() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required plugin name */
 			esc_html__( '"%1$s" requires "%2$s" to be installed and active.', 'webcodingplace-post-carousel-for-elementor' ),
@@ -191,6 +195,10 @@ final class DPCE_Plugin {
 	 * Admin notice: Elementor below minimum version.
 	 */
 	public function admin_notice_minimum_elementor() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required plugin name, 3: minimum version */
 			esc_html__( '"%1$s" requires "%2$s" version %3$s or greater.', 'webcodingplace-post-carousel-for-elementor' ),
@@ -205,6 +213,10 @@ final class DPCE_Plugin {
 	 * Admin notice: PHP below minimum version.
 	 */
 	public function admin_notice_minimum_php() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required PHP version */
 			esc_html__( '"%1$s" requires PHP version %2$s or greater.', 'webcodingplace-post-carousel-for-elementor' ),
