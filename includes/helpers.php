@@ -182,7 +182,6 @@ function dpce_get_posts_for_select( $post_type, $limit = 200 ) {
 			'no_found_rows'          => true,
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
-			'suppress_filters'       => true,
 		)
 	);
 

@@ -1,9 +1,9 @@
 === WebCodingPlace Post Carousel for Elementor ===
 Contributors: webcodingplace
 Tags: elementor, carousel, slider, posts, slick
-Requires at least: 5.6
-Tested up to: 6.9
-Requires PHP: 7.0
+Requires at least: 6.3
+Tested up to: 7.1
+Requires PHP: 7.4
 Stable tag: 1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
