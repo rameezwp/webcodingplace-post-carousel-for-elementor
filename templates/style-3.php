@@ -15,8 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="dpce-body">
 	<div class="date dpce-date">
-		<span class="day"><?php echo get_the_date( 'd' ); ?></span>
-		<span class="month"><?php echo get_the_date( 'M' ); ?></span>
+		<span class="day"><?php echo esc_html( get_the_date( 'd' ) ); ?></span>
+		<span class="month"><?php echo esc_html( get_the_date( 'M' ) ); ?></span>
 	</div>
 	<?php dpce_render_title( $post_id, $carousel_settings ); ?>
 	<p class="dpce-desc">

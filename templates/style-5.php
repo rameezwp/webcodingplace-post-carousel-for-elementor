@@ -19,14 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings ); ?>
 	</h3>
 	<footer class="dpce-footer">
-		<div class="dpce-post-date"><?php echo get_the_date(); ?></div>
+		<div class="dpce-post-date"><?php echo esc_html( get_the_date() ); ?></div>
 		<div class="icons">
 		<div class="views">
 			<?php do_action( 'dpce_carousel_icon', $post_id, $carousel_settings, 'far fa-comments' ); ?>
 			<span>
 			<?php
-				$comments = wp_count_comments( get_the_id() );
-				echo esc_attr( $comments->total_comments );
+				echo esc_html( number_format_i18n( get_comments_number( $post_id ) ) );
 			?>
 			</span>
 		</div>

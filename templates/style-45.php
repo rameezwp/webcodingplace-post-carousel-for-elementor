@@ -18,8 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<span class="dpce-comment-box">
 			<span class="dpce-post-comment">
 				<?php
-					$comments = wp_count_comments( get_the_id() );
-					echo esc_attr( $comments->total_comments );
+					echo esc_html( number_format_i18n( get_comments_number( $post_id ) ) );
 				?>
 			</span>
 		</span>
@@ -57,11 +56,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</h3>
 	<span class="dpce-post-meta">
 		<?php do_action( 'dpce_carousel_icon', $post_id, $carousel_settings, 'far fa-comments' ); ?>
-		<?php the_author_posts_link(); ?>
+		<?php the_author_posts_link(); // Core template tag, escapes its own output. ?>
 	</span>
 	<span class="dpce-post-date">
 		<?php do_action( 'dpce_carousel_icon', $post_id, $carousel_settings, 'far fa-clock' ); ?>
-		<?php echo get_the_date(); ?>
+		<?php echo esc_html( get_the_date() ); ?>
 	</span>
 
 	<div class="clearfix"></div>

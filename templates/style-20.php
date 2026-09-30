@@ -33,8 +33,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		),
 		esc_html(
 			human_time_diff(
-				get_the_time( 'U' ),
-				current_time( 'timestamp' )
+				(int) get_post_timestamp( $post_id ),
+				time()
 			)
 		)
 	);
