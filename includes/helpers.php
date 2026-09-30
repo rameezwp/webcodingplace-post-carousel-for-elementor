@@ -565,3 +565,13 @@ function dpce_cart_tags( $post_id, $fallback_tag, $fallback_attrs ) {
 
 	return array( $open . '>', '</a>' );
 }
+
+/**
+ * Remember the first time a carousel was shown (used by the Getting
+ * Started checklist and the review request). One option write, ever.
+ */
+function dpce_mark_first_use() {
+	if ( ! get_option( 'dpce_first_use' ) ) {
+		update_option( 'dpce_first_use', time(), false );
+	}
+}

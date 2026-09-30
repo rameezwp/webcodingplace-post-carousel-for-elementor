@@ -1188,6 +1188,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			return;
 		}
 
+		dpce_mark_first_use();
+
 		$style_id = isset( $settings['style_id'] ) ? (string) $settings['style_id'] : '1';
 		$template = DPCE_Styles::locate_template( $style_id );
 

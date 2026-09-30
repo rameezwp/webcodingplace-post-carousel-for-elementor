@@ -45,6 +45,16 @@ if ( ! defined( 'DPCE_MIN_PHP_VERSION' ) ) {
 	define( 'DPCE_MIN_PHP_VERSION', '7.4' );
 }
 
+/*
+ * Optional deactivation feedback. Empty by default: no feedback form is
+ * shown and nothing is sent. Set an HTTPS URL here (or through the
+ * dpce_feedback_endpoint filter) to turn it on, and describe it in the
+ * readme's External services section when you do.
+ */
+if ( ! defined( 'DPCE_FEEDBACK_ENDPOINT' ) ) {
+	define( 'DPCE_FEEDBACK_ENDPOINT', '' );
+}
+
 /**
  * Main plugin bootstrap.
  *
@@ -123,6 +133,15 @@ final class DPCE_Plugin {
 		DPCE_Renderer::instance();
 		DPCE_Assets::init();
 		DPCE_Rest::init();
+
+		if ( is_admin() ) {
+			require_once DPCE_PATH . 'includes/admin/class-dpce-admin.php';
+			require_once DPCE_PATH . 'includes/admin/class-dpce-review-notice.php';
+			require_once DPCE_PATH . 'includes/admin/class-dpce-feedback.php';
+			DPCE_Admin::init();
+			DPCE_Review_Notice::init();
+			DPCE_Feedback::init();
+		}
 	}
 
 	/**
@@ -198,3 +217,11 @@ final class DPCE_Plugin {
 }
 
 DPCE_Plugin::instance();
+
+register_activation_hook(
+	__FILE__,
+	static function ( $network_wide = false ) {
+		require_once DPCE_PATH . 'includes/admin/class-dpce-admin.php';
+		DPCE_Admin::on_activation( (bool) $network_wide );
+	}
+);

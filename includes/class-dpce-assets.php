@@ -166,6 +166,9 @@ class DPCE_Assets {
 			\Elementor\Plugin::$instance->files_manager->clear_cache();
 		}
 
+		// Sites updating from 1.4 never ran the new activation code.
+		add_option( 'dpce_installed_at', time(), '', false );
+
 		update_option( self::VERSION_OPTION, DPCE_VERSION, false );
 	}
 }

@@ -12,3 +12,6 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 delete_option( 'dpce_version' );
+delete_option( 'dpce_installed_at' );
+delete_option( 'dpce_first_use' );
+delete_metadata( 'user', 0, 'dpce_review_state', '', true );
