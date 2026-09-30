@@ -46,5 +46,11 @@
 	<!-- File names follow the existing, public template and class file names. -->
 	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
 		<exclude-pattern>/widgets/*</exclude-pattern>
+		<exclude-pattern>/webcodingplace-post-carousel-for-elementor.php</exclude-pattern>
+	</rule>
+
+	<!-- The PHPStan bootstrap mimics constants defined by WordPress and Elementor. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound">
+		<exclude-pattern>/tests/*</exclude-pattern>
 	</rule>
 </ruleset>

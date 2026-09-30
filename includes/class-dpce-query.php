@@ -25,8 +25,8 @@ class DPCE_Query {
 			'post_status'         => 'publish',
 			'ignore_sticky_posts' => true,
 			'posts_per_page'      => isset( $settings['posts_per_page'] ) ? max( -1, (int) $settings['posts_per_page'] ) : 10,
-			'orderby'             => isset( $settings['orderby'] ) ? $settings['orderby'] : 'date',
-			'order'               => isset( $settings['order'] ) ? $settings['order'] : 'DESC',
+			'orderby'             => self::sanitize_orderby( isset( $settings['orderby'] ) ? $settings['orderby'] : 'date' ),
+			'order'               => ( isset( $settings['order'] ) && 'ASC' === strtoupper( (string) $settings['order'] ) ) ? 'ASC' : 'DESC',
 			'no_found_rows'       => true,
 		);
 
@@ -42,7 +42,7 @@ class DPCE_Query {
 				if ( $tax_obj && ! empty( $tax_obj->object_type ) ) {
 					$args['post_type'] = $tax_obj->object_type;
 				}
-				$args['tax_query'] = array(
+				$args['tax_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Filtering by term is the feature; the query is limited by posts_per_page.
 					array(
 						'taxonomy' => $taxonomy,
 						'field'    => 'term_id',
@@ -96,5 +96,16 @@ class DPCE_Query {
 		$args = apply_filters( 'dpce_query_args', $args, $settings );
 
 		return new WP_Query( $args );
+	}
+
+	/**
+	 * Limit orderby to values the widget can produce.
+	 *
+	 * @param mixed $orderby Raw value.
+	 * @return string
+	 */
+	public static function sanitize_orderby( $orderby ) {
+		$allowed = array( 'date', 'title', 'menu_order', 'rand', 'comment_count', 'modified', 'ID', 'author', 'name', 'meta_value', 'meta_value_num', 'post__in' );
+		return in_array( $orderby, $allowed, true ) ? $orderby : 'date';
 	}
 }

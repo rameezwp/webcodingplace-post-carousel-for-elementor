@@ -98,6 +98,11 @@ class DPCE_Styles {
 	 * @return string|null
 	 */
 	public static function locate_template( $id ) {
+		// Only registered styles can be loaded.
+		if ( null === self::get( (string) $id ) ) {
+			return null;
+		}
+
 		$id   = sanitize_file_name( $id );
 		$file = 'style-' . $id . '.php';
 

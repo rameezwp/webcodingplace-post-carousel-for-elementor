@@ -35,7 +35,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * @return string
 	 */
 	public function get_title() {
-		return esc_html__( 'WebCodingPlace Post Carousel', 'webcodingplace-post-carousel-for-elementor' );
+		return esc_html__( 'Post Carousel (WCP)', 'webcodingplace-post-carousel-for-elementor' );
 	}
 
 	/**
@@ -62,7 +62,28 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * @return array
 	 */
 	public function get_keywords() {
-		return array( 'carousel', 'slider', 'posts', 'slick', 'taxonomy', 'cpt' );
+		return array(
+			'post',
+			'posts',
+			'blog',
+			'carousel',
+			'slider',
+			'news',
+			'ticker',
+			'product',
+			'products',
+			'woocommerce',
+			'portfolio',
+			'testimonial',
+			'category',
+			'taxonomy',
+			'custom post type',
+			'loop',
+			'grid',
+			'related',
+			'webcodingplace',
+			'wcp',
+		);
 	}
 
 	/**
@@ -93,10 +114,9 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->register_advanced_section();
 	}
 
-	/*
-	=====================================================
-	 * SECTION 1 - POST / CONTENT
-	 * ===================================================== */
+	/**
+	 * Register controls: Post / Content.
+	 */
 	private function register_post_section() {
 		$this->start_controls_section(
 			'section_post',
@@ -387,10 +407,9 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/*
-	=====================================================
-	 * SECTION 2 - SLIDER
-	 * ===================================================== */
+	/**
+	 * Register controls: Slider.
+	 */
 	private function register_slider_section() {
 		$this->start_controls_section(
 			'section_slider',
@@ -598,10 +617,9 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/*
-	=====================================================
-	 * SECTION 3 - APPEARANCE
-	 * ===================================================== */
+	/**
+	 * Register controls: Appearance.
+	 */
 	private function register_appearance_section() {
 		$this->start_controls_section(
 			'section_appearance',
@@ -796,7 +814,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'fa4compatibility' => 'icon',
 				'default'          => array(
 					'value'   => 'fas fa-star',
-					'library' => 'solid',
+					'library' => 'fa-solid',
 				),
 				'condition'        => array(
 					'style_id' => array(
@@ -823,8 +841,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'     => __( 'Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .dpce-icon' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-icon' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .dpce-icon' => 'color: {{VALUE}}; fill: {{VALUE}};',
 				),
 				'condition' => array(
 					'style_id' => array(
@@ -899,10 +916,9 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/*
-	=====================================================
-	 * SECTION 4 - ADVANCED
-	 * ===================================================== */
+	/**
+	 * Register controls: Advanced.
+	 */
 	private function register_advanced_section() {
 		$this->start_controls_section(
 			'section_advanced',
@@ -1018,10 +1034,9 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/*
-	=====================================================
-	 * RENDER
-	 * ===================================================== */
+	/**
+	 * Render the carousel on the front end and in the editor preview.
+	 */
 	protected function render() {
 		$settings     = $this->get_settings_for_display();
 		$raw_settings = $this->get_settings();
@@ -1138,7 +1153,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			'enable_share'           => 'yes' === ( isset( $settings['enable_share'] ) ? $settings['enable_share'] : '' ),
 			'share_networks'         => isset( $settings['share_networks'] ) ? (array) $settings['share_networks'] : array(),
 			'style_id'               => isset( $settings['style_id'] ) ? $settings['style_id'] : '1',
-			'style_icon'             => isset( $settings['style_icon'] ) ? $settings['style_icon'] : '',
+			'style_icon'             => isset( $settings['style_icon'] ) ? dpce_normalize_icon( $settings['style_icon'] ) : array(),
 			'style_icon_color'       => isset( $settings['style_icon_color'] ) ? $settings['style_icon_color'] : '',
 		);
 	}
