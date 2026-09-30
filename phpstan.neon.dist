@@ -17,6 +17,7 @@ parameters:
 		- tests/phpstan-bootstrap.php
 	scanFiles:
 		- vendor/arts/elementor-stubs/elementor-stubs.php
+		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
 	ignoreErrors:
 		# Template files receive these from the including method.
 		-

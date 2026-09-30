@@ -20,6 +20,8 @@ use Elementor\Group_Control_Typography;
  */
 class DPCE_Post_Carousel_Widget extends Widget_Base {
 
+	use DPCE_Query_Controls;
+
 	/**
 	 * Widget slug.
 	 *
@@ -134,6 +136,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 */
 	protected function register_controls() {
 		$this->register_post_section();
+		$this->register_filters_section();
 		$this->register_slider_section();
 		$this->register_appearance_section();
 		$this->register_advanced_section();
@@ -151,13 +154,16 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			)
 		);
 
+		$this->register_query_mode_controls();
+
 		$this->add_control(
 			'display_by',
 			array(
-				'label'   => esc_html__( 'Display By', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'post_type',
-				'options' => array(
+				'label'     => esc_html__( 'Display By', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'condition' => array( 'query_mode' => 'custom' ),
+				'default'   => 'post_type',
+				'options'   => array(
 					'post_type' => esc_html__( 'Post Type', 'webcodingplace-post-carousel-for-elementor' ),
 					'taxonomy'  => esc_html__( 'Taxonomy', 'webcodingplace-post-carousel-for-elementor' ),
 				),
@@ -172,7 +178,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'post',
 				'options'   => dpce_get_post_types(),
-				'condition' => array( 'display_by' => 'post_type' ),
+				'condition' => array(
+					'display_by' => 'post_type',
+					'query_mode' => 'custom',
+				),
 			)
 		);
 
@@ -195,6 +204,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 					'condition'   => array(
 						'display_by' => 'post_type',
 						'post_type'  => $pt_slug,
+						'query_mode' => 'custom',
 					),
 				)
 			);
@@ -208,7 +218,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'category',
 				'options'   => dpce_get_taxonomies(),
-				'condition' => array( 'display_by' => 'taxonomy' ),
+				'condition' => array(
+					'display_by' => 'taxonomy',
+					'query_mode' => 'custom',
+				),
 			)
 		);
 
@@ -230,6 +243,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 					'condition'   => array(
 						'display_by' => 'taxonomy',
 						'taxonomy'   => $tax_slug,
+						'query_mode' => 'custom',
 					),
 				)
 			);
@@ -249,15 +263,21 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'orderby',
 			array(
-				'label'   => esc_html__( 'Order By', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'date',
-				'options' => array(
-					'date'          => esc_html__( 'Date', 'webcodingplace-post-carousel-for-elementor' ),
-					'title'         => esc_html__( 'Title', 'webcodingplace-post-carousel-for-elementor' ),
-					'menu_order'    => esc_html__( 'Menu Order', 'webcodingplace-post-carousel-for-elementor' ),
-					'rand'          => esc_html__( 'Random', 'webcodingplace-post-carousel-for-elementor' ),
-					'comment_count' => esc_html__( 'Comment Count', 'webcodingplace-post-carousel-for-elementor' ),
+				'condition' => array( 'query_mode!' => 'current' ),
+				'label'     => esc_html__( 'Order By', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'date',
+				'options'   => array(
+					'date'           => esc_html__( 'Date', 'webcodingplace-post-carousel-for-elementor' ),
+					'title'          => esc_html__( 'Title', 'webcodingplace-post-carousel-for-elementor' ),
+					'menu_order'     => esc_html__( 'Menu Order', 'webcodingplace-post-carousel-for-elementor' ),
+					'rand'           => esc_html__( 'Random', 'webcodingplace-post-carousel-for-elementor' ),
+					'comment_count'  => esc_html__( 'Comment Count', 'webcodingplace-post-carousel-for-elementor' ),
+					'modified'       => esc_html__( 'Last Modified', 'webcodingplace-post-carousel-for-elementor' ),
+					'ID'             => esc_html__( 'Post ID', 'webcodingplace-post-carousel-for-elementor' ),
+					'author'         => esc_html__( 'Author', 'webcodingplace-post-carousel-for-elementor' ),
+					'meta_value'     => esc_html__( 'Custom Field (text)', 'webcodingplace-post-carousel-for-elementor' ), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- An option key, not a query.
+					'meta_value_num' => esc_html__( 'Custom Field (number)', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 			)
 		);
@@ -265,20 +285,24 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'order',
 			array(
-				'label'   => esc_html__( 'Order', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'DESC',
-				'options' => array(
+				'condition' => array( 'query_mode!' => 'current' ),
+				'label'     => esc_html__( 'Order', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'DESC',
+				'options'   => array(
 					'DESC' => esc_html__( 'Descending', 'webcodingplace-post-carousel-for-elementor' ),
 					'ASC'  => esc_html__( 'Ascending', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 			)
 		);
 
+		$this->register_order_extra_controls();
+
 		// 6. Exclude posts by ID.
 		$this->add_control(
 			'exclude_ids',
 			array(
+				'condition'   => array( 'query_mode' => 'custom' ),
 				'label'       => esc_html__( 'Exclude Post IDs', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'description' => esc_html__( 'Comma-separated list of post IDs to exclude.', 'webcodingplace-post-carousel-for-elementor' ),
@@ -1460,7 +1484,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			$query_settings[ 'posts__' . $post_type ] = (array) $settings[ 'posts__' . $post_type ];
 		}
 
-		return $query_settings;
+		// Everything else (query mode, filters) is read from the widget settings.
+		return array_merge( $settings, $query_settings );
 	}
 
 	/**

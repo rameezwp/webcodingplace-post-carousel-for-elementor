@@ -45,12 +45,12 @@ class DPCE_Rest {
 				'args'                => array(
 					'kind'    => array(
 						'type'     => 'string',
-						'enum'     => array( 'post', 'term' ),
+						'enum'     => array( 'post', 'term', 'author' ),
 						'required' => true,
 					),
 					'source'  => array(
 						'type'              => 'string',
-						'required'          => true,
+						'default'           => '',
 						'sanitize_callback' => 'sanitize_key',
 					),
 					'search'  => array(
@@ -95,8 +95,13 @@ class DPCE_Rest {
 		$include = array_values( array_filter( array_map( 'absint', (array) $request->get_param( 'include' ) ) ) );
 		$page    = max( 1, (int) $request->get_param( 'page' ) );
 
+		if ( 'author' === $kind ) {
+			return rest_ensure_response( self::search_authors( $search, $include, $page ) );
+		}
+
 		if ( 'term' === $kind ) {
-			if ( ! array_key_exists( $source, dpce_get_taxonomies() ) ) {
+			// "any" searches every public taxonomy (used by the include and exclude term filters).
+			if ( 'any' !== $source && ! array_key_exists( $source, dpce_get_taxonomies() ) ) {
 				return new WP_Error( 'dpce_invalid_taxonomy', __( 'Unknown taxonomy.', 'webcodingplace-post-carousel-for-elementor' ), array( 'status' => 400 ) );
 			}
 			return rest_ensure_response( self::search_terms( $source, $search, $include, $page ) );
@@ -168,8 +173,11 @@ class DPCE_Rest {
 	 * @return array{results: array<int, array{id: string, text: string}>, more: bool}
 	 */
 	public static function search_terms( $taxonomy, $search, $ids, $page ) {
+		$any        = 'any' === $taxonomy;
+		$taxonomies = $any ? array_keys( dpce_get_taxonomies() ) : array( $taxonomy );
+
 		$args = array(
-			'taxonomy'   => $taxonomy,
+			'taxonomy'   => $taxonomies,
 			'hide_empty' => false,
 			'orderby'    => 'name',
 			'number'     => self::PER_PAGE + 1,
@@ -192,9 +200,61 @@ class DPCE_Rest {
 		$more    = ! $ids && count( $terms ) > self::PER_PAGE;
 		$results = array();
 		foreach ( array_slice( $terms, 0, self::PER_PAGE ) as $term ) {
+			$text = self::label( $term->name, $term->term_id );
+			if ( $any ) {
+				$tax  = get_taxonomy( $term->taxonomy );
+				$text = sprintf(
+					/* translators: 1: term name, 2: taxonomy name, for example "News (Categories)". */
+					__( '%1$s (%2$s)', 'webcodingplace-post-carousel-for-elementor' ),
+					$text,
+					$tax ? $tax->labels->name : $term->taxonomy
+				);
+			}
 			$results[] = array(
 				'id'   => (string) $term->term_id,
-				'text' => self::label( $term->name, $term->term_id ),
+				'text' => $text,
+			);
+		}
+
+		return array(
+			'results' => $results,
+			'more'    => $more,
+		);
+	}
+
+	/**
+	 * Search users who have published posts.
+	 *
+	 * @param string $search Search text.
+	 * @param int[]  $ids    Only these IDs.
+	 * @param int    $page   Page number.
+	 * @return array{results: array<int, array{id: string, text: string}>, more: bool}
+	 */
+	public static function search_authors( $search, $ids, $page ) {
+		$args = array(
+			'has_published_posts' => true,
+			'orderby'             => 'display_name',
+			'number'              => self::PER_PAGE + 1,
+			'offset'              => ( $page - 1 ) * self::PER_PAGE,
+			'fields'              => array( 'ID', 'display_name' ),
+		);
+
+		if ( $ids ) {
+			$args['include'] = $ids;
+			$args['number']  = count( $ids );
+			$args['offset']  = 0;
+		} elseif ( '' !== $search ) {
+			$args['search']         = '*' . $search . '*';
+			$args['search_columns'] = array( 'display_name', 'user_login', 'user_nicename' );
+		}
+
+		$users   = get_users( $args );
+		$more    = ! $ids && count( $users ) > self::PER_PAGE;
+		$results = array();
+		foreach ( array_slice( $users, 0, self::PER_PAGE ) as $user ) {
+			$results[] = array(
+				'id'   => (string) $user->ID,
+				'text' => self::label( $user->display_name, (int) $user->ID ),
 			);
 		}
 
