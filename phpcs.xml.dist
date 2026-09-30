@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<ruleset name="WebCodingPlace Post Carousel for Elementor">
+	<description>Coding standards for WebCodingPlace Post Carousel for Elementor.</description>
+
+	<file>.</file>
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/assets/vendor/*</exclude-pattern>
+	<exclude-pattern>/.wordpress-org/*</exclude-pattern>
+	<exclude-pattern>*.min.js</exclude-pattern>
+	<exclude-pattern>*.min.css</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+	<arg name="parallel" value="8"/>
+
+	<config name="minimum_wp_version" value="6.3"/>
+	<config name="testVersion" value="7.4-"/>
+
+	<rule ref="WordPress"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="webcodingplace-post-carousel-for-elementor"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="dpce"/>
+				<element value="DPCE"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Template files are included inside a method, so their variables are local. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound">
+		<exclude-pattern>/templates/*</exclude-pattern>
+	</rule>
+
+	<!-- File names follow the existing, public template and class file names. -->
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>/widgets/*</exclude-pattern>
+	</rule>
+</ruleset>
