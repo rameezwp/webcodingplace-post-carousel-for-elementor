@@ -25,7 +25,7 @@ The goal is a release big enough to justify a fresh listing, new screenshots and
 | Raise minimums to PHP 7.4 / WP 6.3 / Elementor 3.18 | Matches reality; fixes the silent failure on Elementor 3.0 to 3.4 | B1 |
 | AJAX post and term search control | Removes 10+ queries per page view, fixes the 200 posts cap | B2, P1 |
 | Slider engine control: Slick for old widgets, Swiper for new | Lighter pages, no jQuery for new users, zero risk for old widgets | 1.6 |
-| Split and minify CSS per template, drop `slick-theme.css` | About 100 KB down to under 10 KB per page | P2 |
+| Split and minify CSS per template; Slick theme only for classic engine carousels | About 100 KB down to under 10 KB per page | P2 |
 | Use Elementor breakpoints (including custom ones) | Correct columns on every device | B6 |
 | Image fixes: correct `sizes`, no lazy loading on the first visible slides, primed thumbnail cache | Better LCP and fewer queries | P5, P6 |
 | Accessibility pass: focus styles, clone handling, reduced motion, pause control, translated labels | WCAG basics, fewer support threads | A1 to A7 |
