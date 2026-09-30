@@ -96,9 +96,11 @@
 							return this.value === item.id;
 						} ).text( item.text );
 					} );
-					// Refresh the visible labels without touching the saved value.
-					if ( ! self.isDestroyed ) {
-						$select.trigger( 'change.select2' );
+					// Select2 caches option labels, so rebuild it to show the new ones.
+					// The saved value is untouched: the same options stay selected.
+					if ( ! self.isDestroyed && self.select2Instance ) {
+						self.select2Instance.destroy();
+						Select2.prototype.applySavedValue.call( self );
 					}
 				} );
 			},
