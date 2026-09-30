@@ -24,7 +24,7 @@ class DPCE_Query {
 		$args = array(
 			'post_status'         => 'publish',
 			'ignore_sticky_posts' => true,
-			'posts_per_page'      => isset( $settings['posts_per_page'] ) ? max( -1, (int) $settings['posts_per_page'] ) : 10,
+			'posts_per_page'      => self::sanitize_posts_per_page( isset( $settings['posts_per_page'] ) ? $settings['posts_per_page'] : 10 ),
 			'orderby'             => self::sanitize_orderby( isset( $settings['orderby'] ) ? $settings['orderby'] : 'date' ),
 			'order'               => ( isset( $settings['order'] ) && 'ASC' === strtoupper( (string) $settings['order'] ) ) ? 'ASC' : 'DESC',
 			'no_found_rows'       => true,
@@ -96,6 +96,35 @@ class DPCE_Query {
 		$args = apply_filters( 'dpce_query_args', $args, $settings );
 
 		return new WP_Query( $args );
+	}
+
+	/**
+	 * Keep the number of posts within a safe range.
+	 *
+	 * Versions up to 1.4 accepted -1 (all posts). That still works, but is
+	 * capped by the `dpce_max_posts` filter (100 by default) so a carousel
+	 * can never run an unbounded query.
+	 *
+	 * @param mixed $value Raw value.
+	 * @return int
+	 */
+	public static function sanitize_posts_per_page( $value ) {
+		/**
+		 * Filter the largest number of posts one carousel may query.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param int $max Maximum number of posts. Default 100.
+		 */
+		$max   = max( 1, (int) apply_filters( 'dpce_max_posts', 100 ) );
+		$value = (int) $value;
+
+		if ( -1 === $value || $value > $max ) {
+			return $max;
+		}
+
+		// WP_Query treats 0 as 1 and other negative numbers as their absolute value.
+		return $value;
 	}
 
 	/**

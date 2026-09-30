@@ -392,3 +392,50 @@ function dpce_get_title_tag( $settings ) {
 	$tag = isset( $settings['title_tag'] ) ? (string) $settings['title_tag'] : 'h3';
 	return array_key_exists( $tag, dpce_get_title_tags() ) ? $tag : 'h3';
 }
+
+/**
+ * Build a `sizes` attribute that matches the number of columns.
+ *
+ * Without it the browser assumes each image is as wide as the screen and
+ * downloads a much larger file than a 3 or 4 column carousel needs.
+ *
+ * @param array $columns Columns per device: desktop, tablet, mobile.
+ * @return string
+ */
+function dpce_get_image_sizes_attr( $columns ) {
+	$mobile_max = 767;
+	$tablet_max = 1024;
+
+	if ( class_exists( '\Elementor\Plugin' ) ) {
+		$breakpoints = \Elementor\Plugin::$instance->breakpoints->get_active_breakpoints();
+		if ( isset( $breakpoints['mobile'] ) ) {
+			$mobile_max = (int) $breakpoints['mobile']->get_value();
+		}
+		if ( isset( $breakpoints['tablet'] ) ) {
+			$tablet_max = (int) $breakpoints['tablet']->get_value();
+		}
+	}
+
+	$vw = static function ( $cols ) {
+		return (int) ceil( 100 / max( 1, (int) $cols ) ) . 'vw';
+	};
+
+	$sizes = sprintf(
+		'(max-width: %1$dpx) %2$s, (max-width: %3$dpx) %4$s, %5$s',
+		$mobile_max,
+		$vw( isset( $columns['mobile'] ) ? $columns['mobile'] : 1 ),
+		$tablet_max,
+		$vw( isset( $columns['tablet'] ) ? $columns['tablet'] : 2 ),
+		$vw( isset( $columns['desktop'] ) ? $columns['desktop'] : 3 )
+	);
+
+	/**
+	 * Filter the sizes attribute used for carousel images.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $sizes   Sizes attribute.
+	 * @param array  $columns Columns per device.
+	 */
+	return (string) apply_filters( 'dpce_image_sizes_attr', $sizes, $columns );
+}

@@ -235,7 +235,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'   => esc_html__( 'Number of Posts', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 8,
-				'min'     => -1,
+				'min'     => 1,
 				'max'     => 100,
 			)
 		);
@@ -1059,11 +1059,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * Render the carousel on the front end and in the editor preview.
 	 */
 	protected function render() {
-		$settings     = $this->get_settings_for_display();
-		$raw_settings = $this->get_settings();
+		$settings = $this->get_settings_for_display();
 
 		// Normalize relevant fields the renderer hooks expect.
-		$carousel_settings = $this->build_carousel_settings( $settings, $raw_settings );
+		$carousel_settings = $this->build_carousel_settings( $settings );
 
 		// Build query.
 		$query = DPCE_Query::run( $this->build_query_settings( $settings ) );
@@ -1121,9 +1120,14 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			data-slick="<?php echo esc_attr( wp_json_encode( $slick_options ) ); ?>">
 			<div class="dpce-track">
 				<?php
+				// Load all featured image data in one query instead of one per slide.
+				update_post_thumbnail_cache( $query );
+
+				$slide_index = 0;
 				while ( $query->have_posts() ) {
 					$query->the_post();
-					$post_id = get_the_ID();
+					$post_id                          = get_the_ID();
+					$carousel_settings['slide_index'] = $slide_index++;
 					echo '<div class="dpce-slide"><div class="dpce-slide-inner">';
 					if ( $template ) {
 						include $template;
@@ -1143,16 +1147,21 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * Compose the settings array exposed to template files via $carousel_settings.
 	 *
 	 * @param array $settings    Display settings.
-	 * @param array $raw         Raw settings.
 	 * @return array
 	 */
-	private function build_carousel_settings( $settings, $raw ) {
-		unset( $raw );
-
-		$placeholder = '';
+	private function build_carousel_settings( $settings ) {
+		$placeholder    = '';
+		$placeholder_id = 0;
 		if ( isset( $settings['placeholder_image'] ) && is_array( $settings['placeholder_image'] ) && ! empty( $settings['placeholder_image']['url'] ) ) {
-			$placeholder = $settings['placeholder_image']['url'];
+			$placeholder    = $settings['placeholder_image']['url'];
+			$placeholder_id = isset( $settings['placeholder_image']['id'] ) ? absint( $settings['placeholder_image']['id'] ) : 0;
 		}
+
+		$columns = array(
+			'desktop' => max( 1, (int) ( isset( $settings['cols_desktop'] ) ? $settings['cols_desktop'] : 3 ) ),
+			'tablet'  => max( 1, (int) ( isset( $settings['cols_tablet'] ) ? $settings['cols_tablet'] : 2 ) ),
+			'mobile'  => max( 1, (int) ( isset( $settings['cols_mobile'] ) ? $settings['cols_mobile'] : 1 ) ),
+		);
 
 		return array(
 			'heading_field'          => isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title',
@@ -1171,6 +1180,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			'image_size'             => isset( $settings['image_size'] ) ? $settings['image_size'] : 'medium_large',
 			'lazy_load'              => 'yes' === ( isset( $settings['lazy_load'] ) ? $settings['lazy_load'] : 'yes' ),
 			'placeholder_image'      => $placeholder,
+			'placeholder_image_id'   => $placeholder_id,
+			'visible_slides'         => $columns['desktop'],
+			'image_sizes_attr'       => dpce_get_image_sizes_attr( $columns ),
+			'slide_index'            => 0,
 			'enable_share'           => 'yes' === ( isset( $settings['enable_share'] ) ? $settings['enable_share'] : '' ),
 			'share_networks'         => isset( $settings['share_networks'] ) ? (array) $settings['share_networks'] : array(),
 			'style_id'               => isset( $settings['style_id'] ) ? $settings['style_id'] : '1',

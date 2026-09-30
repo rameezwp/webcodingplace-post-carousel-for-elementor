@@ -65,13 +65,30 @@ class DPCE_Renderer {
 			'class' => 'dpce-thumbnail-img',
 		);
 
-		if ( ! empty( $settings['lazy_load'] ) ) {
+		if ( ! empty( $settings['image_sizes_attr'] ) ) {
+			$attr['sizes'] = $settings['image_sizes_attr'];
+		}
+
+		// Lazy load only slides that start outside the visible area, so the
+		// first visible images are not delayed (better Largest Contentful Paint).
+		$index   = isset( $settings['slide_index'] ) ? (int) $settings['slide_index'] : 0;
+		$visible = isset( $settings['visible_slides'] ) ? (int) $settings['visible_slides'] : 0;
+		if ( ! empty( $settings['lazy_load'] ) && $index >= $visible ) {
 			$attr['loading'] = 'lazy';
 		}
 
 		if ( has_post_thumbnail( $post_id ) ) {
 			echo '<div class="dpce-thumbnail">';
 			echo get_the_post_thumbnail( $post_id, $size, $attr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe HTML from core.
+			echo '</div>';
+			return;
+		}
+
+		if ( ! empty( $settings['placeholder_image_id'] ) && wp_attachment_is_image( (int) $settings['placeholder_image_id'] ) ) {
+			// The placeholder is decorative: the post title is printed right after it.
+			$attr['alt'] = '';
+			echo '<div class="dpce-thumbnail">';
+			echo wp_get_attachment_image( (int) $settings['placeholder_image_id'], $size, false, $attr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe HTML from core.
 			echo '</div>';
 			return;
 		}
