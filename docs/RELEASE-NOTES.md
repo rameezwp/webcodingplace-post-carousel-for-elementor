@@ -71,3 +71,74 @@ Run these on a staging copy of a real site that used 1.4.
 11. **RTL site** (for example Arabic): modern engine carousels slide in the right direction.
 12. **Page with no carousel:** no `dpce-` CSS or JS in the page source.
 13. **Elementor > Tools > Regenerate files** once more, then repeat test 1.
+
+## Phase 3: features
+
+### What is new for site owners
+
+* **Source** (top of Post / Content):
+  * *Posts I choose*: the 1.4 behaviour.
+  * *Current query*: the posts of the archive, category or search page the carousel is on. Useful in Elementor theme templates.
+  * *Related posts*: same type, sharing categories, tags or any taxonomy with the post being viewed, with an optional fallback to the latest posts.
+* **Filters section:** include or leave out any terms (searchable across taxonomies, match any or all), include or leave out authors, date range (past day to past year, or custom), skip first posts, sticky posts (normal, leave out, only), and order by last modified, ID, author or a custom field.
+* **WooCommerce:**
+  * Filters: featured, on sale, best selling, top rated, hide out of stock.
+  * The Card template shows rating, price with sale price, a Sale badge, Out of stock, and a working AJAX add to cart button ("Select options" for variable products).
+  * Other templates can add a product block with the same parts.
+  * The add to cart icon in templates 49 and 50 used to do nothing. For products it is now a real add to cart link. For other posts the markup is unchanged.
+* **Card (customizable) template:** a clean card whose parts switch on and off (image, category badge, meta row, excerpt, button, and the product parts). New carousels start with it.
+* **Meta row:** date, author, author picture, categories, comments and reading time. On the Card it is on by default; other templates can switch it on.
+* **Image options:** ratio, fit, hover effect (zoom, lift, darken, color on hover) and corner radius. They work on every template.
+* **Layout:** Carousel, Grid or List. Grid and List load no slider files at all. Grid columns follow Elementor's breakpoints; List makes the Card horizontal.
+* **Modern engine extras:**
+  * Effects: fade, coverflow, centered active slide.
+  * Pagination: numbers (2 / 8) or a progress bar.
+  * News ticker mode: continuous, freezes on hover and keyboard focus.
+  * Custom arrow icons.
+* **Getting Started page** (Elementor > Post Carousel):
+  * A one time welcome redirect after a single activation (never on bulk or network activation).
+  * A checklist, help links and a gallery of all 52 templates.
+* **Review request:**
+  * Admins only, on the Dashboard or the Getting Started page, 7 days after install and after a carousel was used.
+  * Leave a review, Maybe later (30 days) or I already did.
+* **Deactivation feedback:** built but **off**. `DPCE_FEEDBACK_ENDPOINT` is empty, so no form is shown and nothing is sent. Setting an HTTPS address turns on a form with Skip and Submit; only Submit sends the reason, comment and plugin version. If you turn it on, add it to the readme's External services section.
+
+### New developer hooks
+
+`dpce_carousel_settings`, `dpce_slide_html`, `dpce_carousel_after_title`, `dpce_badges_html`, `dpce_meta_row_items`, `dpce_words_per_minute`, `dpce_feedback_endpoint`. Everything is documented in `docs/HOOKS.md`.
+
+### Migration notes
+
+* Nothing to migrate. Every new option defaults to the 1.4 behaviour, except in two places where no saved carousel can be affected:
+  * The new Card template's own switches.
+  * The settings the editor gives to newly created carousels: modern engine, pause button, Card template.
+* Three new options (`dpce_installed_at`, `dpce_first_use`, `dpce_version`) and one user meta key (`dpce_review_state`). All are removed on uninstall.
+* Plugin size grows by about 0.3 MB of template thumbnails (`assets/images/templates/`).
+
+### What I verified
+
+Test site: WordPress 7.1.2, Elementor 3.32, WooCommerce 11.1.2, PHP 8.4.
+
+* Each query option returned the expected posts:
+  * Terms (any and all), authors, date ranges, offset, sticky modes, custom field order.
+  * All WooCommerce filters.
+  * Related posts with and without fallback.
+  * Current query on a category archive.
+* The editor shows and hides the new controls correctly, and term and author search work.
+* Add to cart works through AJAX from the Card, the product block, template 49 and template 50. The page stays put, and WooCommerce adds its "View cart" link.
+* Grid, list, fade, coverflow, centered, numbers, progress bar, ticker (moves, freezes on hover and focus, resumes) and custom arrows all work in Chromium, desktop and phone widths, with no console errors.
+* Admin screens:
+  * The redirect happens on single activation only.
+  * The review notice appears only on the Dashboard, after 7 days, and its choices are saved with and without JavaScript.
+  * The feedback form is absent by default. With a test address it opens, closes with Escape, Skip sends nothing, and Submit sends only the reason and comment.
+* Every 1.4 test carousel still renders the same HTML as 1.4. The screenshot comparison shows only the known intended differences.
+
+### More manual test cases
+
+14. **Card template with products:** switch Post Type to Products. Check prices, sale badge, rating, Out of stock, and that Add to cart adds the product without leaving the page.
+15. **Related posts:** put a carousel set to Related posts in a single post template (Elementor Pro theme builder, or any single post built with Elementor). It shows posts from the same category and never the post itself.
+16. **Current query:** in an archive template, the carousel shows the posts of the category being viewed.
+17. **Grid and list:** switch Layout to Grid. Columns change on tablet and phone. No `swiper` or `slick` files in the page source.
+18. **News ticker:** turn it on. Slides move continuously and stop when you hover or tab into the carousel.
+19. **Review request:** set your site clock (or the `dpce_installed_at` option) back 8 days, view a page with a carousel, then open the Dashboard. The notice appears; each button hides it.
+20. **Fresh install:** activate the plugin from the Plugins screen. You land on Getting Started once. Activate it again with the bulk action: no redirect.

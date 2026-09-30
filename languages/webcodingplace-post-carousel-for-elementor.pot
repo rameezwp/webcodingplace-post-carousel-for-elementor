@@ -9,16 +9,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-30T17:29:48+00:00\n"
+"POT-Creation-Date: 2026-09-30T18:54:08+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: webcodingplace-post-carousel-for-elementor\n"
 
 #. Plugin Name of the plugin
 #: webcodingplace-post-carousel-for-elementor.php:3
-#: webcodingplace-post-carousel-for-elementor.php:154
-#: webcodingplace-post-carousel-for-elementor.php:171
-#: webcodingplace-post-carousel-for-elementor.php:189
+#: webcodingplace-post-carousel-for-elementor.php:177
+#: webcodingplace-post-carousel-for-elementor.php:194
+#: webcodingplace-post-carousel-for-elementor.php:212
 msgid "WebCodingPlace Post Carousel for Elementor"
 msgstr ""
 
@@ -42,42 +42,243 @@ msgstr ""
 msgid "https://webcodingplace.com/"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:316
+#: includes/admin/class-dpce-admin.php:102
+msgid "Post Carousel: Getting Started"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:103
+msgid "Post Carousel"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:143
+#: includes/admin/class-dpce-admin.php:208
+msgid "Getting started"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:159
+msgid "Docs"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:160
+msgid "Support"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:200
+msgid "Post Carousel for Elementor"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:202
+msgid "Show your posts, products and custom post types as a carousel, grid or list in Elementor. Everything works with the free version of Elementor."
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:210
+msgid "Elementor is active."
+msgstr ""
+
+#. translators: %s: link to the Pages screen.
+#: includes/admin/class-dpce-admin.php:215
+#, php-format
+msgid "Open a page with Elementor, search the widget panel for \"Post Carousel\" and drag it in. %s"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:216
+msgid "Go to Pages"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:220
+msgid "Pick what to show under Post / Content: latest posts, hand picked posts, related posts, or the posts of the current archive."
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:221
+msgid "Choose a design in Style > Appearance. The Card template lets you switch each part on or off; 51 more templates are ready to use."
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:222
+msgid "Prefer a static layout? Switch Layout to Grid or List in the Slider section."
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:224
+msgid "Selling with WooCommerce? Choose Products as the post type to get prices, ratings, sale badges and add to cart buttons."
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:230
+msgid "Help and resources"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:232
+msgid "See live demos"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:233
+msgid "Read the documentation"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:234
+msgid "Ask a question in the support forum"
+msgstr ""
+
+#. translators: %s: link to the review form.
+#: includes/admin/class-dpce-admin.php:240
+#, php-format
+msgid "Enjoying the plugin? %s helps other people find it."
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:241
+msgid "A short review"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:250
+msgid "Templates"
+msgstr ""
+
+#: includes/admin/class-dpce-admin.php:251
+msgid "Pick any of these in Style > Appearance > Template Style. Colors, fonts and spacing can be changed in the widget."
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:74
+msgid "I am only deactivating it for a moment"
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:75
+msgid "It did not work on my site"
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:76
+msgid "A feature I need is missing"
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:77
+msgid "I found another plugin"
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:78
+msgid "I no longer need a carousel"
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:93
+msgid "Quick question before you go"
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:94
+msgid "Why are you deactivating Post Carousel for Elementor? This is optional. Nothing is sent if you skip."
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:97
+msgid "Reason"
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:102
+msgid "Anything else? (optional)"
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:104
+msgid "If you submit, we receive your answer, your comment and the plugin version. No personal data, no site address."
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:106
+msgid "Skip and deactivate"
+msgstr ""
+
+#: includes/admin/class-dpce-feedback.php:107
+msgid "Submit and deactivate"
+msgstr ""
+
+#: includes/admin/class-dpce-review-notice.php:84
+msgid "Thanks for using Post Carousel for Elementor! If it has been useful, would you leave a short review on WordPress.org? It helps other people find the plugin and keeps it free."
+msgstr ""
+
+#: includes/admin/class-dpce-review-notice.php:87
+msgid "Leave a review"
+msgstr ""
+
+#: includes/admin/class-dpce-review-notice.php:88
+msgid "Maybe later"
+msgstr ""
+
+#: includes/admin/class-dpce-review-notice.php:89
+msgid "I already did"
+msgstr ""
+
+#: includes/admin/class-dpce-review-notice.php:122
+msgid "Sorry, you are not allowed to do that."
+msgstr ""
+
+#: includes/class-dpce-renderer.php:322
 msgid "Share on Facebook"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:317
+#: includes/class-dpce-renderer.php:323
 msgid "Share on Twitter"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:318
+#: includes/class-dpce-renderer.php:324
 msgid "Share on LinkedIn"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:319
+#: includes/class-dpce-renderer.php:325
 msgid "Share on WhatsApp"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:320
+#: includes/class-dpce-renderer.php:326
 msgid "Share on Pinterest"
 msgstr ""
 
-#: includes/class-dpce-renderer.php:321
+#: includes/class-dpce-renderer.php:327
 msgid "Share by Email"
 msgstr ""
 
-#: includes/class-dpce-rest.php:100
+#. translators: %s: number of comments.
+#: includes/class-dpce-renderer.php:443
+#, php-format
+msgid "%s comment"
+msgid_plural "%s comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of minutes.
+#: includes/class-dpce-renderer.php:454
+#, php-format
+msgid "%s min read"
+msgid_plural "%s min read"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-dpce-rest.php:105
 msgid "Unknown taxonomy."
 msgstr ""
 
-#: includes/class-dpce-rest.php:106
+#: includes/class-dpce-rest.php:111
 msgid "Unknown post type."
 msgstr ""
 
+#. translators: 1: term name, 2: taxonomy name, for example "News (Categories)".
+#: includes/class-dpce-rest.php:208
+#, php-format
+msgid "%1$s (%2$s)"
+msgstr ""
+
+#: includes/class-dpce-styles.php:45
+msgid "Card (customizable)"
+msgstr ""
+
 #. translators: %d: template style number.
-#: includes/class-dpce-styles.php:49
+#: includes/class-dpce-styles.php:58
 #, php-format
 msgid "Style %d"
+msgstr ""
+
+#. translators: %s: average rating, for example 4.5.
+#: includes/class-dpce-woo.php:73
+#, php-format
+msgid "Rated %s out of 5"
+msgstr ""
+
+#: includes/class-dpce-woo.php:91
+msgid "Sale"
+msgstr ""
+
+#: includes/class-dpce-woo.php:105
+msgid "Out of stock"
 msgstr ""
 
 #: includes/helpers.php:116
@@ -124,6 +325,474 @@ msgstr ""
 msgid "Full"
 msgstr ""
 
+#: includes/widget/trait-dpce-card-controls.php:31
+#: includes/widget/trait-dpce-card-controls.php:190
+msgid "Image"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:32
+msgid "Category Badge on Image"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:33
+msgid "Meta Row"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:34
+msgid "Excerpt"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:35
+msgid "Button"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:36
+msgid "Product Rating"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:37
+msgid "Product Price"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:38
+msgid "Sale Badge"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:39
+msgid "Add to Cart for Products"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:50
+msgid "Card Elements"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:59
+msgid "Choose the template in Style > Appearance. The Card template lets you switch each part on or off. Other templates can get a meta row, badges and product details too."
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:80
+msgid "Add Meta Row Under Title"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:81
+msgid "Add Category Badge on Image"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:82
+msgid "Add Sale Badge on Product Images"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:83
+msgid "Add Product Rating, Price and Cart Button"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:101
+msgid "Meta Row Shows"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:107
+#: includes/widget/trait-dpce-query-controls.php:179
+#: widgets/post-carousel-widget.php:279
+msgid "Date"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:108
+#: widgets/post-carousel-widget.php:286
+msgid "Author"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:109
+msgid "Author Picture"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:110
+msgid "Categories"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:111
+msgid "Comments"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:112
+msgid "Reading Time"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:122
+msgid "Badge and Categories From"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:125
+msgid "Main category of the post type"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:198
+msgid "Image Ratio"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:202
+msgid "Original"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:219
+msgid "Image Fit"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:223
+msgid "Fill (crop)"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:224
+msgid "Fit (no crop)"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:236
+msgid "Hover Effect"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:240
+msgid "None"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:241
+msgid "Zoom image"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:242
+msgid "Lift card"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:243
+msgid "Darken image"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:244
+msgid "Color on hover"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:253
+msgid "Image Corner Radius"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:267
+msgid "Card Parts"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:275
+msgid "Card Padding"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:288
+msgid "Alignment"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:292
+msgid "Left"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:296
+msgid "Center"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:300
+msgid "Right"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:314
+msgid "Meta Row Color"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:325
+msgid "Meta Row Typography"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:333
+msgid "Badge Background"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:343
+msgid "Badge Text"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:352
+msgid "Sale Badge Background"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:361
+msgid "Price Color"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:372
+msgid "Price Typography"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:380
+msgid "Button Text"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:390
+msgid "Button Background"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:399
+msgid "Button Background on Hover"
+msgstr ""
+
+#: includes/widget/trait-dpce-card-controls.php:409
+msgid "Button Typography"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:28
+msgid "Layout"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:32
+msgid "Carousel"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:33
+msgid "Grid"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:34
+msgid "List"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:42
+msgid "Columns"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:59
+msgid "Space Between Rows (px)"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:88
+msgid "Modern Engine Options"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:98
+msgid "Effect"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:102
+msgid "Slide"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:103
+msgid "Fade (one slide at a time)"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:104
+msgid "Coverflow"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:113
+msgid "Center the Active Slide"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:127
+msgid "Pagination"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:131
+msgid "Dots"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:132
+msgid "Numbers (2 / 8)"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:133
+msgid "Progress bar"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:145
+msgid "News Ticker (Continuous Scroll)"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:146
+msgid "Slides move without stopping, like a news ticker. Pauses on hover and keyboard focus."
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:157
+msgid "Ticker Speed (seconds per slide)"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:170
+msgid "Previous Arrow Icon"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:181
+msgid "Next Arrow Icon"
+msgstr ""
+
+#: includes/widget/trait-dpce-layout-controls.php:193
+msgid "Fade, coverflow, news ticker, numbered or progress bar pagination and custom arrow icons need the Modern slider engine."
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:28
+msgid "Source"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:32
+msgid "Posts I choose"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:33
+msgid "Current query (archive and search pages)"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:34
+msgid "Related posts (single post pages)"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:43
+msgid "Shows the posts of the archive, category or search page the carousel is on. In the editor you see your latest posts instead."
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:49
+msgid "Any shared category, tag or term"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:54
+msgid "Related By"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:55
+msgid "Shows posts of the same type that share these terms with the post being viewed. The post itself is left out."
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:66
+msgid "Show Latest Posts When Nothing Is Related"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:82
+msgid "Custom Field Key"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:100
+msgid "Filters"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:109
+msgid "Only Posts With These Terms"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:110
+msgid "Categories, tags or any other terms. Type to search."
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:125
+msgid "Match"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:129
+msgid "Any of these terms"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:130
+msgid "All of these terms"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:139
+msgid "Leave Out Posts With These Terms"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:154
+msgid "Only These Authors"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:167
+msgid "Leave Out These Authors"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:183
+msgid "Any time"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:184
+msgid "Past day"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:185
+msgid "Past week"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:186
+msgid "Past month"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:187
+msgid "Past 3 months"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:188
+msgid "Past year"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:189
+msgid "Custom range"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:198
+msgid "From"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:208
+msgid "To"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:218
+msgid "Skip First Posts"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:219
+msgid "Useful when another widget already shows the latest posts."
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:231
+msgid "Sticky Posts"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:235
+msgid "Treat like other posts"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:236
+msgid "Leave out"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:237
+msgid "Show only sticky posts"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:277
+msgid "Products"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:281
+msgid "All products"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:282
+msgid "Featured"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:283
+msgid "On sale"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:284
+msgid "Best selling"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:285
+msgid "Top rated"
+msgstr ""
+
+#: includes/widget/trait-dpce-query-controls.php:295
+msgid "Hide Out of Stock Products"
+msgstr ""
+
 #. translators: %s: Human-readable time difference.
 #: templates/style-20.php:29
 #: templates/style-21.php:27
@@ -133,508 +802,520 @@ msgid "%s ago"
 msgstr ""
 
 #. translators: 1: plugin name, 2: required plugin name
-#: webcodingplace-post-carousel-for-elementor.php:153
+#: webcodingplace-post-carousel-for-elementor.php:176
 #, php-format
 msgid "\"%1$s\" requires \"%2$s\" to be installed and active."
 msgstr ""
 
-#: webcodingplace-post-carousel-for-elementor.php:155
-#: webcodingplace-post-carousel-for-elementor.php:172
+#: webcodingplace-post-carousel-for-elementor.php:178
+#: webcodingplace-post-carousel-for-elementor.php:195
 msgid "Elementor"
 msgstr ""
 
 #. translators: 1: plugin name, 2: required plugin name, 3: minimum version
-#: webcodingplace-post-carousel-for-elementor.php:170
+#: webcodingplace-post-carousel-for-elementor.php:193
 #, php-format
 msgid "\"%1$s\" requires \"%2$s\" version %3$s or greater."
 msgstr ""
 
 #. translators: 1: plugin name, 2: required PHP version
-#: webcodingplace-post-carousel-for-elementor.php:188
+#: webcodingplace-post-carousel-for-elementor.php:211
 #, php-format
 msgid "\"%1$s\" requires PHP version %2$s or greater."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:38
+#: widgets/post-carousel-widget.php:42
 msgid "Post Carousel (WCP)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:149
+#: widgets/post-carousel-widget.php:160
 msgid "Post / Content"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:157
+#: widgets/post-carousel-widget.php:170
 msgid "Display By"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:161
+#: widgets/post-carousel-widget.php:175
 msgid "Post Type"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:162
+#: widgets/post-carousel-widget.php:176
 msgid "Taxonomy"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:171
+#: widgets/post-carousel-widget.php:185
 msgid "Choose Post Type"
 msgstr ""
 
 #. translators: %s: post type label
-#: widgets/post-carousel-widget.php:185
+#: widgets/post-carousel-widget.php:202
 #, php-format
 msgid "Select %s"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:186
+#: widgets/post-carousel-widget.php:203
 msgid "Type to search. Leave empty to include all."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:207
+#: widgets/post-carousel-widget.php:225
 msgid "Choose Taxonomy"
 msgstr ""
 
 #. translators: %s: taxonomy label
-#: widgets/post-carousel-widget.php:221
+#: widgets/post-carousel-widget.php:242
 #, php-format
 msgid "Select %s Terms"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:241
+#: widgets/post-carousel-widget.php:263
 msgid "Number of Posts"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:252
+#: widgets/post-carousel-widget.php:275
 msgid "Order By"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:256
-msgid "Date"
-msgstr ""
-
-#: widgets/post-carousel-widget.php:257
+#: widgets/post-carousel-widget.php:280
 msgid "Title"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:258
+#: widgets/post-carousel-widget.php:281
 msgid "Menu Order"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:259
+#: widgets/post-carousel-widget.php:282
 msgid "Random"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:260
+#: widgets/post-carousel-widget.php:283
 msgid "Comment Count"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:268
+#: widgets/post-carousel-widget.php:284
+msgid "Last Modified"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:285
+msgid "Post ID"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:287
+msgid "Custom Field (text)"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:288
+msgid "Custom Field (number)"
+msgstr ""
+
+#: widgets/post-carousel-widget.php:297
 msgid "Order"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:272
+#: widgets/post-carousel-widget.php:301
 msgid "Descending"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:273
+#: widgets/post-carousel-widget.php:302
 msgid "Ascending"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:282
+#: widgets/post-carousel-widget.php:314
 msgid "Exclude Post IDs"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:284
+#: widgets/post-carousel-widget.php:316
 msgid "Comma-separated list of post IDs to exclude."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:293
+#: widgets/post-carousel-widget.php:325
 msgid "Heading Source"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:303
+#: widgets/post-carousel-widget.php:335
 msgid "Heading Meta Key"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:313
+#: widgets/post-carousel-widget.php:345
 msgid "Heading Max Words"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:324
+#: widgets/post-carousel-widget.php:356
 msgid "Heading HTML Tag"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:335
+#: widgets/post-carousel-widget.php:367
 msgid "Description Source"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:345
+#: widgets/post-carousel-widget.php:377
 msgid "Description Meta Key"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:355
+#: widgets/post-carousel-widget.php:387
 msgid "Description Max Words"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:367
+#: widgets/post-carousel-widget.php:399
 msgid "Append to Trimmed Text"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:377
+#: widgets/post-carousel-widget.php:409
 msgid "Render Shortcodes / HTML in Description"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:379
+#: widgets/post-carousel-widget.php:411
 msgid "Yes"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:380
+#: widgets/post-carousel-widget.php:412
 msgid "No"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:391
+#: widgets/post-carousel-widget.php:423
 msgid "Read More Button Text"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:393
+#: widgets/post-carousel-widget.php:425
 msgid "Read More"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:400
+#: widgets/post-carousel-widget.php:432
 msgid "Read More Extra CSS Classes"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:410
+#: widgets/post-carousel-widget.php:442
 msgid "Link Target"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:414
+#: widgets/post-carousel-widget.php:446
 msgid "Same Tab"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:415
+#: widgets/post-carousel-widget.php:447
 msgid "New Tab"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:423
+#: widgets/post-carousel-widget.php:455
 msgid "Link Area"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:424
+#: widgets/post-carousel-widget.php:456
 msgid "Choose whether the entire card or only the Read More button links to the post."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:428
+#: widgets/post-carousel-widget.php:460
 msgid "Whole Card"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:429
+#: widgets/post-carousel-widget.php:461
 msgid "Read More Button Only"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:444
+#: widgets/post-carousel-widget.php:476
 msgid "Slider"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:455
+#: widgets/post-carousel-widget.php:489
 msgid "Slider Engine"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:459
+#: widgets/post-carousel-widget.php:493
 msgid "Modern (Swiper, no jQuery)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:460
+#: widgets/post-carousel-widget.php:494
 msgid "Classic (Slick)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:469
+#: widgets/post-carousel-widget.php:504
 msgid "This carousel uses the classic engine. Switch to Modern for a lighter page that does not need jQuery. You can switch back at any time."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:478
+#: widgets/post-carousel-widget.php:516
 msgid "Columns - Desktop"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:488
+#: widgets/post-carousel-widget.php:527
 msgid "Columns - Tablet"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:498
+#: widgets/post-carousel-widget.php:538
 msgid "Columns - Mobile"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:508
+#: widgets/post-carousel-widget.php:549
 msgid "Slides to Scroll"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:518
+#: widgets/post-carousel-widget.php:560
 msgid "Animation Speed (ms)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:528
+#: widgets/post-carousel-widget.php:571
 msgid "Infinite Scroll"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:537
+#: widgets/post-carousel-widget.php:581
 msgid "Vertical Mode"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:546
+#: widgets/post-carousel-widget.php:591
 msgid "Space Between Posts (px)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:568
+#: widgets/post-carousel-widget.php:613
 msgid "Autoplay"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:577
+#: widgets/post-carousel-widget.php:623
 msgid "Autoplay Speed (ms)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:588
+#: widgets/post-carousel-widget.php:637
 msgid "Show Dots"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:597
+#: widgets/post-carousel-widget.php:647
 msgid "Dots Style"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:601
+#: widgets/post-carousel-widget.php:651
 msgid "Circle"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:602
-#: widgets/post-carousel-widget.php:627
+#: widgets/post-carousel-widget.php:652
+#: widgets/post-carousel-widget.php:681
 msgid "Square"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:603
+#: widgets/post-carousel-widget.php:653
 msgid "Dash"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:611
+#: widgets/post-carousel-widget.php:664
 msgid "Show Arrows"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:620
+#: widgets/post-carousel-widget.php:674
 msgid "Arrows Style"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:624
+#: widgets/post-carousel-widget.php:678
 msgid "Chevron"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:625
+#: widgets/post-carousel-widget.php:679
 msgid "Arrow"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:626
+#: widgets/post-carousel-widget.php:680
 msgid "Circled Chevron"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:635
+#: widgets/post-carousel-widget.php:692
 msgid "Arrows Position"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:639
+#: widgets/post-carousel-widget.php:696
 msgid "Center (Sides)"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:640
+#: widgets/post-carousel-widget.php:697
 msgid "Top Left"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:641
+#: widgets/post-carousel-widget.php:698
 msgid "Top Right"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:642
+#: widgets/post-carousel-widget.php:699
 msgid "Top Center"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:643
+#: widgets/post-carousel-widget.php:700
 msgid "Bottom Left"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:644
+#: widgets/post-carousel-widget.php:701
 msgid "Bottom Right"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:645
+#: widgets/post-carousel-widget.php:702
 msgid "Bottom Center"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:653
+#: widgets/post-carousel-widget.php:713
 msgid "RTL Mode"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:662
+#: widgets/post-carousel-widget.php:723
 msgid "Pause on Hover"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:672
+#: widgets/post-carousel-widget.php:736
 msgid "Pause Button"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:673
+#: widgets/post-carousel-widget.php:737
 msgid "Shows a small button that lets visitors stop the autoplay. Recommended for accessibility."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:694
+#: widgets/post-carousel-widget.php:761
 msgid "Appearance"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:702
+#: widgets/post-carousel-widget.php:769
 msgid "Template Style"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:712
+#: widgets/post-carousel-widget.php:779
 msgid "Accent Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:750
+#: widgets/post-carousel-widget.php:817
 msgid "Post Background Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:765
+#: widgets/post-carousel-widget.php:832
 msgid "Title Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:777
+#: widgets/post-carousel-widget.php:844
 msgid "Title Typography"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:785
+#: widgets/post-carousel-widget.php:852
 msgid "Description Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:797
+#: widgets/post-carousel-widget.php:864
 msgid "Description Typography"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:813
+#: widgets/post-carousel-widget.php:880
 msgid "Border Radius"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:833
+#: widgets/post-carousel-widget.php:900
 msgid "Arrows Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:845
+#: widgets/post-carousel-widget.php:912
 msgid "Arrows Background"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:857
+#: widgets/post-carousel-widget.php:924
 msgid "Dots Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:871
+#: widgets/post-carousel-widget.php:938
 msgid "Style Specific Settings"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:879
+#: widgets/post-carousel-widget.php:946
 msgid "Icon"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:908
+#: widgets/post-carousel-widget.php:975
 msgid "Icon Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:993
+#: widgets/post-carousel-widget.php:1060
 msgid "Advanced"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1001
+#: widgets/post-carousel-widget.php:1068
 msgid "Image Size"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1011
+#: widgets/post-carousel-widget.php:1078
 msgid "Lazy Load Images"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1021
+#: widgets/post-carousel-widget.php:1088
 msgid "Placeholder Image"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1029
+#: widgets/post-carousel-widget.php:1096
 msgid "Hide Current Post"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1030
+#: widgets/post-carousel-widget.php:1097
 msgid "Skip the current post when the carousel is rendered on a singular page."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1040
+#: widgets/post-carousel-widget.php:1107
 msgid "Adaptive Height"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1050
+#: widgets/post-carousel-widget.php:1118
 msgid "Enable Social Sharing"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1060
+#: widgets/post-carousel-widget.php:1128
 msgid "Networks"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1070
+#: widgets/post-carousel-widget.php:1138
 msgid "Email"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1080
+#: widgets/post-carousel-widget.php:1148
 msgid "Share Icon Color"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1092
+#: widgets/post-carousel-widget.php:1160
 msgid "Share Icon Background"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1118
+#: widgets/post-carousel-widget.php:1196
 msgid "No posts match the current settings."
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1170
+#: widgets/post-carousel-widget.php:1289
 msgid "Previous slide"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1171
+#: widgets/post-carousel-widget.php:1290
 msgid "Next slide"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1172
+#: widgets/post-carousel-widget.php:1291
 msgid "This is the first slide"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1173
+#: widgets/post-carousel-widget.php:1292
 msgid "This is the last slide"
 msgstr ""
 
 #. translators: %d: slide number.
-#: widgets/post-carousel-widget.php:1175
+#: widgets/post-carousel-widget.php:1294
 #, php-format
 msgid "Go to slide %d"
 msgstr ""
 
 #. translators: Swiper replaces {{index}} with the slide number and {{slidesLength}} with the number of slides.
-#: widgets/post-carousel-widget.php:1177
+#: widgets/post-carousel-widget.php:1296
 msgid "{{index}} of {{slidesLength}}"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1178
+#: widgets/post-carousel-widget.php:1297
 msgid "Pause autoplay"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1179
+#: widgets/post-carousel-widget.php:1298
 msgid "Play autoplay"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1359
+#: widgets/post-carousel-widget.php:1562
 msgid "carousel"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1360
+#: widgets/post-carousel-widget.php:1563
 msgid "Posts carousel"
 msgstr ""
 
-#: widgets/post-carousel-widget.php:1375
+#: widgets/post-carousel-widget.php:1578
 msgid "Choose slide"
 msgstr ""

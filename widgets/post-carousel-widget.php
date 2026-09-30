@@ -1178,6 +1178,16 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		// Normalize relevant fields the renderer hooks expect.
 		$carousel_settings = $this->build_carousel_settings( $settings );
 
+		/**
+		 * Filter the settings passed to templates as $carousel_settings.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param array $carousel_settings Settings used by templates and renderer hooks.
+		 * @param array $settings          Raw widget settings.
+		 */
+		$carousel_settings = (array) apply_filters( 'dpce_carousel_settings', $carousel_settings, $settings );
+
 		// Build query.
 		$query = DPCE_Query::run( $this->build_query_settings( $settings ) );
 
@@ -1327,12 +1337,27 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			$query->the_post();
 			$post_id                          = get_the_ID();
 			$carousel_settings['slide_index'] = $slide_index++;
-			echo '<div class="' . esc_attr( $slide_class ) . '"><div class="dpce-slide-inner">';
+			ob_start();
 			if ( $template ) {
 				include $template;
 			} else {
 				$this->render_fallback_slide( $post_id, $carousel_settings );
 			}
+			$slide_html = (string) ob_get_clean();
+
+			/**
+			 * Filter the HTML of one card before it is printed.
+			 *
+			 * @since 2.0.0
+			 *
+			 * @param string $slide_html        Card HTML (the template output).
+			 * @param int    $post_id           Post ID.
+			 * @param array  $carousel_settings Settings used by the template.
+			 */
+			$slide_html = (string) apply_filters( 'dpce_slide_html', $slide_html, $post_id, $carousel_settings );
+
+			echo '<div class="' . esc_attr( $slide_class ) . '"><div class="dpce-slide-inner">';
+			echo $slide_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Template output, escaped inside each template.
 			echo '</div></div>';
 		}
 		wp_reset_postdata();
