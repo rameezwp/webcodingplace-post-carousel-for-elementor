@@ -308,6 +308,16 @@ function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 		echo '</' . esc_attr( $inner ) . '>';
 	}
 	echo '</' . esc_attr( $tag ) . '>';
+
+	/**
+	 * Fires after the card title. The plugin prints the meta row here.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param int   $post_id           Post ID.
+	 * @param array $carousel_settings Carousel settings.
+	 */
+	do_action( 'dpce_carousel_after_title', $post_id, $carousel_settings );
 }
 
 
@@ -454,4 +464,104 @@ function dpce_get_image_sizes_attr( $columns ) {
 	 * @param array  $columns Columns per device.
 	 */
 	return (string) apply_filters( 'dpce_image_sizes_attr', $sizes, $columns );
+}
+
+/**
+ * Terms to show for a post (badges and the meta row).
+ *
+ * @param int    $post_id  Post ID.
+ * @param string $taxonomy Taxonomy name, or "auto" for the main taxonomy of the post type.
+ * @param int    $limit    Maximum number of terms.
+ * @return WP_Term[]
+ */
+function dpce_get_post_terms_for_display( $post_id, $taxonomy = 'auto', $limit = 1 ) {
+	if ( 'auto' === $taxonomy || '' === $taxonomy ) {
+		$taxonomy  = '';
+		$post_type = get_post_type( $post_id );
+		if ( 'product' === $post_type ) {
+			$taxonomy = 'product_cat';
+		} elseif ( is_object_in_taxonomy( (string) $post_type, 'category' ) ) {
+			$taxonomy = 'category';
+		} else {
+			foreach ( get_object_taxonomies( (string) $post_type, 'objects' ) as $object ) {
+				if ( $object->public && $object->hierarchical ) {
+					$taxonomy = $object->name;
+					break;
+				}
+			}
+		}
+	}
+
+	if ( '' === $taxonomy || ! taxonomy_exists( $taxonomy ) ) {
+		return array();
+	}
+
+	$terms = get_the_terms( $post_id, $taxonomy );
+	if ( ! is_array( $terms ) ) {
+		return array();
+	}
+
+	return array_slice( $terms, 0, max( 1, (int) $limit ) );
+}
+
+/**
+ * Estimated reading time in minutes (at least 1).
+ *
+ * @param int $post_id Post ID.
+ * @return int
+ */
+function dpce_get_reading_time( $post_id ) {
+	$content = (string) get_post_field( 'post_content', $post_id );
+	$words   = str_word_count( wp_strip_all_tags( strip_shortcodes( $content ) ) );
+
+	/**
+	 * Filter the reading speed used for "min read".
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param int $words_per_minute Words per minute. Default 200.
+	 */
+	$speed = max( 1, (int) apply_filters( 'dpce_words_per_minute', 200 ) );
+
+	return max( 1, (int) ceil( $words / $speed ) );
+}
+
+/**
+ * Opening and closing tags for an add to cart element in a template.
+ *
+ * For WooCommerce products this is a real AJAX add to cart link that sits
+ * above the card link. Otherwise the original markup is kept exactly, so
+ * templates look the same when the post is not a product.
+ *
+ * @param int    $post_id        Post ID.
+ * @param string $fallback_tag   Tag used when the post is not a product (span or div).
+ * @param array  $fallback_attrs Attributes of the original element, in order.
+ * @return array{0: string, 1: string} Opening and closing tag, already escaped.
+ */
+function dpce_cart_tags( $post_id, $fallback_tag, $fallback_attrs ) {
+	$fallback_tag = in_array( $fallback_tag, array( 'span', 'div' ), true ) ? $fallback_tag : 'span';
+	$product      = DPCE_Woo::product( $post_id );
+
+	if ( ! $product ) {
+		$open = '<' . $fallback_tag;
+		foreach ( $fallback_attrs as $name => $value ) {
+			$open .= ' ' . $name . '="' . esc_attr( $value ) . '"';
+		}
+		return array( $open . '>', '</' . $fallback_tag . '>' );
+	}
+
+	DPCE_Woo::enqueue_cart_script();
+
+	$attributes          = DPCE_Woo::add_to_cart_attributes( $product );
+	$ajax                = false !== strpos( $attributes['class'], 'ajax_add_to_cart' );
+	$original            = isset( $fallback_attrs['class'] ) ? $fallback_attrs['class'] : '';
+	$original            = trim( str_replace( array( 'ajax_add_to_cart', 'add_to_cart_button' ), '', $original ) );
+	$attributes['class'] = trim( $original . ' dpce-cart-link add_to_cart_button' . ( $ajax ? ' ajax_add_to_cart' : '' ) );
+
+	$open = '<a';
+	foreach ( $attributes as $name => $value ) {
+		$open .= ' ' . $name . '="' . ( 'href' === $name ? esc_url( $value ) : esc_attr( $value ) ) . '"';
+	}
+
+	return array( $open . '>', '</a>' );
 }

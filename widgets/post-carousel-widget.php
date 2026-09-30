@@ -21,6 +21,7 @@ use Elementor\Group_Control_Typography;
 class DPCE_Post_Carousel_Widget extends Widget_Base {
 
 	use DPCE_Query_Controls;
+	use DPCE_Card_Controls;
 
 	/**
 	 * Widget slug.
@@ -137,8 +138,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	protected function register_controls() {
 		$this->register_post_section();
 		$this->register_filters_section();
+		$this->register_card_content_section();
 		$this->register_slider_section();
 		$this->register_appearance_section();
+		$this->register_card_style_sections();
 		$this->register_advanced_section();
 	}
 
@@ -1426,32 +1429,35 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			'mobile'  => max( 1, (int) ( isset( $settings['cols_mobile'] ) ? $settings['cols_mobile'] : 1 ) ),
 		);
 
-		return array(
-			'heading_field'          => isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title',
-			'heading_meta_key'       => isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '',
-			'heading_max_words'      => isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0,
-			'title_tag'              => dpce_get_title_tag( $settings ),
-			'desc_field'             => isset( $settings['desc_field'] ) ? $settings['desc_field'] : 'excerpt',
-			'desc_meta_key'          => isset( $settings['desc_meta_key'] ) ? $settings['desc_meta_key'] : '',
-			'desc_max_words'         => isset( $settings['desc_max_words'] ) ? (int) $settings['desc_max_words'] : 20,
-			'desc_render_shortcodes' => 'yes' === ( isset( $settings['desc_render_shortcodes'] ) ? $settings['desc_render_shortcodes'] : '' ),
-			'trim_append'            => isset( $settings['trim_append'] ) ? $settings['trim_append'] : '...',
-			'read_more_txt'          => isset( $settings['read_more_txt'] ) ? $settings['read_more_txt'] : '',
-			'read_more_classes'      => isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button',
-			'read_more_target'       => dpce_get_link_target( $settings ),
-			'link_area'              => isset( $settings['link_area'] ) && in_array( $settings['link_area'], array( 'card', 'button' ), true ) ? $settings['link_area'] : 'card',
-			'image_size'             => isset( $settings['image_size'] ) ? $settings['image_size'] : 'medium_large',
-			'lazy_load'              => 'yes' === ( isset( $settings['lazy_load'] ) ? $settings['lazy_load'] : 'yes' ),
-			'placeholder_image'      => $placeholder,
-			'placeholder_image_id'   => $placeholder_id,
-			'visible_slides'         => $columns['desktop'],
-			'image_sizes_attr'       => dpce_get_image_sizes_attr( $columns ),
-			'slide_index'            => 0,
-			'enable_share'           => 'yes' === ( isset( $settings['enable_share'] ) ? $settings['enable_share'] : '' ),
-			'share_networks'         => isset( $settings['share_networks'] ) ? (array) $settings['share_networks'] : array(),
-			'style_id'               => isset( $settings['style_id'] ) ? $settings['style_id'] : '1',
-			'style_icon'             => isset( $settings['style_icon'] ) ? dpce_normalize_icon( $settings['style_icon'] ) : array(),
-			'style_icon_color'       => isset( $settings['style_icon_color'] ) ? $settings['style_icon_color'] : '',
+		return array_merge(
+			$this->build_card_settings( $settings ),
+			array(
+				'heading_field'          => isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title',
+				'heading_meta_key'       => isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '',
+				'heading_max_words'      => isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0,
+				'title_tag'              => dpce_get_title_tag( $settings ),
+				'desc_field'             => isset( $settings['desc_field'] ) ? $settings['desc_field'] : 'excerpt',
+				'desc_meta_key'          => isset( $settings['desc_meta_key'] ) ? $settings['desc_meta_key'] : '',
+				'desc_max_words'         => isset( $settings['desc_max_words'] ) ? (int) $settings['desc_max_words'] : 20,
+				'desc_render_shortcodes' => 'yes' === ( isset( $settings['desc_render_shortcodes'] ) ? $settings['desc_render_shortcodes'] : '' ),
+				'trim_append'            => isset( $settings['trim_append'] ) ? $settings['trim_append'] : '...',
+				'read_more_txt'          => isset( $settings['read_more_txt'] ) ? $settings['read_more_txt'] : '',
+				'read_more_classes'      => isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button',
+				'read_more_target'       => dpce_get_link_target( $settings ),
+				'link_area'              => isset( $settings['link_area'] ) && in_array( $settings['link_area'], array( 'card', 'button' ), true ) ? $settings['link_area'] : 'card',
+				'image_size'             => isset( $settings['image_size'] ) ? $settings['image_size'] : 'medium_large',
+				'lazy_load'              => 'yes' === ( isset( $settings['lazy_load'] ) ? $settings['lazy_load'] : 'yes' ),
+				'placeholder_image'      => $placeholder,
+				'placeholder_image_id'   => $placeholder_id,
+				'visible_slides'         => $columns['desktop'],
+				'image_sizes_attr'       => dpce_get_image_sizes_attr( $columns ),
+				'slide_index'            => 0,
+				'enable_share'           => 'yes' === ( isset( $settings['enable_share'] ) ? $settings['enable_share'] : '' ),
+				'share_networks'         => isset( $settings['share_networks'] ) ? (array) $settings['share_networks'] : array(),
+				'style_id'               => isset( $settings['style_id'] ) ? $settings['style_id'] : '1',
+				'style_icon'             => isset( $settings['style_icon'] ) ? dpce_normalize_icon( $settings['style_icon'] ) : array(),
+				'style_icon_color'       => isset( $settings['style_icon_color'] ) ? $settings['style_icon_color'] : '',
+			)
 		);
 	}
 

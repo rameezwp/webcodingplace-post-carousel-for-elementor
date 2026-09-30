@@ -115,6 +115,8 @@ final class DPCE_Plugin {
 		require_once DPCE_PATH . 'includes/class-dpce-rest.php';
 		require_once DPCE_PATH . 'includes/controls/class-dpce-query-control.php';
 		require_once DPCE_PATH . 'includes/widget/trait-dpce-query-controls.php';
+		require_once DPCE_PATH . 'includes/widget/trait-dpce-card-controls.php';
+		require_once DPCE_PATH . 'includes/class-dpce-woo.php';
 
 		// Boot renderer hooks.
 		DPCE_Renderer::instance();

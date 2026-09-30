@@ -8,7 +8,7 @@
  *
  * Usage: node bin/build-css.js
  * No dependencies. Rules are assigned to a template when every selector in
- * the rule mentions the same `.dpce-style-N` or `.dpce-wrapper-N` class.
+ * the rule mentions the same `.dpce-style-N` or `.dpce-wrapper-N` class (N is a number or "card").
  * `@keyframes dpce-style-N-*` goes with template N. Everything else is base.
  */
 'use strict';
@@ -52,7 +52,7 @@ function topLevelBlocks( css ) {
 	return blocks;
 }
 
-const styleIdsIn = ( text ) => new Set( [ ...text.matchAll( /dpce-(?:style|wrapper)-(\d+)/g ) ].map( ( m ) => m[ 1 ] ) );
+const styleIdsIn = ( text ) => new Set( [ ...text.matchAll( /dpce-(?:style|wrapper)-(\d+|card)/g ) ].map( ( m ) => m[ 1 ] ) );
 
 /**
  * Which template a plain rule belongs to, or null for base.

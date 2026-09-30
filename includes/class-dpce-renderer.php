@@ -50,6 +50,8 @@ class DPCE_Renderer {
 		add_action( 'dpce_carousel_meta', array( $this, 'render_meta' ), 10, 2 );
 		add_action( 'dpce_carousel_share', array( $this, 'render_share' ), 10, 2 );
 		add_action( 'dpce_carousel_icon', array( $this, 'render_icon' ), 10, 4 );
+		add_action( 'dpce_carousel_after_title', array( $this, 'render_meta_row' ), 10, 2 );
+		add_action( 'dpce_carousel_overlay', array( $this, 'render_product_extras' ), 5, 2 );
 	}
 
 	/**
@@ -77,8 +79,11 @@ class DPCE_Renderer {
 			$attr['loading'] = 'lazy';
 		}
 
+		$badges = $this->get_badges( $post_id, $settings );
+
 		if ( has_post_thumbnail( $post_id ) ) {
-			echo '<div class="dpce-thumbnail">';
+			echo '<div class="dpce-thumbnail' . ( '' !== $badges ? ' dpce-has-badge' : '' ) . '">';
+			echo $badges; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in get_badges().
 			echo get_the_post_thumbnail( $post_id, $size, $attr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe HTML from core.
 			echo '</div>';
 			return;
@@ -347,6 +352,148 @@ class DPCE_Renderer {
 			echo '</a>';
 		}
 
+		echo '</div>';
+	}
+
+	/**
+	 * Badges shown on the image: the first term and, for products, "Sale".
+	 *
+	 * @param int   $post_id  Post ID.
+	 * @param array $settings Carousel settings.
+	 * @return string Safe HTML, or an empty string.
+	 */
+	public function get_badges( $post_id, $settings ) {
+		$html = '';
+
+		if ( ! empty( $settings['show_badge'] ) ) {
+			$terms = dpce_get_post_terms_for_display( $post_id, isset( $settings['badge_taxonomy'] ) ? $settings['badge_taxonomy'] : 'auto', 1 );
+			foreach ( $terms as $term ) {
+				$html .= '<span class="dpce-badge dpce-badge--term">' . esc_html( $term->name ) . '</span>';
+			}
+		}
+
+		if ( ! empty( $settings['show_sale_badge'] ) ) {
+			$html .= DPCE_Woo::sale_badge( $post_id );
+		}
+
+		if ( '' === $html ) {
+			return '';
+		}
+
+		/**
+		 * Filter the badges printed on a carousel image.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $html     Badge HTML.
+		 * @param int    $post_id  Post ID.
+		 * @param array  $settings Carousel settings.
+		 */
+		return (string) apply_filters( 'dpce_badges_html', '<div class="dpce-badges">' . $html . '</div>', $post_id, $settings );
+	}
+
+	/**
+	 * Meta row (date, author, terms, comments, reading time).
+	 *
+	 * Printed right after the title when the Meta Row setting is on.
+	 *
+	 * @param int   $post_id  Post ID.
+	 * @param array $settings Carousel settings.
+	 */
+	public function render_meta_row( $post_id, $settings ) {
+		if ( empty( $settings['show_meta'] ) ) {
+			return;
+		}
+
+		$items = isset( $settings['meta_items'] ) && is_array( $settings['meta_items'] ) ? $settings['meta_items'] : array( 'date', 'author' );
+		$parts = array();
+
+		foreach ( $items as $item ) {
+			switch ( $item ) {
+				case 'date':
+					$parts[] = sprintf(
+						'<span class="dpce-meta__item dpce-meta__date"><time datetime="%1$s">%2$s</time></span>',
+						esc_attr( (string) get_the_date( 'c', $post_id ) ),
+						esc_html( (string) get_the_date( '', $post_id ) )
+					);
+					break;
+
+				case 'author':
+				case 'avatar':
+					if ( 'avatar' === $item && in_array( 'author', $items, true ) ) {
+						break;
+					}
+					$author_id = (int) get_post_field( 'post_author', $post_id );
+					$avatar    = in_array( 'avatar', $items, true ) ? get_avatar( $author_id, 24, '', '', array( 'class' => 'dpce-meta__avatar' ) ) : '';
+					$parts[]   = '<span class="dpce-meta__item dpce-meta__author">' . wp_kses_post( (string) $avatar ) . esc_html( get_the_author_meta( 'display_name', $author_id ) ) . '</span>';
+					break;
+
+				case 'terms':
+					$terms = dpce_get_post_terms_for_display( $post_id, isset( $settings['badge_taxonomy'] ) ? $settings['badge_taxonomy'] : 'auto', 2 );
+					if ( $terms ) {
+						$parts[] = '<span class="dpce-meta__item dpce-meta__terms">' . esc_html( implode( ', ', wp_list_pluck( $terms, 'name' ) ) ) . '</span>';
+					}
+					break;
+
+				case 'comments':
+					$count   = (int) get_comments_number( $post_id );
+					$parts[] = '<span class="dpce-meta__item dpce-meta__comments">' . esc_html(
+						sprintf(
+							/* translators: %s: number of comments. */
+							_n( '%s comment', '%s comments', $count, 'webcodingplace-post-carousel-for-elementor' ),
+							number_format_i18n( $count )
+						)
+					) . '</span>';
+					break;
+
+				case 'reading_time':
+					$minutes = dpce_get_reading_time( $post_id );
+					$parts[] = '<span class="dpce-meta__item dpce-meta__reading">' . esc_html(
+						sprintf(
+							/* translators: %s: number of minutes. */
+							_n( '%s min read', '%s min read', $minutes, 'webcodingplace-post-carousel-for-elementor' ),
+							number_format_i18n( $minutes )
+						)
+					) . '</span>';
+					break;
+			}
+		}
+
+		if ( ! $parts ) {
+			return;
+		}
+
+		/**
+		 * Filter the meta row items before they are printed.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string[] $parts    HTML of each item (already escaped).
+		 * @param int      $post_id  Post ID.
+		 * @param array    $settings Carousel settings.
+		 */
+		$parts = (array) apply_filters( 'dpce_meta_row_items', $parts, $post_id, $settings );
+
+		echo '<div class="dpce-meta">' . implode( '', array_map( 'wp_kses_post', $parts ) ) . '</div>';
+	}
+
+	/**
+	 * WooCommerce block (rating, price, stock, add to cart) for templates
+	 * other than Card, when "Show Product Details" is on.
+	 *
+	 * @param int   $post_id  Post ID.
+	 * @param array $settings Carousel settings.
+	 */
+	public function render_product_extras( $post_id, $settings ) {
+		if ( empty( $settings['show_product_extras'] ) || ! DPCE_Woo::product( $post_id ) ) {
+			return;
+		}
+
+		// Templates 48 to 51 already print the price.
+		$has_price = isset( $settings['style_id'] ) && in_array( (string) $settings['style_id'], array( '48', '49', '50', '51' ), true );
+
+		echo '<div class="dpce-product-extras">';
+		echo DPCE_Woo::rating( $post_id ) . ( $has_price ? '' : DPCE_Woo::price( $post_id ) ) . DPCE_Woo::stock_label( $post_id ) . DPCE_Woo::add_to_cart( $post_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each part is escaped in DPCE_Woo.
 		echo '</div>';
 	}
 }

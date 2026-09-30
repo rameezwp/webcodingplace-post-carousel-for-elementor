@@ -37,7 +37,16 @@ class DPCE_Styles {
 			return self::$styles;
 		}
 
-		$default_styles = array();
+		// "Card" is the customizable template added in 2.0. It is listed
+		// first; the default for existing carousels stays "1".
+		$default_styles = array(
+			'card' => array(
+				'id'       => 'card',
+				'name'     => esc_html__( 'Card (customizable)', 'webcodingplace-post-carousel-for-elementor' ),
+				'thumb'    => '',
+				'settings' => array(),
+			),
+		);
 
 		// Auto-register styles 1-51. Each ships with an empty `settings` array;
 		// add per-style controls later by pushing into $default_styles[$id]['settings']

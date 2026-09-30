@@ -160,6 +160,7 @@
 						settings: {
 							slider_engine: 'swiper',
 							pause_button: 'yes',
+							style_id: 'card',
 						},
 						options: { render: true },
 					} );
