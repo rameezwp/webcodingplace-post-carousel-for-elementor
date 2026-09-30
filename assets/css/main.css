@@ -58,6 +58,24 @@
   z-index: 5;
 }
 
+/* Share links sit above the whole-card link so they stay clickable. */
+.dpce-carousel .dpce-share {
+  position: relative;
+  z-index: 6;
+}
+
+/* Visible keyboard focus that works on light and dark cards. */
+.dpce-carousel a:focus-visible,
+.dpce-carousel button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px #1e1e1e;
+}
+.dpce-carousel .dpce-overlay-link:focus-visible {
+  outline-offset: -4px;
+  box-shadow: inset 0 0 0 6px #1e1e1e;
+}
+
 /* ---------- Slick overrides ---------- */
 .dpce-carousel .slick-prev,
 .dpce-carousel .slick-next {

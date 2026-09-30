@@ -110,5 +110,61 @@
 		} );
 
 		window.elementor.addControlView( 'dpce-query', QueryControl );
+
+		registerNewWidgetDefaults();
 	} );
+
+	/**
+	 * New carousels get the modern engine (and the pause button).
+	 *
+	 * Elementor does not save settings that equal the control default, so
+	 * the Slider Engine default has to stay "slick" to keep old carousels on
+	 * the classic engine. Instead, a carousel dragged in from the panel (it
+	 * has no settings yet) is switched to "swiper" right after it is created.
+	 * Pasted or duplicated carousels keep their own settings.
+	 */
+	function registerNewWidgetDefaults() {
+		var $e = window.$e;
+		if ( ! $e || ! $e.modules || ! $e.modules.hookData || ! $e.modules.hookData.After ) {
+			return;
+		}
+
+		var isNewCarousel = function ( model ) {
+			return model && 'dpce_post_carousel' === model.widgetType &&
+				( ! model.settings || 0 === Object.keys( model.settings ).length );
+		};
+
+		class NewCarouselDefaults extends $e.modules.hookData.After {
+			getCommand() {
+				return 'document/elements/create';
+			}
+
+			getId() {
+				return 'dpce-new-carousel-defaults';
+			}
+
+			getConditions( args ) {
+				return isNewCarousel( args && args.model );
+			}
+
+			apply( args, result ) {
+				var containers = Array.isArray( result ) ? result : [ result ];
+				containers.forEach( function ( container ) {
+					if ( ! container || ! container.settings ) {
+						return;
+					}
+					$e.internal( 'document/elements/set-settings', {
+						container: container,
+						settings: {
+							slider_engine: 'swiper',
+							pause_button: 'yes',
+						},
+						options: { render: true },
+					} );
+				} );
+			}
+		}
+
+		$e.hooks.registerDataAfter( new NewCarouselDefaults() );
+	}
 }() );

@@ -39,6 +39,9 @@ class DPCE_Assets {
 		// Classic engine (Slick). Kept for carousels created before 2.0.
 		wp_register_script( 'dpce-slick', DPCE_URL . 'assets/vendor/slick/slick.min.js', array( 'jquery' ), '1.8.1', true );
 		wp_register_script( 'dpce-frontend', DPCE_URL . 'assets/js/main.js', array( 'jquery', 'dpce-slick' ), DPCE_VERSION, true );
+
+		// Modern engine: Elementor's own Swiper plus a small script without jQuery.
+		wp_register_script( 'dpce-swiper', DPCE_URL . 'assets/js/swiper-init.js', array( 'swiper' ), DPCE_VERSION, true );
 	}
 
 	/**
@@ -54,6 +57,7 @@ class DPCE_Assets {
 
 		// Front end: a small base file plus one file per template.
 		wp_register_style( 'dpce-base', DPCE_URL . 'assets/css/dist/base.min.css', array(), DPCE_VERSION );
+		wp_register_style( 'dpce-swiper', DPCE_URL . 'assets/css/swiper.css', array(), DPCE_VERSION );
 		foreach ( array_keys( DPCE_Styles::all() ) as $style_id ) {
 			if ( file_exists( self::style_file( $style_id ) ) ) {
 				wp_register_style( self::style_handle( $style_id ), DPCE_URL . self::style_file( $style_id, false ), array( 'dpce-base' ), DPCE_VERSION );
@@ -87,15 +91,20 @@ class DPCE_Assets {
 	 * Styles a carousel needs.
 	 *
 	 * @param string|null $style_id Template id, or null when unknown (editor, preview).
+	 * @param string      $engine   "slick" or "swiper".
 	 * @return string[] Style handles in load order.
 	 */
-	public static function get_style_handles( $style_id = null ) {
+	public static function get_style_handles( $style_id = null, $engine = 'slick' ) {
 		if ( null === $style_id ) {
-			return array( 'dpce-slick', 'dpce-frontend', 'dpce-slick-theme' );
+			return array( 'dpce-slick', 'dpce-frontend', 'dpce-slick-theme', 'swiper', 'dpce-swiper' );
 		}
 
-		// Same order 1.4 printed: Slick, Slick theme, then the plugin styles.
-		$handles = array( 'dpce-slick', 'dpce-slick-theme', 'dpce-base' );
+		if ( 'swiper' === $engine ) {
+			$handles = array( 'swiper', 'dpce-base', 'dpce-swiper' );
+		} else {
+			// Same order 1.4 printed: Slick, Slick theme, then the plugin styles.
+			$handles = array( 'dpce-slick', 'dpce-slick-theme', 'dpce-base' );
+		}
 
 		// Elementor can ask before styles are registered, so check the file.
 		if ( file_exists( self::style_file( $style_id ) ) ) {
@@ -108,10 +117,17 @@ class DPCE_Assets {
 	/**
 	 * Scripts a carousel needs.
 	 *
+	 * @param string|null $engine "slick", "swiper", or null for both (editor, preview).
 	 * @return string[] Script handles.
 	 */
-	public static function get_script_handles() {
-		return array( 'dpce-slick', 'dpce-frontend' );
+	public static function get_script_handles( $engine = null ) {
+		if ( 'swiper' === $engine ) {
+			return array( 'dpce-swiper' );
+		}
+		if ( 'slick' === $engine ) {
+			return array( 'dpce-slick', 'dpce-frontend' );
+		}
+		return array( 'dpce-slick', 'dpce-frontend', 'dpce-swiper' );
 	}
 
 	/**

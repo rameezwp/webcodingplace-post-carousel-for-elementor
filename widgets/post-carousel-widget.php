@@ -101,16 +101,22 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		}
 
 		$style_id = $this->get_settings( 'style_id' );
-		return DPCE_Assets::get_style_handles( is_scalar( $style_id ) && '' !== (string) $style_id ? (string) $style_id : '1' );
+		return DPCE_Assets::get_style_handles(
+			is_scalar( $style_id ) && '' !== (string) $style_id ? (string) $style_id : '1',
+			self::get_engine( (array) $this->get_settings() )
+		);
 	}
 
 	/**
-	 * Script dependencies.
+	 * Script dependencies: only the engine this carousel uses.
 	 *
 	 * @return array
 	 */
 	public function get_script_depends() {
-		return DPCE_Assets::get_script_handles();
+		if ( ! $this->get_id() || $this->is_editor_request() ) {
+			return DPCE_Assets::get_script_handles();
+		}
+		return DPCE_Assets::get_script_handles( self::get_engine( (array) $this->get_settings() ) );
 	}
 
 	/**
@@ -440,6 +446,32 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			)
 		);
 
+		// The default stays "slick" so carousels saved before 2.0 (which have
+		// no value stored) keep the classic engine. New widgets are switched
+		// to "swiper" by the editor script when they are created.
+		$this->add_control(
+			'slider_engine',
+			array(
+				'label'   => esc_html__( 'Slider Engine', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'    => Controls_Manager::SELECT,
+				'default' => 'slick',
+				'options' => array(
+					'swiper' => esc_html__( 'Modern (Swiper, no jQuery)', 'webcodingplace-post-carousel-for-elementor' ),
+					'slick'  => esc_html__( 'Classic (Slick)', 'webcodingplace-post-carousel-for-elementor' ),
+				),
+			)
+		);
+
+		$this->add_control(
+			'slider_engine_notice',
+			array(
+				'type'            => Controls_Manager::RAW_HTML,
+				'raw'             => esc_html__( 'This carousel uses the classic engine. Switch to Modern for a lighter page that does not need jQuery. You can switch back at any time.', 'webcodingplace-post-carousel-for-elementor' ),
+				'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+				'condition'       => array( 'slider_engine' => 'slick' ),
+			)
+		);
+
 		$this->add_control(
 			'cols_desktop',
 			array(
@@ -632,6 +664,20 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'return_value' => 'yes',
 				'default'      => 'yes',
 				'condition'    => array( 'autoplay' => 'yes' ),
+			)
+		);
+		$this->add_control(
+			'pause_button',
+			array(
+				'label'        => esc_html__( 'Pause Button', 'webcodingplace-post-carousel-for-elementor' ),
+				'description'  => esc_html__( 'Shows a small button that lets visitors stop the autoplay. Recommended for accessibility.', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'return_value' => 'yes',
+				'default'      => '',
+				'condition'    => array(
+					'autoplay'      => 'yes',
+					'slider_engine' => 'swiper',
+				),
 			)
 		);
 
@@ -1074,10 +1120,104 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			return;
 		}
 
-		$style_id = isset( $settings['style_id'] ) ? $settings['style_id'] : '1';
+		$style_id = isset( $settings['style_id'] ) ? (string) $settings['style_id'] : '1';
 		$template = DPCE_Styles::locate_template( $style_id );
 
-		// Build slick options.
+		// Load all featured image data in one query instead of one per slide.
+		update_post_thumbnail_cache( $query );
+
+		if ( 'swiper' === self::get_engine( $settings ) ) {
+			$this->render_swiper( $settings, $carousel_settings, $query, $template, $style_id );
+		} else {
+			$this->render_slick( $settings, $carousel_settings, $query, $template, $style_id );
+		}
+	}
+
+	/**
+	 * Slider engine for a set of settings.
+	 *
+	 * @param array $settings Widget settings.
+	 * @return string "swiper" or "slick".
+	 */
+	public static function get_engine( $settings ) {
+		return ( isset( $settings['slider_engine'] ) && 'swiper' === $settings['slider_engine'] ) ? 'swiper' : 'slick';
+	}
+
+	/**
+	 * Wrapper classes shared by both engines.
+	 *
+	 * @param array  $settings Widget settings.
+	 * @param string $style_id Template id.
+	 * @return string[]
+	 */
+	private function get_wrapper_classes( $settings, $style_id ) {
+		return array(
+			'dpce-carousel',
+			'dpce-wrapper-' . sanitize_html_class( $style_id ),
+			'dpce-arrows-' . sanitize_html_class( isset( $settings['arrows_style'] ) ? $settings['arrows_style'] : 'chevron' ),
+			'dpce-arrows-pos-' . sanitize_html_class( isset( $settings['arrows_position'] ) ? $settings['arrows_position'] : 'center' ),
+			'dpce-dots-' . sanitize_html_class( isset( $settings['dots_icon'] ) ? $settings['dots_icon'] : 'circle' ),
+		);
+	}
+
+	/**
+	 * Labels used by the carousel scripts.
+	 *
+	 * @return array
+	 */
+	private function get_script_i18n() {
+		return array(
+			'prev'       => __( 'Previous slide', 'webcodingplace-post-carousel-for-elementor' ),
+			'next'       => __( 'Next slide', 'webcodingplace-post-carousel-for-elementor' ),
+			'first'      => __( 'This is the first slide', 'webcodingplace-post-carousel-for-elementor' ),
+			'last'       => __( 'This is the last slide', 'webcodingplace-post-carousel-for-elementor' ),
+			/* translators: %d: slide number. */
+			'goToSlide'  => __( 'Go to slide %d', 'webcodingplace-post-carousel-for-elementor' ),
+			/* translators: Swiper replaces {{index}} with the slide number and {{slidesLength}} with the number of slides. */
+			'slideLabel' => __( '{{index}} of {{slidesLength}}', 'webcodingplace-post-carousel-for-elementor' ),
+			'pause'      => __( 'Pause autoplay', 'webcodingplace-post-carousel-for-elementor' ),
+			'play'       => __( 'Play autoplay', 'webcodingplace-post-carousel-for-elementor' ),
+		);
+	}
+
+	/**
+	 * Print every slide.
+	 *
+	 * Templates are included here, so they see $post_id and
+	 * $carousel_settings as local variables, exactly as in 1.4.
+	 *
+	 * @param WP_Query    $query             Query.
+	 * @param string|null $template          Template path, or null for the fallback markup.
+	 * @param array       $carousel_settings Settings passed to templates.
+	 * @param string      $slide_class       Class list for each slide.
+	 */
+	private function render_slides( $query, $template, $carousel_settings, $slide_class ) {
+		$slide_index = 0;
+		while ( $query->have_posts() ) {
+			$query->the_post();
+			$post_id                          = get_the_ID();
+			$carousel_settings['slide_index'] = $slide_index++;
+			echo '<div class="' . esc_attr( $slide_class ) . '"><div class="dpce-slide-inner">';
+			if ( $template ) {
+				include $template;
+			} else {
+				$this->render_fallback_slide( $post_id, $carousel_settings );
+			}
+			echo '</div></div>';
+		}
+		wp_reset_postdata();
+	}
+
+	/**
+	 * Classic engine (Slick) markup, unchanged from 1.4.
+	 *
+	 * @param array       $settings          Widget settings.
+	 * @param array       $carousel_settings Settings passed to templates.
+	 * @param WP_Query    $query             Query.
+	 * @param string|null $template          Template path.
+	 * @param string      $style_id          Template id.
+	 */
+	private function render_slick( $settings, $carousel_settings, $query, $template, $style_id ) {
 		$slick_options = array(
 			'slidesToShow'   => max( 1, (int) ( isset( $settings['cols_desktop'] ) ? $settings['cols_desktop'] : 3 ) ),
 			'slidesToScroll' => max( 1, (int) ( isset( $settings['slides_to_scroll'] ) ? $settings['slides_to_scroll'] : 1 ) ),
@@ -1107,38 +1247,137 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			),
 		);
 
-		$wrapper_classes = array(
-			'dpce-carousel',
-			'dpce-wrapper-' . sanitize_html_class( $style_id ),
-			'dpce-arrows-' . sanitize_html_class( isset( $settings['arrows_style'] ) ? $settings['arrows_style'] : 'chevron' ),
-			'dpce-arrows-pos-' . sanitize_html_class( isset( $settings['arrows_position'] ) ? $settings['arrows_position'] : 'center' ),
-			'dpce-dots-' . sanitize_html_class( isset( $settings['dots_icon'] ) ? $settings['dots_icon'] : 'circle' ),
-		);
+		/**
+		 * Filter the options passed to Slick (classic engine).
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param array $slick_options Slick options.
+		 * @param array $settings      Widget settings.
+		 */
+		$slick_options         = apply_filters( 'dpce_slick_options', $slick_options, $settings );
+		$slick_options['i18n'] = array_intersect_key( $this->get_script_i18n(), array_flip( array( 'prev', 'next' ) ) );
 
 		?>
-		<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>"
-			data-slick="<?php echo esc_attr( wp_json_encode( $slick_options ) ); ?>">
+		<div class="<?php echo esc_attr( implode( ' ', $this->get_wrapper_classes( $settings, $style_id ) ) ); ?>"
+			data-slick="<?php echo esc_attr( (string) wp_json_encode( $slick_options ) ); ?>">
 			<div class="dpce-track">
-				<?php
-				// Load all featured image data in one query instead of one per slide.
-				update_post_thumbnail_cache( $query );
-
-				$slide_index = 0;
-				while ( $query->have_posts() ) {
-					$query->the_post();
-					$post_id                          = get_the_ID();
-					$carousel_settings['slide_index'] = $slide_index++;
-					echo '<div class="dpce-slide"><div class="dpce-slide-inner">';
-					if ( $template ) {
-						include $template;
-					} else {
-						$this->render_fallback_slide( $post_id, $carousel_settings );
-					}
-					echo '</div></div>';
-				}
-				wp_reset_postdata();
-				?>
+				<?php $this->render_slides( $query, $template, $carousel_settings, 'dpce-slide' ); ?>
 			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Modern engine (Swiper) markup.
+	 *
+	 * The class names of arrows and dots match the classic engine, so the
+	 * arrow and dot style settings and all templates work the same way.
+	 *
+	 * @param array       $settings          Widget settings.
+	 * @param array       $carousel_settings Settings passed to templates.
+	 * @param WP_Query    $query             Query.
+	 * @param string|null $template          Template path.
+	 * @param string      $style_id          Template id.
+	 */
+	private function render_swiper( $settings, $carousel_settings, $query, $template, $style_id ) {
+		$cols       = array(
+			'desktop' => max( 1, (int) ( isset( $settings['cols_desktop'] ) ? $settings['cols_desktop'] : 3 ) ),
+			'tablet'  => max( 1, (int) ( isset( $settings['cols_tablet'] ) ? $settings['cols_tablet'] : 2 ) ),
+			'mobile'  => max( 1, (int) ( isset( $settings['cols_mobile'] ) ? $settings['cols_mobile'] : 1 ) ),
+		);
+		$scroll     = max( 1, (int) ( isset( $settings['slides_to_scroll'] ) ? $settings['slides_to_scroll'] : 1 ) );
+		$vertical   = 'yes' === ( isset( $settings['vertical'] ) ? $settings['vertical'] : '' );
+		$autoplay   = 'yes' === ( isset( $settings['autoplay'] ) ? $settings['autoplay'] : '' );
+		$dots       = 'yes' === ( isset( $settings['dots'] ) ? $settings['dots'] : 'yes' );
+		$arrows     = 'yes' === ( isset( $settings['arrows'] ) ? $settings['arrows'] : 'yes' );
+		$rtl        = is_rtl() || 'yes' === ( isset( $settings['rtl'] ) ? $settings['rtl'] : '' );
+		$breakpoint = dpce_get_breakpoints();
+
+		$swiper = array(
+			'slidesPerView'  => $cols['mobile'],
+			'slidesPerGroup' => min( $scroll, $cols['mobile'] ),
+			'speed'          => max( 0, (int) ( isset( $settings['speed'] ) ? $settings['speed'] : 500 ) ),
+			'loop'           => 'yes' === ( isset( $settings['infinite'] ) ? $settings['infinite'] : 'yes' ),
+			'direction'      => $vertical ? 'vertical' : 'horizontal',
+			'autoHeight'     => ! $vertical && 'yes' === ( isset( $settings['adaptive_height'] ) ? $settings['adaptive_height'] : '' ),
+			'breakpoints'    => array(
+				( $breakpoint['mobile'] + 1 ) => array(
+					'slidesPerView'  => $cols['tablet'],
+					'slidesPerGroup' => min( $scroll, $cols['tablet'] ),
+				),
+				( $breakpoint['tablet'] + 1 ) => array(
+					'slidesPerView'  => $cols['desktop'],
+					'slidesPerGroup' => min( $scroll, $cols['desktop'] ),
+				),
+			),
+		);
+
+		if ( $vertical ) {
+			// A vertical carousel shows the same number of slides on every screen.
+			$swiper['slidesPerView']  = $cols['desktop'];
+			$swiper['slidesPerGroup'] = min( $scroll, $cols['desktop'] );
+			unset( $swiper['breakpoints'] );
+		}
+
+		if ( $autoplay ) {
+			$swiper['autoplay'] = array(
+				'delay'                => max( 500, (int) ( isset( $settings['autoplay_speed'] ) ? $settings['autoplay_speed'] : 3000 ) ),
+				'disableOnInteraction' => false,
+			);
+		}
+
+		/**
+		 * Filter the options passed to Swiper (modern engine).
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param array $swiper   Swiper options.
+		 * @param array $settings Widget settings.
+		 */
+		$swiper = apply_filters( 'dpce_swiper_options', $swiper, $settings );
+
+		$options = array(
+			'swiper'       => $swiper,
+			'pauseOnHover' => 'yes' === ( isset( $settings['pause_on_hover'] ) ? $settings['pause_on_hover'] : 'yes' ),
+			'i18n'         => $this->get_script_i18n(),
+		);
+
+		$classes   = $this->get_wrapper_classes( $settings, $style_id );
+		$classes[] = 'dpce-engine-swiper';
+		if ( $dots ) {
+			$classes[] = 'dpce-has-dots';
+		}
+		if ( $vertical ) {
+			$classes[] = 'dpce-vertical';
+		}
+
+		$i18n = $this->get_script_i18n();
+		?>
+		<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
+			role="region"
+			aria-roledescription="<?php echo esc_attr__( 'carousel', 'webcodingplace-post-carousel-for-elementor' ); ?>"
+			aria-label="<?php echo esc_attr__( 'Posts carousel', 'webcodingplace-post-carousel-for-elementor' ); ?>"
+			data-dpce-swiper="<?php echo esc_attr( (string) wp_json_encode( $options ) ); ?>">
+			<div class="dpce-track">
+				<?php if ( $arrows ) : ?>
+					<button type="button" class="slick-prev slick-arrow" aria-label="<?php echo esc_attr( $i18n['prev'] ); ?>"><?php echo esc_html( $i18n['prev'] ); ?></button>
+				<?php endif; ?>
+				<div class="dpce-swiper swiper swiper-container"<?php echo $rtl ? ' dir="rtl"' : ''; ?>>
+					<div class="swiper-wrapper">
+						<?php $this->render_slides( $query, $template, $carousel_settings, 'dpce-slide swiper-slide' ); ?>
+					</div>
+				</div>
+				<?php if ( $arrows ) : ?>
+					<button type="button" class="slick-next slick-arrow" aria-label="<?php echo esc_attr( $i18n['next'] ); ?>"><?php echo esc_html( $i18n['next'] ); ?></button>
+				<?php endif; ?>
+				<?php if ( $dots ) : ?>
+					<ul class="slick-dots" aria-label="<?php echo esc_attr__( 'Choose slide', 'webcodingplace-post-carousel-for-elementor' ); ?>"></ul>
+				<?php endif; ?>
+			</div>
+			<?php if ( $autoplay && 'yes' === ( isset( $settings['pause_button'] ) ? $settings['pause_button'] : '' ) ) : ?>
+				<button type="button" class="dpce-pause" aria-pressed="false" aria-label="<?php echo esc_attr( $i18n['pause'] ); ?>"></button>
+			<?php endif; ?>
 		</div>
 		<?php
 	}

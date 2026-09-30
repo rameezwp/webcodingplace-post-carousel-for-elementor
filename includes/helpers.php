@@ -393,6 +393,32 @@ function dpce_get_title_tag( $settings ) {
 }
 
 /**
+ * Elementor's mobile and tablet breakpoints (the largest width of each).
+ *
+ * Follows custom breakpoints set in Site Settings. Falls back to
+ * Elementor's defaults (767 and 1024).
+ *
+ * @return array{mobile: int, tablet: int}
+ */
+function dpce_get_breakpoints() {
+	$result = array(
+		'mobile' => 767,
+		'tablet' => 1024,
+	);
+
+	if ( class_exists( '\Elementor\Plugin' ) ) {
+		$active = \Elementor\Plugin::$instance->breakpoints->get_active_breakpoints();
+		foreach ( array( 'mobile', 'tablet' ) as $device ) {
+			if ( isset( $active[ $device ] ) ) {
+				$result[ $device ] = (int) $active[ $device ]->get_value();
+			}
+		}
+	}
+
+	return $result;
+}
+
+/**
  * Build a `sizes` attribute that matches the number of columns.
  *
  * Without it the browser assumes each image is as wide as the screen and
@@ -402,18 +428,9 @@ function dpce_get_title_tag( $settings ) {
  * @return string
  */
 function dpce_get_image_sizes_attr( $columns ) {
-	$mobile_max = 767;
-	$tablet_max = 1024;
-
-	if ( class_exists( '\Elementor\Plugin' ) ) {
-		$breakpoints = \Elementor\Plugin::$instance->breakpoints->get_active_breakpoints();
-		if ( isset( $breakpoints['mobile'] ) ) {
-			$mobile_max = (int) $breakpoints['mobile']->get_value();
-		}
-		if ( isset( $breakpoints['tablet'] ) ) {
-			$tablet_max = (int) $breakpoints['tablet']->get_value();
-		}
-	}
+	$breakpoints = dpce_get_breakpoints();
+	$mobile_max  = $breakpoints['mobile'];
+	$tablet_max  = $breakpoints['tablet'];
 
 	$vw = static function ( $cols ) {
 		return (int) ceil( 100 / max( 1, (int) $cols ) ) . 'vw';
