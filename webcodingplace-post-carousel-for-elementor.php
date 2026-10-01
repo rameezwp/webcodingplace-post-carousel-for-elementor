@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       WebCodingPlace Post Carousel for Elementor
- * Description:       Show posts, WooCommerce products and custom post types in a responsive carousel widget for Elementor, with 51 ready made templates.
+ * Plugin Name:       Post Carousel & Grid for Elementor by WebCodingPlace
+ * Description:       Show posts, WooCommerce products or any post type in an Elementor carousel, grid or list, with 52 ready made templates.
  * Plugin URI:        https://webcodingplace.com/post-carousel-for-elementor
  * Version:           1.4
  * Author:            WebCodingPlace
@@ -174,7 +174,7 @@ final class DPCE_Plugin {
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required plugin name */
 			esc_html__( '"%1$s" requires "%2$s" to be installed and active.', 'webcodingplace-post-carousel-for-elementor' ),
-			'<strong>' . esc_html__( 'WebCodingPlace Post Carousel for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
+			'<strong>' . esc_html__( 'Post Carousel & Grid for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
 			'<strong>' . esc_html__( 'Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>'
 		);
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', wp_kses_post( $message ) );
@@ -191,7 +191,7 @@ final class DPCE_Plugin {
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required plugin name, 3: minimum version */
 			esc_html__( '"%1$s" requires "%2$s" version %3$s or greater.', 'webcodingplace-post-carousel-for-elementor' ),
-			'<strong>' . esc_html__( 'WebCodingPlace Post Carousel for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
+			'<strong>' . esc_html__( 'Post Carousel & Grid for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
 			'<strong>' . esc_html__( 'Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
 			DPCE_MIN_ELEMENTOR_VERSION
 		);
@@ -209,7 +209,7 @@ final class DPCE_Plugin {
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required PHP version */
 			esc_html__( '"%1$s" requires PHP version %2$s or greater.', 'webcodingplace-post-carousel-for-elementor' ),
-			'<strong>' . esc_html__( 'WebCodingPlace Post Carousel for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
+			'<strong>' . esc_html__( 'Post Carousel & Grid for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
 			DPCE_MIN_PHP_VERSION
 		);
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', wp_kses_post( $message ) );
