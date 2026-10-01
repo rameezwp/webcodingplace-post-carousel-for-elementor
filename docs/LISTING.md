@@ -40,7 +40,7 @@ These phrases each appear naturally a few times: post carousel, post slider, pos
 * `Tested up to: 7.1`, the current WordPress release. Tested on 7.1.2.
 * `Requires at least: 6.3` and `Requires PHP: 7.4`, matching the plugin header (Plugin Check compares them).
 * `Elementor tested up to: 4.3` in the plugin header (tested on 4.3.2, the current release). Elementor reads this to show its "not tested with your version" warning.
-* `Stable tag` stays `1.4` until you release. When you release 2.0, change `Stable tag`, `Version:` and `DPCE_VERSION` together.
+* `Stable tag: 2.0`, matching `Version:` and `DPCE_VERSION` in the main plugin file. For later releases, change all three together.
 
 ## Screenshots
 

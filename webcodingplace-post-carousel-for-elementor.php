@@ -3,7 +3,7 @@
  * Plugin Name:       Post Carousel & Grid for Elementor by WebCodingPlace
  * Description:       Show posts, WooCommerce products or any post type in an Elementor carousel, grid or list, with 52 ready made templates.
  * Plugin URI:        https://webcodingplace.com/post-carousel-for-elementor
- * Version:           1.4
+ * Version:           2.0
  * Author:            WebCodingPlace
  * Author URI:        https://webcodingplace.com/
  * License:           GPL-2.0-or-later
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'DPCE_VERSION' ) ) {
-	define( 'DPCE_VERSION', '1.4' );
+	define( 'DPCE_VERSION', '2.0' );
 }
 if ( ! defined( 'DPCE_FILE' ) ) {
 	define( 'DPCE_FILE', __FILE__ );

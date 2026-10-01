@@ -1,6 +1,6 @@
-# Release notes (work in progress for 2.0)
+# Release notes for 2.0
 
-This file collects what changed, what to test by hand before releasing, and migration notes. It grows with each phase. The version number is not bumped in code; do that yourself when you release.
+What changed in 2.0, what to test by hand before releasing, and migration notes, grouped by the phase in which the work was done.
 
 ## Phase 2: engineering foundation
 
