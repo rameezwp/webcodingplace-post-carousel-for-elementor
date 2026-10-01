@@ -80,7 +80,7 @@ Every template can be overridden from your theme by copying it to `your-theme/dp
 1. In your dashboard go to **Plugins > Add New**, search for "WebCodingPlace Post Carousel" and click **Install Now**, then **Activate**. Elementor must be installed and active.
 2. You land on the **Getting Started** page (also under **Elementor > Post Carousel**) with a short checklist and a gallery of all templates.
 3. Edit a page with Elementor, search for **Post Carousel** in the widget panel and drag it onto the page.
-4. Pick the source of your posts under **Post**, a template under **Template Style**, and the layout under **Slider**.
+4. Pick the source of your posts under **Post / Content**, a template under **Appearance > Template Style**, and the layout under **Slider > Layout**.
 
 == Frequently Asked Questions ==
 
