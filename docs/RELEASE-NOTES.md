@@ -47,7 +47,7 @@ Full hook documentation follows in `docs/HOOKS.md` (Phase 3).
 ### What I verified
 
 * WordPress 7.1.2 on PHP 8.4, using a test site with 8 posts, 6 featured images, 3 categories and 69 carousel pages (all 51 templates plus option combinations).
-* Elementor versions: **3.18.3** (the new minimum), **3.32.0**, and **4.0.8** (the latest release). On each one: HTML compared with 1.4, the modern engine tested in Chromium, and the editor tested. Screenshots compared on 3.32.0 and 4.0.8. The plugin header now says "Elementor tested up to: 4.0". Elementor Pro was not tested (not available in the test environment), so its "tested up to" value is unchanged.
+* Elementor versions: **3.18.3** (the new minimum), **3.32.0**, **4.0.8** and **4.3.2** (the latest release, tested in Phase 4). On each one: HTML compared with 1.4, the modern engine tested in Chromium, and the editor tested. Screenshots compared on 3.32.0 and 4.0.8. The plugin header now says "Elementor tested up to: 4.3". Elementor Pro was not tested (not available in the test environment), so its "tested up to" value is unchanged.
 * **HTML of every 1.4 carousel** rendered by 1.4 and by this branch, compared line by line. The only differences are the intended ones listed above.
 * **Screenshots of every 1.4 carousel** at 1280 px and 390 px wide, compared pixel by pixel against 1.4. Identical apart from the star icon now showing (template 48 in the test set), the placeholder alt text, and one case of sub-pixel text smoothing.
 * **Modern engine** in Chromium (including Elementor 3.18, where Swiper is loaded on demand): arrows, dots, loop, no loop, vertical, RTL, autoplay with pause button, hover and focus pause, hidden loop copies, no console errors.
@@ -131,7 +131,7 @@ Test site: WordPress 7.1.2, Elementor 3.32, WooCommerce 11.1.2, PHP 8.4.
   * The redirect happens on single activation only.
   * The review notice appears only on the Dashboard, after 7 days, and its choices are saved with and without JavaScript.
   * The feedback form is absent by default. With a test address it opens, closes with Escape, Skip sends nothing, and Submit sends only the reason and comment.
-* Repeated on Elementor 3.18.3 and 4.0.8: editor controls and search, grid and list, every effect and pagination type, the ticker, and the admin redirect and menu.
+* Repeated on Elementor 3.18.3, 4.0.8 and 4.3.2: editor controls and search, grid and list, every effect and pagination type, the ticker, and the admin redirect and menu.
 * Every 1.4 test carousel still renders the same HTML as 1.4. The screenshot comparison shows only the known intended differences.
 
 ### More manual test cases
