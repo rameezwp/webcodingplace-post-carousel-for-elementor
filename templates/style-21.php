@@ -10,33 +10,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <article class="dpce-style-21 dpce-wrapper">
-  <div class="dpce-body dpce-bg">
-    <?php dpce_render_title( $post_id, $carousel_settings ); ?>
-    <p class="dpce-desc">
-      <?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings); ?>
-    </p>
-    <div class="icons">
-      <?php do_action( 'dpce_carousel_share', $post_id, $carousel_settings ); ?> 
-    </div>
-  </div>
-  <?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
-  <div class="position dpce-date">
-    <?php
-    printf(
-      /* translators: %s: Human-readable time difference. */
-      esc_html_x(
-        '%s ago',
-        '%s = human-readable time difference',
-        'webcodingplace-post-carousel-for-elementor'
-      ),
-      esc_html(
-        human_time_diff(
-          get_the_time( 'U' ),
-          current_time( 'timestamp' )
-        )
-      )
-    );
-    ?>
-  </div>
+	<div class="dpce-body dpce-bg">
+	<?php dpce_render_title( $post_id, $carousel_settings ); ?>
+	<p class="dpce-desc">
+		<?php do_action( 'dpce_carousel_desc', $post_id, $carousel_settings ); ?>
+	</p>
+	<div class="icons">
+		<?php do_action( 'dpce_carousel_share', $post_id, $carousel_settings ); ?> 
+	</div>
+	</div>
+	<?php do_action( 'dpce_carousel_thumbnail', $post_id, $carousel_settings ); ?>
+	<div class="position dpce-date">
+	<?php
+	printf(
+		/* translators: %s: Human-readable time difference. */
+		esc_html_x(
+			'%s ago',
+			'%s = human-readable time difference',
+			'webcodingplace-post-carousel-for-elementor'
+		),
+		esc_html(
+			human_time_diff(
+				(int) get_post_timestamp( $post_id ),
+				time()
+			)
+		)
+	);
+	?>
+	</div>
 	<?php do_action( 'dpce_carousel_overlay', $post_id, $carousel_settings ); ?>
 </article>

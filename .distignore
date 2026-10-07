@@ -1,0 +1,22 @@
+# Files and folders left out of the release zip.
+/.git
+/.github
+/.wordpress-org
+/.distignore
+/.gitignore
+/.gitattributes
+/.editorconfig
+/build
+/docs
+/node_modules
+/tests
+/vendor
+/composer.json
+/composer.lock
+/package.json
+/package-lock.json
+/phpcs.xml.dist
+/phpstan.neon.dist
+/CLAUDE.md
+*.zip
+/bin

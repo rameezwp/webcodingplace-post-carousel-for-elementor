@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return string
  */
 function dpce_trim_words( $text, $words, $append = '...' ) {
-	$text = (string) $text;
+	$text  = (string) $text;
 	$words = (int) $words;
 
 	if ( $words <= 0 || '' === trim( wp_strip_all_tags( $text ) ) ) {
@@ -76,7 +76,7 @@ function dpce_get_field_value( $post_id, $field, $meta_key = '' ) {
 
 		case 'author':
 			$post = get_post( $post_id );
-			return $post ? get_the_author_meta( 'display_name', $post->post_author ) : '';
+			return $post ? get_the_author_meta( 'display_name', (int) $post->post_author ) : '';
 
 		case 'date':
 			return get_the_date( '', $post_id );
@@ -158,6 +158,8 @@ function dpce_get_taxonomies() {
 /**
  * Get all posts of a given post type as id => title.
  *
+ * @deprecated 2.0 The widget now searches posts over AJAX. Kept for code that calls it.
+ *
  * Capped to a sensible limit to avoid memory issues in the editor.
  *
  * @param string $post_type Post type slug.
@@ -180,7 +182,6 @@ function dpce_get_posts_for_select( $post_type, $limit = 200 ) {
 			'no_found_rows'          => true,
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
-			'suppress_filters'       => true,
 		)
 	);
 
@@ -193,6 +194,8 @@ function dpce_get_posts_for_select( $post_type, $limit = 200 ) {
 
 /**
  * Get all terms of a given taxonomy as id => name.
+ *
+ * @deprecated 2.0 The widget now searches terms over AJAX. Kept for code that calls it.
  *
  * @param string $taxonomy Taxonomy slug.
  * @param int    $limit    Max terms to return.
@@ -236,11 +239,8 @@ function dpce_get_image_sizes() {
 		'full'      => esc_html__( 'Full', 'webcodingplace-post-carousel-for-elementor' ),
 	);
 
-	$additional = wp_get_additional_image_sizes();
-	if ( is_array( $additional ) ) {
-		foreach ( array_keys( $additional ) as $size ) {
-			$sizes[ $size ] = $size;
-		}
+	foreach ( array_keys( wp_get_additional_image_sizes() ) as $size ) {
+		$sizes[ $size ] = $size;
 	}
 
 	return apply_filters( 'dpce_image_sizes', $sizes );
@@ -249,7 +249,7 @@ function dpce_get_image_sizes() {
 /**
  * Convert comma/space separated IDs to a clean array of positive integers.
  *
- * @param string $value Raw input.
+ * @param string|array $value Raw input.
  * @return int[]
  */
 function dpce_parse_id_list( $value ) {
@@ -273,10 +273,10 @@ function dpce_parse_id_list( $value ) {
  * text comes from the dpce_carousel_title action so the existing trim / meta
  * key plumbing keeps working.
  *
- * @param int    $post_id           Post ID.
- * @param array  $carousel_settings Settings forwarded by the widget.
- * @param array  $args              Optional args: 'inner_wrap' (string, e.g. 'span')
- *                                  to wrap the title text, 'extra_class' (string).
+ * @param int          $post_id           Post ID.
+ * @param array        $carousel_settings Settings forwarded by the widget.
+ * @param array|string $args       Optional args: 'inner_wrap' (string, e.g. 'span')
+ *                                 to wrap the title text, 'extra_class' (string).
  */
 function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 	if ( is_string( $args ) ) {
@@ -290,11 +290,7 @@ function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 		)
 	);
 
-	$tag = isset( $carousel_settings['title_tag'] ) ? $carousel_settings['title_tag'] : 'h3';
-	$tag = tag_escape( $tag );
-	if ( ! in_array( $tag, array( 'h2', 'h3', 'h4', 'h5', 'h6' ), true ) ) {
-		$tag = 'h3';
-	}
+	$tag = dpce_get_title_tag( $carousel_settings );
 
 	$class = 'dpce-title';
 	if ( '' !== trim( (string) $args['extra_class'] ) ) {
@@ -303,13 +299,279 @@ function dpce_render_title( $post_id, $carousel_settings, $args = array() ) {
 
 	$inner = tag_escape( $args['inner_wrap'] );
 
-	echo '<' . esc_attr($tag) . ' class="' . esc_attr( $class ) . '">';
+	echo '<' . esc_attr( $tag ) . ' class="' . esc_attr( $class ) . '">';
 	if ( $inner ) {
-		echo '<' . esc_attr($inner) . '>';
+		echo '<' . esc_attr( $inner ) . '>';
 	}
 	do_action( 'dpce_carousel_title', $post_id, $carousel_settings );
 	if ( $inner ) {
-		echo '</' . esc_attr($inner) . '>';
+		echo '</' . esc_attr( $inner ) . '>';
 	}
-	echo '</' . esc_attr($tag) . '>';
+	echo '</' . esc_attr( $tag ) . '>';
+
+	/**
+	 * Fires after the card title. The plugin prints the meta row here.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param int   $post_id           Post ID.
+	 * @param array $carousel_settings Carousel settings.
+	 */
+	do_action( 'dpce_carousel_after_title', $post_id, $carousel_settings );
+}
+
+
+/**
+ * Get a safe link target from the widget settings.
+ *
+ * @param array $settings Carousel settings.
+ * @return string Either "_self" or "_blank".
+ */
+function dpce_get_link_target( $settings ) {
+	$target = isset( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self';
+	return '_blank' === $target ? '_blank' : '_self';
+}
+
+/**
+ * Build the target and rel attributes for post links.
+ *
+ * @param array $settings Carousel settings.
+ * @return string Attribute string with a leading space, already escaped.
+ */
+function dpce_link_target_attrs( $settings ) {
+	if ( '_blank' === dpce_get_link_target( $settings ) ) {
+		return ' target="_blank" rel="noopener noreferrer"';
+	}
+	return ' target="_self"';
+}
+
+/**
+ * Normalize an Elementor icon value.
+ *
+ * Versions up to 1.4 saved the default icon with the library "solid"
+ * instead of "fa-solid", so Elementor could not load it and the icon
+ * did not show on the front end. Map the short names to the real ones.
+ *
+ * @param mixed $icon Icon control value.
+ * @return array
+ */
+function dpce_normalize_icon( $icon ) {
+	if ( ! is_array( $icon ) || empty( $icon['value'] ) ) {
+		return array();
+	}
+
+	$map = array(
+		'solid'   => 'fa-solid',
+		'regular' => 'fa-regular',
+		'brands'  => 'fa-brands',
+	);
+	if ( isset( $icon['library'] ) && isset( $map[ $icon['library'] ] ) ) {
+		$icon['library'] = $map[ $icon['library'] ];
+	}
+
+	return $icon;
+}
+
+/**
+ * HTML tags allowed for card titles, as tag => label.
+ *
+ * @return array
+ */
+function dpce_get_title_tags() {
+	return array(
+		'h1'   => 'H1',
+		'h2'   => 'H2',
+		'h3'   => 'H3',
+		'h4'   => 'H4',
+		'h5'   => 'H5',
+		'h6'   => 'H6',
+		'div'  => 'div',
+		'p'    => 'p',
+		'span' => 'span',
+	);
+}
+
+/**
+ * Get the title tag from the settings, falling back to h3.
+ *
+ * @param array $settings Carousel settings.
+ * @return string
+ */
+function dpce_get_title_tag( $settings ) {
+	$tag = isset( $settings['title_tag'] ) ? (string) $settings['title_tag'] : 'h3';
+	return array_key_exists( $tag, dpce_get_title_tags() ) ? $tag : 'h3';
+}
+
+/**
+ * Elementor's mobile and tablet breakpoints (the largest width of each).
+ *
+ * Follows custom breakpoints set in Site Settings. Falls back to
+ * Elementor's defaults (767 and 1024).
+ *
+ * @return array{mobile: int, tablet: int}
+ */
+function dpce_get_breakpoints() {
+	$result = array(
+		'mobile' => 767,
+		'tablet' => 1024,
+	);
+
+	if ( class_exists( '\Elementor\Plugin' ) ) {
+		$active = \Elementor\Plugin::$instance->breakpoints->get_active_breakpoints();
+		foreach ( array( 'mobile', 'tablet' ) as $device ) {
+			if ( isset( $active[ $device ] ) ) {
+				$result[ $device ] = (int) $active[ $device ]->get_value();
+			}
+		}
+	}
+
+	return $result;
+}
+
+/**
+ * Build a `sizes` attribute that matches the number of columns.
+ *
+ * Without it the browser assumes each image is as wide as the screen and
+ * downloads a much larger file than a 3 or 4 column carousel needs.
+ *
+ * @param array $columns Columns per device: desktop, tablet, mobile.
+ * @return string
+ */
+function dpce_get_image_sizes_attr( $columns ) {
+	$breakpoints = dpce_get_breakpoints();
+	$mobile_max  = $breakpoints['mobile'];
+	$tablet_max  = $breakpoints['tablet'];
+
+	$vw = static function ( $cols ) {
+		return (int) ceil( 100 / max( 1, (int) $cols ) ) . 'vw';
+	};
+
+	$sizes = sprintf(
+		'(max-width: %1$dpx) %2$s, (max-width: %3$dpx) %4$s, %5$s',
+		$mobile_max,
+		$vw( isset( $columns['mobile'] ) ? $columns['mobile'] : 1 ),
+		$tablet_max,
+		$vw( isset( $columns['tablet'] ) ? $columns['tablet'] : 2 ),
+		$vw( isset( $columns['desktop'] ) ? $columns['desktop'] : 3 )
+	);
+
+	/**
+	 * Filter the sizes attribute used for carousel images.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $sizes   Sizes attribute.
+	 * @param array  $columns Columns per device.
+	 */
+	return (string) apply_filters( 'dpce_image_sizes_attr', $sizes, $columns );
+}
+
+/**
+ * Terms to show for a post (badges and the meta row).
+ *
+ * @param int    $post_id  Post ID.
+ * @param string $taxonomy Taxonomy name, or "auto" for the main taxonomy of the post type.
+ * @param int    $limit    Maximum number of terms.
+ * @return WP_Term[]
+ */
+function dpce_get_post_terms_for_display( $post_id, $taxonomy = 'auto', $limit = 1 ) {
+	if ( 'auto' === $taxonomy || '' === $taxonomy ) {
+		$taxonomy  = '';
+		$post_type = get_post_type( $post_id );
+		if ( 'product' === $post_type ) {
+			$taxonomy = 'product_cat';
+		} elseif ( is_object_in_taxonomy( (string) $post_type, 'category' ) ) {
+			$taxonomy = 'category';
+		} else {
+			foreach ( get_object_taxonomies( (string) $post_type, 'objects' ) as $object ) {
+				if ( $object->public && $object->hierarchical ) {
+					$taxonomy = $object->name;
+					break;
+				}
+			}
+		}
+	}
+
+	if ( '' === $taxonomy || ! taxonomy_exists( $taxonomy ) ) {
+		return array();
+	}
+
+	$terms = get_the_terms( $post_id, $taxonomy );
+	if ( ! is_array( $terms ) ) {
+		return array();
+	}
+
+	return array_slice( $terms, 0, max( 1, (int) $limit ) );
+}
+
+/**
+ * Estimated reading time in minutes (at least 1).
+ *
+ * @param int $post_id Post ID.
+ * @return int
+ */
+function dpce_get_reading_time( $post_id ) {
+	$content = (string) get_post_field( 'post_content', $post_id );
+	$words   = str_word_count( wp_strip_all_tags( strip_shortcodes( $content ) ) );
+
+	/**
+	 * Filter the reading speed used for "min read".
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param int $words_per_minute Words per minute. Default 200.
+	 */
+	$speed = max( 1, (int) apply_filters( 'dpce_words_per_minute', 200 ) );
+
+	return max( 1, (int) ceil( $words / $speed ) );
+}
+
+/**
+ * Opening and closing tags for an add to cart element in a template.
+ *
+ * For WooCommerce products this is a real AJAX add to cart link that sits
+ * above the card link. Otherwise the original markup is kept exactly, so
+ * templates look the same when the post is not a product.
+ *
+ * @param int    $post_id        Post ID.
+ * @param string $fallback_tag   Tag used when the post is not a product (span or div).
+ * @param array  $fallback_attrs Attributes of the original element, in order.
+ * @return array{0: string, 1: string} Opening and closing tag, already escaped.
+ */
+function dpce_cart_tags( $post_id, $fallback_tag, $fallback_attrs ) {
+	$fallback_tag = in_array( $fallback_tag, array( 'span', 'div' ), true ) ? $fallback_tag : 'span';
+	$product      = DPCE_Woo::product( $post_id );
+
+	if ( ! $product ) {
+		$open = '<' . $fallback_tag;
+		foreach ( $fallback_attrs as $name => $value ) {
+			$open .= ' ' . $name . '="' . esc_attr( $value ) . '"';
+		}
+		return array( $open . '>', '</' . $fallback_tag . '>' );
+	}
+
+	DPCE_Woo::enqueue_cart_script();
+
+	$attributes          = DPCE_Woo::add_to_cart_attributes( $product );
+	$ajax                = false !== strpos( $attributes['class'], 'ajax_add_to_cart' );
+	$original            = isset( $fallback_attrs['class'] ) ? $fallback_attrs['class'] : '';
+	$original            = trim( str_replace( array( 'ajax_add_to_cart', 'add_to_cart_button' ), '', $original ) );
+	$attributes['class'] = trim( $original . ' dpce-cart-link add_to_cart_button' . ( $ajax ? ' ajax_add_to_cart' : '' ) );
+
+	$open = '<a';
+	foreach ( $attributes as $name => $value ) {
+		$open .= ' ' . $name . '="' . ( 'href' === $name ? esc_url( $value ) : esc_attr( $value ) ) . '"';
+	}
+
+	return array( $open . '>', '</a>' );
+}
+
+/**
+ * Remember the first time a carousel was shown (used by the Getting
+ * Started checklist and the review request). One option write, ever.
+ */
+function dpce_mark_first_use() {
+	if ( ! get_option( 'dpce_first_use' ) ) {
+		update_option( 'dpce_first_use', time(), false );
+	}
 }

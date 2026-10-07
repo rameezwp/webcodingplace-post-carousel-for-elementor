@@ -50,6 +50,8 @@ class DPCE_Renderer {
 		add_action( 'dpce_carousel_meta', array( $this, 'render_meta' ), 10, 2 );
 		add_action( 'dpce_carousel_share', array( $this, 'render_share' ), 10, 2 );
 		add_action( 'dpce_carousel_icon', array( $this, 'render_icon' ), 10, 4 );
+		add_action( 'dpce_carousel_after_title', array( $this, 'render_meta_row' ), 10, 2 );
+		add_action( 'dpce_carousel_overlay', array( $this, 'render_product_extras' ), 5, 2 );
 	}
 
 	/**
@@ -65,22 +67,42 @@ class DPCE_Renderer {
 			'class' => 'dpce-thumbnail-img',
 		);
 
-		if ( ! empty( $settings['lazy_load'] ) ) {
+		if ( ! empty( $settings['image_sizes_attr'] ) ) {
+			$attr['sizes'] = $settings['image_sizes_attr'];
+		}
+
+		// Lazy load only slides that start outside the visible area, so the
+		// first visible images are not delayed (better Largest Contentful Paint).
+		$index   = isset( $settings['slide_index'] ) ? (int) $settings['slide_index'] : 0;
+		$visible = isset( $settings['visible_slides'] ) ? (int) $settings['visible_slides'] : 0;
+		if ( ! empty( $settings['lazy_load'] ) && $index >= $visible ) {
 			$attr['loading'] = 'lazy';
 		}
 
+		$badges = $this->get_badges( $post_id, $settings );
+
 		if ( has_post_thumbnail( $post_id ) ) {
-			echo '<div class="dpce-thumbnail">';
+			echo '<div class="dpce-thumbnail' . ( '' !== $badges ? ' dpce-has-badge' : '' ) . '">';
+			echo $badges; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in get_badges().
 			echo get_the_post_thumbnail( $post_id, $size, $attr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe HTML from core.
 			echo '</div>';
 			return;
 		}
 
+		if ( ! empty( $settings['placeholder_image_id'] ) && wp_attachment_is_image( (int) $settings['placeholder_image_id'] ) ) {
+			// The placeholder is decorative: the post title is printed right after it.
+			$attr['alt'] = '';
+			echo '<div class="dpce-thumbnail">';
+			echo wp_get_attachment_image( (int) $settings['placeholder_image_id'], $size, false, $attr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- safe HTML from core.
+			echo '</div>';
+			return;
+		}
+
 		if ( ! empty( $settings['placeholder_image'] ) ) {
+			// The placeholder is decorative: the post title is printed right after it.
 			printf(
-				'<div class="dpce-thumbnail"><img class="dpce-thumbnail-img" src="%s" alt="%s"%s /></div>',
+				'<div class="dpce-thumbnail"><img class="dpce-thumbnail-img" src="%s" alt=""%s /></div>',
 				esc_url( $settings['placeholder_image'] ),
-				esc_attr( get_the_title( $post_id ) ),
 				! empty( $settings['lazy_load'] ) ? ' loading="lazy"' : ''
 			);
 		}
@@ -93,9 +115,9 @@ class DPCE_Renderer {
 	 * @param array $settings Carousel settings.
 	 */
 	public function render_title( $post_id, $settings ) {
-		$field = isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title';
-		$meta  = isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '';
-		$max   = isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0;
+		$field  = isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title';
+		$meta   = isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '';
+		$max    = isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0;
 		$append = isset( $settings['trim_append'] ) ? $settings['trim_append'] : '...';
 
 		$value = dpce_get_field_value( $post_id, $field, $meta );
@@ -125,9 +147,10 @@ class DPCE_Renderer {
 		}
 
 		if ( ! empty( $settings['desc_render_shortcodes'] ) ) {
-			// Trim BEFORE running shortcodes so we don't break tag pairs.
+			// Trim before running shortcodes so tag pairs are not cut in half.
+			// HTML is only kept when no word limit is set, because trimming strips tags.
 			$value = dpce_trim_words( $value, $max, $append );
-			echo do_shortcode( wp_kses_post( $value ) );
+			echo do_shortcode( wp_kses_post( $value ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Input is filtered by wp_kses_post(); shortcode output is trusted, as in the_content.
 			return;
 		}
 
@@ -154,14 +177,12 @@ class DPCE_Renderer {
 			return;
 		}
 		$classes = isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button';
-		$target  = ! empty( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self';
 
 		printf(
-			'<a class="%1$s" href="%2$s" target="%3$s" rel="%4$s">%5$s</a>',
+			'<a class="%1$s" href="%2$s"%3$s>%4$s</a>',
 			esc_attr( $classes ),
-			esc_url( get_permalink( $post_id ) ),
-			esc_attr( $target ),
-			'_blank' === $target ? 'noopener noreferrer' : 'follow',
+			esc_url( (string) get_permalink( $post_id ) ),
+			dpce_link_target_attrs( $settings ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from an allowlist.
 			esc_html( $text )
 		);
 	}
@@ -178,49 +199,53 @@ class DPCE_Renderer {
 		if ( 'card' !== $link_area ) {
 			return;
 		}
-		$target = ! empty( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self';
 		printf(
-			'<a class="dpce-overlay-link" href="%1$s" target="%2$s" rel="%3$s" aria-label="%4$s"></a>',
-			esc_url( get_permalink( $post_id ) ),
-			esc_attr( $target ),
-			'_blank' === $target ? 'noopener noreferrer' : 'follow',
-			esc_attr( get_the_title( $post_id ) )
+			'<a class="dpce-overlay-link" href="%1$s"%2$s aria-label="%3$s"></a>',
+			esc_url( (string) get_permalink( $post_id ) ),
+			dpce_link_target_attrs( $settings ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from an allowlist.
+			esc_attr( wp_strip_all_tags( get_the_title( $post_id ) ) )
 		);
 	}
 
 	/**
-	 * Inline SVG icon registry.
+	 * Render an icon through Elementor's icon manager.
 	 *
-	 * @param string $name  Icon slug (link, comments, user, share, cart-plus, plus, clock).
-	 * @param string $class Optional extra CSS class.
-	 * @return string Safe HTML.
+	 * Templates pass a Font Awesome class in $icon for their fixed icons
+	 * (comments, clock and so on). The widget's own "Icon" control is
+	 * rendered after it when set.
+	 *
+	 * @param int    $post_id   Post ID.
+	 * @param array  $settings  Carousel settings.
+	 * @param string $icon      Optional Font Awesome class, for example "far fa-clock".
+	 * @param string $css_class CSS class for the fixed icon.
 	 */
-	function render_icon( $post_id, $settings, $icon = '', $class = 'dpce-custom-icon' ) {
-		if ($icon) {
+	public function render_icon( $post_id, $settings, $icon = '', $css_class = 'dpce-custom-icon' ) {
+		unset( $post_id );
+
+		if ( $icon ) {
 			\Elementor\Icons_Manager::render_icon(
-				[
-				    'library' => 'fa-regular',
-				    'value'   => esc_attr($icon),
-				],
-			    [
-			        'aria-hidden' => 'true',
-			        'class' => esc_attr($class),
-			    ]
+				array(
+					'library' => 'fa-regular',
+					'value'   => (string) $icon,
+				),
+				array(
+					'aria-hidden' => 'true',
+					'class'       => (string) $css_class,
+				)
 			);
 		}
 
-		if ( ! empty( $settings['style_icon']['value'] ) ) {
-
+		$style_icon = isset( $settings['style_icon'] ) ? dpce_normalize_icon( $settings['style_icon'] ) : array();
+		if ( ! empty( $style_icon['value'] ) ) {
 			\Elementor\Icons_Manager::render_icon(
-			    $settings['style_icon'],
-			    [
-			        'aria-hidden' => 'true',
-			        'class' => 'dpce-icon'
-			    ]
+				$style_icon,
+				array(
+					'aria-hidden' => 'true',
+					'class'       => 'dpce-icon',
+				)
 			);
 		}
 	}
-
 
 	/**
 	 * Render compact post meta (date + author) used by some templates.
@@ -231,7 +256,7 @@ class DPCE_Renderer {
 	public function render_meta( $post_id, $settings ) {
 		unset( $settings );
 		$date   = get_the_date( '', $post_id );
-		$author = get_the_author_meta( 'display_name', get_post_field( 'post_author', $post_id ) );
+		$author = get_the_author_meta( 'display_name', (int) get_post_field( 'post_author', $post_id ) );
 
 		echo '<span class="dpce-meta-date">' . esc_html( $date ) . '</span>';
 		if ( $author ) {
@@ -253,26 +278,45 @@ class DPCE_Renderer {
 			? $settings['share_networks']
 			: array( 'facebook', 'twitter', 'linkedin' );
 
-		$url   = rawurlencode( get_permalink( $post_id ) );
-		$title = rawurlencode( get_the_title( $post_id ) );
+		$url   = rawurlencode( (string) get_permalink( $post_id ) );
+		$title = rawurlencode( wp_strip_all_tags( get_the_title( $post_id ) ) );
 
 		$urls = array(
-			'facebook' => 'https://www.facebook.com/sharer/sharer.php?u=' . $url,
-			'twitter'  => 'https://twitter.com/intent/tweet?url=' . $url . '&text=' . $title,
-			'linkedin' => 'https://www.linkedin.com/sharing/share-offsite/?url=' . $url,
-			'whatsapp' => 'https://api.whatsapp.com/send?text=' . $title . '%20' . $url,
+			'facebook'  => 'https://www.facebook.com/sharer/sharer.php?u=' . $url,
+			'twitter'   => 'https://twitter.com/intent/tweet?url=' . $url . '&text=' . $title,
+			'linkedin'  => 'https://www.linkedin.com/sharing/share-offsite/?url=' . $url,
+			'whatsapp'  => 'https://api.whatsapp.com/send?text=' . $title . '%20' . $url,
 			'pinterest' => 'https://pinterest.com/pin/create/button/?url=' . $url . '&description=' . $title,
-			'email'    => 'mailto:?subject=' . $title . '&body=' . $url,
+			'email'     => 'mailto:?subject=' . $title . '&body=' . $url,
 		);
 
-		$icons = [
-		    'facebook'  => [ 'value' => 'fab fa-facebook-f',  'library' => 'fa-brands' ],
-		    'twitter'   => [ 'value' => 'fab fa-x-twitter',   'library' => 'fa-brands' ],
-		    'linkedin'  => [ 'value' => 'fab fa-linkedin-in', 'library' => 'fa-brands' ],
-		    'whatsapp'  => [ 'value' => 'fab fa-whatsapp',    'library' => 'fa-brands' ],
-		    'pinterest' => [ 'value' => 'fab fa-pinterest-p', 'library' => 'fa-brands' ],
-		    'email'     => [ 'value' => 'fas fa-envelope',     'library' => 'fa-solid' ],
-		];
+		$icons = array(
+			'facebook'  => array(
+				'value'   => 'fab fa-facebook-f',
+				'library' => 'fa-brands',
+			),
+			'twitter'   => array(
+				// The X logo ships with Elementor 3.20 and newer.
+				'value'   => version_compare( ELEMENTOR_VERSION, '3.20.0', '>=' ) ? 'fab fa-x-twitter' : 'fab fa-twitter',
+				'library' => 'fa-brands',
+			),
+			'linkedin'  => array(
+				'value'   => 'fab fa-linkedin-in',
+				'library' => 'fa-brands',
+			),
+			'whatsapp'  => array(
+				'value'   => 'fab fa-whatsapp',
+				'library' => 'fa-brands',
+			),
+			'pinterest' => array(
+				'value'   => 'fab fa-pinterest-p',
+				'library' => 'fa-brands',
+			),
+			'email'     => array(
+				'value'   => 'fas fa-envelope',
+				'library' => 'fa-solid',
+			),
+		);
 
 		$labels = array(
 			'facebook'  => __( 'Share on Facebook', 'webcodingplace-post-carousel-for-elementor' ),
@@ -286,32 +330,170 @@ class DPCE_Renderer {
 		echo '<div class="dpce-share">';
 
 		foreach ( $networks as $network ) {
+			if ( ! is_string( $network ) || ! isset( $urls[ $network ] ) ) {
+				continue;
+			}
 
-		    if ( ! isset( $urls[ $network ] ) ) {
-		        continue;
-		    }
+			printf(
+				'<a class="dpce-share-link dpce-share-%1$s" target="_blank" rel="noopener noreferrer" href="%2$s" aria-label="%3$s">',
+				esc_attr( $network ),
+				esc_url( $urls[ $network ] ),
+				esc_attr( $labels[ $network ] )
+			);
 
-		    printf(
-		        '<a class="dpce-share-link dpce-share-%1$s"
-		            target="_blank"
-		            rel="noopener noreferrer"
-		            href="%2$s"
-		            aria-label="%3$s">',
-		        esc_attr( $network ),
-		        esc_url( $urls[ $network ] ),
-		        esc_attr( $labels[ $network ] )
-		    );
+			\Elementor\Icons_Manager::render_icon(
+				$icons[ $network ],
+				array(
+					'aria-hidden' => 'true',
+					'class'       => 'dpce-social-icon',
+				)
+			);
 
-		    if ( isset( $icons[ $network ] ) ) {
-		        \Elementor\Icons_Manager::render_icon(
-		            $icons[ $network ],
-		            [ 'aria-hidden' => 'true', 'class' => 'dpce-social-icon' ]
-		        );
-		    }
-
-		    echo '</a>';
+			echo '</a>';
 		}
 
+		echo '</div>';
+	}
+
+	/**
+	 * Badges shown on the image: the first term and, for products, "Sale".
+	 *
+	 * @param int   $post_id  Post ID.
+	 * @param array $settings Carousel settings.
+	 * @return string Safe HTML, or an empty string.
+	 */
+	public function get_badges( $post_id, $settings ) {
+		$html = '';
+
+		if ( ! empty( $settings['show_badge'] ) ) {
+			$terms = dpce_get_post_terms_for_display( $post_id, isset( $settings['badge_taxonomy'] ) ? $settings['badge_taxonomy'] : 'auto', 1 );
+			foreach ( $terms as $term ) {
+				$html .= '<span class="dpce-badge dpce-badge--term">' . esc_html( $term->name ) . '</span>';
+			}
+		}
+
+		if ( ! empty( $settings['show_sale_badge'] ) ) {
+			$html .= DPCE_Woo::sale_badge( $post_id );
+		}
+
+		if ( '' === $html ) {
+			return '';
+		}
+
+		/**
+		 * Filter the badges printed on a carousel image.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $html     Badge HTML.
+		 * @param int    $post_id  Post ID.
+		 * @param array  $settings Carousel settings.
+		 */
+		return (string) apply_filters( 'dpce_badges_html', '<div class="dpce-badges">' . $html . '</div>', $post_id, $settings );
+	}
+
+	/**
+	 * Meta row (date, author, terms, comments, reading time).
+	 *
+	 * Printed right after the title when the Meta Row setting is on.
+	 *
+	 * @param int   $post_id  Post ID.
+	 * @param array $settings Carousel settings.
+	 */
+	public function render_meta_row( $post_id, $settings ) {
+		if ( empty( $settings['show_meta'] ) ) {
+			return;
+		}
+
+		$items = isset( $settings['meta_items'] ) && is_array( $settings['meta_items'] ) ? $settings['meta_items'] : array( 'date', 'author' );
+		$parts = array();
+
+		foreach ( $items as $item ) {
+			switch ( $item ) {
+				case 'date':
+					$parts[] = sprintf(
+						'<span class="dpce-meta__item dpce-meta__date"><time datetime="%1$s">%2$s</time></span>',
+						esc_attr( (string) get_the_date( 'c', $post_id ) ),
+						esc_html( (string) get_the_date( '', $post_id ) )
+					);
+					break;
+
+				case 'author':
+				case 'avatar':
+					if ( 'avatar' === $item && in_array( 'author', $items, true ) ) {
+						break;
+					}
+					$author_id = (int) get_post_field( 'post_author', $post_id );
+					$avatar    = in_array( 'avatar', $items, true ) ? get_avatar( $author_id, 24, '', '', array( 'class' => 'dpce-meta__avatar' ) ) : '';
+					$parts[]   = '<span class="dpce-meta__item dpce-meta__author">' . wp_kses_post( (string) $avatar ) . esc_html( get_the_author_meta( 'display_name', $author_id ) ) . '</span>';
+					break;
+
+				case 'terms':
+					$terms = dpce_get_post_terms_for_display( $post_id, isset( $settings['badge_taxonomy'] ) ? $settings['badge_taxonomy'] : 'auto', 2 );
+					if ( $terms ) {
+						$parts[] = '<span class="dpce-meta__item dpce-meta__terms">' . esc_html( implode( ', ', wp_list_pluck( $terms, 'name' ) ) ) . '</span>';
+					}
+					break;
+
+				case 'comments':
+					$count   = (int) get_comments_number( $post_id );
+					$parts[] = '<span class="dpce-meta__item dpce-meta__comments">' . esc_html(
+						sprintf(
+							/* translators: %s: number of comments. */
+							_n( '%s comment', '%s comments', $count, 'webcodingplace-post-carousel-for-elementor' ),
+							number_format_i18n( $count )
+						)
+					) . '</span>';
+					break;
+
+				case 'reading_time':
+					$minutes = dpce_get_reading_time( $post_id );
+					$parts[] = '<span class="dpce-meta__item dpce-meta__reading">' . esc_html(
+						sprintf(
+							/* translators: %s: number of minutes. */
+							_n( '%s min read', '%s min read', $minutes, 'webcodingplace-post-carousel-for-elementor' ),
+							number_format_i18n( $minutes )
+						)
+					) . '</span>';
+					break;
+			}
+		}
+
+		if ( ! $parts ) {
+			return;
+		}
+
+		/**
+		 * Filter the meta row items before they are printed.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string[] $parts    HTML of each item (already escaped).
+		 * @param int      $post_id  Post ID.
+		 * @param array    $settings Carousel settings.
+		 */
+		$parts = (array) apply_filters( 'dpce_meta_row_items', $parts, $post_id, $settings );
+
+		echo '<div class="dpce-meta">' . implode( '', array_map( 'wp_kses_post', $parts ) ) . '</div>';
+	}
+
+	/**
+	 * WooCommerce block (rating, price, stock, add to cart) for templates
+	 * other than Card, when "Show Product Details" is on.
+	 *
+	 * @param int   $post_id  Post ID.
+	 * @param array $settings Carousel settings.
+	 */
+	public function render_product_extras( $post_id, $settings ) {
+		if ( empty( $settings['show_product_extras'] ) || ! DPCE_Woo::product( $post_id ) ) {
+			return;
+		}
+
+		// Templates 48 to 51 already print the price.
+		$has_price = isset( $settings['style_id'] ) && in_array( (string) $settings['style_id'], array( '48', '49', '50', '51' ), true );
+
+		echo '<div class="dpce-product-extras">';
+		echo DPCE_Woo::rating( $post_id ) . ( $has_price ? '' : DPCE_Woo::price( $post_id ) ) . DPCE_Woo::stock_label( $post_id ) . DPCE_Woo::add_to_cart( $post_id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Each part is escaped in DPCE_Woo.
 		echo '</div>';
 	}
 }

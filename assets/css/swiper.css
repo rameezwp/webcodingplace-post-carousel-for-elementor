@@ -1,0 +1,248 @@
+/**
+ * WebCodingPlace Post Carousel: modern engine (Swiper) layout.
+ *
+ * The classic engine gets its arrow and dot layout from slick-theme.css.
+ * These rules give the modern engine the same layout, scoped to
+ * .dpce-engine-swiper, without loading Slick or its icon font.
+ */
+
+.dpce-engine-swiper .dpce-track {
+	position: relative;
+}
+
+.dpce-engine-swiper .dpce-swiper {
+	overflow: hidden;
+}
+
+/* Equal height cards, like the classic engine. */
+.dpce-engine-swiper .swiper-wrapper {
+	align-items: stretch;
+}
+
+.dpce-engine-swiper .dpce-slide.swiper-slide {
+	height: auto;
+	box-sizing: border-box;
+}
+
+.dpce-engine-swiper.dpce-vertical .dpce-slide.swiper-slide {
+	height: 100%;
+}
+
+/* Arrows. */
+.dpce-engine-swiper .slick-prev,
+.dpce-engine-swiper .slick-next {
+	position: absolute;
+	top: 50%;
+	display: block;
+	padding: 0;
+	margin: 0;
+	font-size: 0;
+	line-height: 0;
+	color: transparent;
+	border: none;
+	cursor: pointer;
+	transform: translate(0, -50%);
+}
+
+.dpce-engine-swiper .slick-prev:before,
+.dpce-engine-swiper .slick-next:before {
+	display: block;
+	line-height: 1;
+	font-family: inherit;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.dpce-engine-swiper .slick-prev.slick-disabled,
+.dpce-engine-swiper .slick-next.slick-disabled {
+	cursor: default;
+}
+
+.dpce-engine-swiper .slick-prev.slick-disabled:before,
+.dpce-engine-swiper .slick-next.slick-disabled:before {
+	opacity: 0.25;
+}
+
+/* Dots. */
+.dpce-engine-swiper.dpce-has-dots .dpce-track {
+	margin-bottom: 30px;
+}
+
+.dpce-engine-swiper .slick-dots {
+	position: absolute;
+	bottom: -25px;
+	display: block;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	text-align: center;
+}
+
+.dpce-engine-swiper .slick-dots[hidden] {
+	display: none;
+}
+
+.dpce-engine-swiper .slick-dots li {
+	position: relative;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	margin: 0 5px;
+	padding: 0;
+	cursor: pointer;
+}
+
+.dpce-engine-swiper .slick-dots li button {
+	display: block;
+	width: 20px;
+	height: 20px;
+	padding: 5px;
+	font-size: 0;
+	line-height: 0;
+	color: transparent;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+
+.dpce-engine-swiper .slick-dots li button:before {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 20px;
+	height: 20px;
+	font-family: Arial, sans-serif;
+	font-size: 22px;
+	line-height: 20px;
+	text-align: center;
+	content: "\2022";
+	opacity: 0.25;
+	color: #000;
+}
+
+.dpce-engine-swiper .slick-dots li button:hover:before,
+.dpce-engine-swiper .slick-dots li button:focus-visible:before,
+.dpce-engine-swiper .slick-dots li.slick-active button:before {
+	opacity: 0.75;
+}
+
+/* Pause and play button for autoplay. */
+.dpce-engine-swiper .dpce-pause {
+	position: absolute;
+	right: 8px;
+	bottom: 8px;
+	z-index: 6;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.6);
+	color: #fff;
+	cursor: pointer;
+}
+
+.dpce-engine-swiper .dpce-pause[hidden] {
+	display: none;
+}
+
+.dpce-engine-swiper .dpce-pause:before {
+	display: block;
+	font-size: 12px;
+	line-height: 32px;
+	text-align: center;
+	content: "\275A\275A";
+	letter-spacing: -2px;
+}
+
+.dpce-engine-swiper .dpce-pause.is-paused:before {
+	content: "\25B6";
+	letter-spacing: 0;
+}
+
+.dpce-engine-swiper .swiper-notification {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: -1000;
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* Numbers and progress bar pagination. */
+.dpce-engine-swiper .dpce-fraction {
+	position: absolute;
+	bottom: -28px;
+	width: 100%;
+	color: #374151;
+	font-size: 14px;
+	line-height: 20px;
+	text-align: center;
+	font-variant-numeric: tabular-nums;
+}
+
+.dpce-engine-swiper .dpce-progress {
+	position: absolute;
+	bottom: -18px;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	overflow: hidden;
+	border-radius: 2px;
+	background: rgba(0, 0, 0, 0.12);
+}
+
+.dpce-engine-swiper .dpce-progress span {
+	display: block;
+	width: 100%;
+	height: 100%;
+	background: #111827;
+	transform: scaleX(0);
+	transform-origin: left center;
+	transition: transform 0.3s ease;
+}
+
+.dpce-engine-swiper[dir="rtl"] .dpce-progress span,
+.dpce-engine-swiper .dpce-swiper[dir="rtl"] ~ .dpce-progress span {
+	transform-origin: right center;
+}
+
+/* News ticker: constant speed. */
+.dpce-engine-swiper.dpce-ticker .swiper-wrapper {
+	transition-timing-function: linear !important;
+}
+
+/* Custom arrow icons. */
+.dpce-engine-swiper .slick-arrow.dpce-arrow-custom {
+	color: #ffffff;
+	font-size: 18px;
+	line-height: 1;
+}
+
+.dpce-engine-swiper .slick-arrow.dpce-arrow-custom:before {
+	content: none;
+}
+
+.dpce-engine-swiper .slick-arrow.dpce-arrow-custom svg {
+	width: 1em;
+	height: 1em;
+	fill: currentColor;
+}
+
+.dpce-engine-swiper .dpce-sr {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Coverflow needs room for the tilted slides. */
+.dpce-engine-swiper.dpce-effect-coverflow .dpce-swiper {
+	padding: 20px 0;
+}

@@ -20,6 +20,10 @@ use Elementor\Group_Control_Typography;
  */
 class DPCE_Post_Carousel_Widget extends Widget_Base {
 
+	use DPCE_Query_Controls;
+	use DPCE_Card_Controls;
+	use DPCE_Layout_Controls;
+
 	/**
 	 * Widget slug.
 	 *
@@ -35,7 +39,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * @return string
 	 */
 	public function get_title() {
-		return esc_html__( 'WebCodingPlace Post Carousel', 'webcodingplace-post-carousel-for-elementor' );
+		return esc_html__( 'Post Carousel (WCP)', 'webcodingplace-post-carousel-for-elementor' );
 	}
 
 	/**
@@ -62,25 +66,75 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * @return array
 	 */
 	public function get_keywords() {
-		return array( 'carousel', 'slider', 'posts', 'slick', 'taxonomy', 'cpt' );
+		return array(
+			'post',
+			'posts',
+			'blog',
+			'carousel',
+			'slider',
+			'news',
+			'ticker',
+			'product',
+			'products',
+			'woocommerce',
+			'portfolio',
+			'testimonial',
+			'category',
+			'taxonomy',
+			'custom post type',
+			'loop',
+			'grid',
+			'related',
+			'webcodingplace',
+			'wcp',
+		);
 	}
 
 	/**
 	 * Style dependencies.
 	 *
+	 * Elementor calls this per widget instance when it collects the assets
+	 * of a page, so only the stylesheet of the chosen template is loaded.
+	 * Without an instance (editor, preview) every template is loaded.
+	 *
 	 * @return array
 	 */
 	public function get_style_depends() {
-		return array( 'dpce-slick', 'dpce-frontend', 'dpce-slick-theme' );
+		if ( ! $this->get_id() || $this->is_editor_request() ) {
+			return DPCE_Assets::get_style_handles();
+		}
+
+		$settings = (array) $this->get_settings();
+		$style_id = isset( $settings['style_id'] ) && is_scalar( $settings['style_id'] ) && '' !== (string) $settings['style_id'] ? (string) $settings['style_id'] : '1';
+		$engine   = 'carousel' === self::get_layout( $settings ) ? self::get_engine( $settings ) : 'none';
+
+		return DPCE_Assets::get_style_handles( $style_id, $engine );
 	}
 
 	/**
-	 * Script dependencies.
+	 * Script dependencies: only the engine this carousel uses.
 	 *
 	 * @return array
 	 */
 	public function get_script_depends() {
-		return array( 'dpce-slick', 'dpce-frontend' );
+		if ( ! $this->get_id() || $this->is_editor_request() ) {
+			return DPCE_Assets::get_script_handles();
+		}
+		$settings = (array) $this->get_settings();
+		if ( 'carousel' !== self::get_layout( $settings ) ) {
+			return array();
+		}
+		return DPCE_Assets::get_script_handles( self::get_engine( $settings ) );
+	}
+
+	/**
+	 * Whether we are inside the Elementor editor or its preview frame.
+	 *
+	 * @return bool
+	 */
+	private function is_editor_request() {
+		$elementor = \Elementor\Plugin::$instance;
+		return $elementor->editor->is_edit_mode() || $elementor->preview->is_preview_mode();
 	}
 
 	/**
@@ -88,14 +142,17 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 */
 	protected function register_controls() {
 		$this->register_post_section();
+		$this->register_filters_section();
+		$this->register_card_content_section();
 		$this->register_slider_section();
 		$this->register_appearance_section();
+		$this->register_card_style_sections();
 		$this->register_advanced_section();
 	}
 
-	/* =====================================================
-	 * SECTION 1 - POST / CONTENT
-	 * ===================================================== */
+	/**
+	 * Register controls: Post / Content.
+	 */
 	private function register_post_section() {
 		$this->start_controls_section(
 			'section_post',
@@ -105,13 +162,16 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			)
 		);
 
+		$this->register_query_mode_controls();
+
 		$this->add_control(
 			'display_by',
 			array(
-				'label'   => esc_html__( 'Display By', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'post_type',
-				'options' => array(
+				'label'     => esc_html__( 'Display By', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'condition' => array( 'query_mode' => 'custom' ),
+				'default'   => 'post_type',
+				'options'   => array(
 					'post_type' => esc_html__( 'Post Type', 'webcodingplace-post-carousel-for-elementor' ),
 					'taxonomy'  => esc_html__( 'Taxonomy', 'webcodingplace-post-carousel-for-elementor' ),
 				),
@@ -126,7 +186,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'post',
 				'options'   => dpce_get_post_types(),
-				'condition' => array( 'display_by' => 'post_type' ),
+				'condition' => array(
+					'display_by' => 'post_type',
+					'query_mode' => 'custom',
+				),
 			)
 		);
 
@@ -137,14 +200,19 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				array(
 					/* translators: %s: post type label */
 					'label'       => sprintf( esc_html__( 'Select %s', 'webcodingplace-post-carousel-for-elementor' ), $pt_label ),
-					'description' => esc_html__( 'Leave empty to include all.', 'webcodingplace-post-carousel-for-elementor' ),
-					'type'        => Controls_Manager::SELECT2,
+					'description' => esc_html__( 'Type to search. Leave empty to include all.', 'webcodingplace-post-carousel-for-elementor' ),
+					'type'        => DPCE_Query_Control::TYPE,
 					'multiple'    => true,
 					'label_block' => true,
-					'options'     => dpce_get_posts_for_select( $pt_slug ),
+					'options'     => array(),
+					'query'       => array(
+						'kind'   => 'post',
+						'source' => $pt_slug,
+					),
 					'condition'   => array(
 						'display_by' => 'post_type',
 						'post_type'  => $pt_slug,
+						'query_mode' => 'custom',
 					),
 				)
 			);
@@ -158,7 +226,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'category',
 				'options'   => dpce_get_taxonomies(),
-				'condition' => array( 'display_by' => 'taxonomy' ),
+				'condition' => array(
+					'display_by' => 'taxonomy',
+					'query_mode' => 'custom',
+				),
 			)
 		);
 
@@ -169,13 +240,18 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				array(
 					/* translators: %s: taxonomy label */
 					'label'       => sprintf( esc_html__( 'Select %s Terms', 'webcodingplace-post-carousel-for-elementor' ), $tax_label ),
-					'type'        => Controls_Manager::SELECT2,
+					'type'        => DPCE_Query_Control::TYPE,
 					'multiple'    => true,
 					'label_block' => true,
-					'options'     => dpce_get_terms_for_select( $tax_slug ),
+					'options'     => array(),
+					'query'       => array(
+						'kind'   => 'term',
+						'source' => $tax_slug,
+					),
 					'condition'   => array(
 						'display_by' => 'taxonomy',
 						'taxonomy'   => $tax_slug,
+						'query_mode' => 'custom',
 					),
 				)
 			);
@@ -187,7 +263,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'   => esc_html__( 'Number of Posts', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => 8,
-				'min'     => -1,
+				'min'     => 1,
 				'max'     => 100,
 			)
 		);
@@ -195,15 +271,21 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'orderby',
 			array(
-				'label'   => esc_html__( 'Order By', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'date',
-				'options' => array(
-					'date'       => esc_html__( 'Date', 'webcodingplace-post-carousel-for-elementor' ),
-					'title'      => esc_html__( 'Title', 'webcodingplace-post-carousel-for-elementor' ),
-					'menu_order' => esc_html__( 'Menu Order', 'webcodingplace-post-carousel-for-elementor' ),
-					'rand'       => esc_html__( 'Random', 'webcodingplace-post-carousel-for-elementor' ),
-					'comment_count' => esc_html__( 'Comment Count', 'webcodingplace-post-carousel-for-elementor' ),
+				'condition' => array( 'query_mode!' => 'current' ),
+				'label'     => esc_html__( 'Order By', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'date',
+				'options'   => array(
+					'date'           => esc_html__( 'Date', 'webcodingplace-post-carousel-for-elementor' ),
+					'title'          => esc_html__( 'Title', 'webcodingplace-post-carousel-for-elementor' ),
+					'menu_order'     => esc_html__( 'Menu Order', 'webcodingplace-post-carousel-for-elementor' ),
+					'rand'           => esc_html__( 'Random', 'webcodingplace-post-carousel-for-elementor' ),
+					'comment_count'  => esc_html__( 'Comment Count', 'webcodingplace-post-carousel-for-elementor' ),
+					'modified'       => esc_html__( 'Last Modified', 'webcodingplace-post-carousel-for-elementor' ),
+					'ID'             => esc_html__( 'Post ID', 'webcodingplace-post-carousel-for-elementor' ),
+					'author'         => esc_html__( 'Author', 'webcodingplace-post-carousel-for-elementor' ),
+					'meta_value'     => esc_html__( 'Custom Field (text)', 'webcodingplace-post-carousel-for-elementor' ), // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- An option key, not a query.
+					'meta_value_num' => esc_html__( 'Custom Field (number)', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 			)
 		);
@@ -211,20 +293,24 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->add_control(
 			'order',
 			array(
-				'label'   => esc_html__( 'Order', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'DESC',
-				'options' => array(
+				'condition' => array( 'query_mode!' => 'current' ),
+				'label'     => esc_html__( 'Order', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'DESC',
+				'options'   => array(
 					'DESC' => esc_html__( 'Descending', 'webcodingplace-post-carousel-for-elementor' ),
 					'ASC'  => esc_html__( 'Ascending', 'webcodingplace-post-carousel-for-elementor' ),
 				),
 			)
 		);
 
+		$this->register_order_extra_controls();
+
 		// 6. Exclude posts by ID.
 		$this->add_control(
 			'exclude_ids',
 			array(
+				'condition'   => array( 'query_mode' => 'custom' ),
 				'label'       => esc_html__( 'Exclude Post IDs', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'        => Controls_Manager::TEXT,
 				'description' => esc_html__( 'Comma-separated list of post IDs to exclude.', 'webcodingplace-post-carousel-for-elementor' ),
@@ -270,13 +356,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'   => esc_html__( 'Heading HTML Tag', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'h3',
-				'options' => array(
-					'h2' => 'H2',
-					'h3' => 'H3',
-					'h4' => 'H4',
-					'h5' => 'H5',
-					'h6' => 'H6',
-				),
+				'options' => dpce_get_title_tags(),
 			)
 		);
 
@@ -386,9 +466,9 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/* =====================================================
-	 * SECTION 2 - SLIDER
-	 * ===================================================== */
+	/**
+	 * Register controls: Slider.
+	 */
 	private function register_slider_section() {
 		$this->start_controls_section(
 			'section_slider',
@@ -398,54 +478,91 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			)
 		);
 
+		$this->register_layout_controls();
+
+		// The default stays "slick" so carousels saved before 2.0 (which have
+		// no value stored) keep the classic engine. New widgets are switched
+		// to "swiper" by the editor script when they are created.
+		$this->add_control(
+			'slider_engine',
+			array(
+				'label'     => esc_html__( 'Slider Engine', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::SELECT,
+				'default'   => 'slick',
+				'options'   => array(
+					'swiper' => esc_html__( 'Modern (Swiper, no jQuery)', 'webcodingplace-post-carousel-for-elementor' ),
+					'slick'  => esc_html__( 'Classic (Slick)', 'webcodingplace-post-carousel-for-elementor' ),
+				),
+				'condition' => array( 'layout' => 'carousel' ),
+			)
+		);
+
+		$this->add_control(
+			'slider_engine_notice',
+			array(
+				'type'            => Controls_Manager::RAW_HTML,
+				'raw'             => esc_html__( 'This carousel uses the classic engine. Switch to Modern for a lighter page that does not need jQuery. You can switch back at any time.', 'webcodingplace-post-carousel-for-elementor' ),
+				'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+				'condition'       => array(
+					'layout'        => 'carousel',
+					'slider_engine' => 'slick',
+				),
+			)
+		);
+
 		$this->add_control(
 			'cols_desktop',
 			array(
-				'label'   => esc_html__( 'Columns - Desktop', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 3,
-				'min'     => 1,
-				'max'     => 8,
+				'label'     => esc_html__( 'Columns - Desktop', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => 3,
+				'min'       => 1,
+				'max'       => 8,
+				'condition' => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
 			'cols_tablet',
 			array(
-				'label'   => esc_html__( 'Columns - Tablet', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 2,
-				'min'     => 1,
-				'max'     => 6,
+				'label'     => esc_html__( 'Columns - Tablet', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => 2,
+				'min'       => 1,
+				'max'       => 6,
+				'condition' => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
 			'cols_mobile',
 			array(
-				'label'   => esc_html__( 'Columns - Mobile', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 1,
-				'min'     => 1,
-				'max'     => 4,
+				'label'     => esc_html__( 'Columns - Mobile', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => 1,
+				'min'       => 1,
+				'max'       => 4,
+				'condition' => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
 			'slides_to_scroll',
 			array(
-				'label'   => esc_html__( 'Slides to Scroll', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 1,
-				'min'     => 1,
-				'max'     => 8,
+				'label'     => esc_html__( 'Slides to Scroll', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => 1,
+				'min'       => 1,
+				'max'       => 8,
+				'condition' => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
 			'speed',
 			array(
-				'label'   => esc_html__( 'Animation Speed (ms)', 'webcodingplace-post-carousel-for-elementor' ),
-				'type'    => Controls_Manager::NUMBER,
-				'default' => 500,
-				'min'     => 50,
-				'max'     => 5000,
+				'label'     => esc_html__( 'Animation Speed (ms)', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::NUMBER,
+				'default'   => 500,
+				'min'       => 50,
+				'max'       => 5000,
+				'condition' => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
@@ -455,6 +572,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => 'yes',
+				'condition'    => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
@@ -464,6 +582,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
+				'condition'    => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_responsive_control(
@@ -472,8 +591,16 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'      => esc_html__( 'Space Between Posts (px)', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => array( 'px' ),
-				'range'      => array( 'px' => array( 'min' => 0, 'max' => 100 ) ),
-				'default'    => array( 'unit' => 'px', 'size' => 15 ),
+				'range'      => array(
+					'px' => array(
+						'min' => 0,
+						'max' => 100,
+					),
+				),
+				'default'    => array(
+					'unit' => 'px',
+					'size' => 15,
+				),
 				'selectors'  => array(
 					'{{WRAPPER}} .dpce-slide' => 'padding-left: calc({{SIZE}}{{UNIT}}/2); padding-right: calc({{SIZE}}{{UNIT}}/2);',
 					'{{WRAPPER}} .dpce-track' => 'margin-left: calc(-{{SIZE}}{{UNIT}}/2); margin-right: calc(-{{SIZE}}{{UNIT}}/2);',
@@ -487,6 +614,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
+				'condition'    => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
@@ -497,7 +625,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'default'   => 3000,
 				'min'       => 500,
 				'max'       => 20000,
-				'condition' => array( 'autoplay' => 'yes' ),
+				'condition' => array(
+					'layout'   => 'carousel',
+					'autoplay' => 'yes',
+				),
 			)
 		);
 		$this->add_control(
@@ -507,6 +638,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => 'yes',
+				'condition'    => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
@@ -520,7 +652,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 					'square' => esc_html__( 'Square', 'webcodingplace-post-carousel-for-elementor' ),
 					'dash'   => esc_html__( 'Dash', 'webcodingplace-post-carousel-for-elementor' ),
 				),
-				'condition' => array( 'dots' => 'yes' ),
+				'condition' => array(
+					'layout' => 'carousel',
+					'dots'   => 'yes',
+				),
 			)
 		);
 		$this->add_control(
@@ -530,6 +665,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => 'yes',
+				'condition'    => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
@@ -544,7 +680,10 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 					'circle'  => esc_html__( 'Circled Chevron', 'webcodingplace-post-carousel-for-elementor' ),
 					'square'  => esc_html__( 'Square', 'webcodingplace-post-carousel-for-elementor' ),
 				),
-				'condition' => array( 'arrows' => 'yes' ),
+				'condition' => array(
+					'layout' => 'carousel',
+					'arrows' => 'yes',
+				),
 			)
 		);
 		$this->add_control(
@@ -554,15 +693,18 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'center',
 				'options'   => array(
-					'center'       => esc_html__( 'Center (Sides)', 'webcodingplace-post-carousel-for-elementor' ),
-					'top-left'     => esc_html__( 'Top Left', 'webcodingplace-post-carousel-for-elementor' ),
-					'top-right'    => esc_html__( 'Top Right', 'webcodingplace-post-carousel-for-elementor' ),
-					'top-center'   => esc_html__( 'Top Center', 'webcodingplace-post-carousel-for-elementor' ),
-					'bottom-left'  => esc_html__( 'Bottom Left', 'webcodingplace-post-carousel-for-elementor' ),
-					'bottom-right' => esc_html__( 'Bottom Right', 'webcodingplace-post-carousel-for-elementor' ),
+					'center'        => esc_html__( 'Center (Sides)', 'webcodingplace-post-carousel-for-elementor' ),
+					'top-left'      => esc_html__( 'Top Left', 'webcodingplace-post-carousel-for-elementor' ),
+					'top-right'     => esc_html__( 'Top Right', 'webcodingplace-post-carousel-for-elementor' ),
+					'top-center'    => esc_html__( 'Top Center', 'webcodingplace-post-carousel-for-elementor' ),
+					'bottom-left'   => esc_html__( 'Bottom Left', 'webcodingplace-post-carousel-for-elementor' ),
+					'bottom-right'  => esc_html__( 'Bottom Right', 'webcodingplace-post-carousel-for-elementor' ),
 					'bottom-center' => esc_html__( 'Bottom Center', 'webcodingplace-post-carousel-for-elementor' ),
 				),
-				'condition' => array( 'arrows' => 'yes' ),
+				'condition' => array(
+					'layout' => 'carousel',
+					'arrows' => 'yes',
+				),
 			)
 		);
 		$this->add_control(
@@ -572,6 +714,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
+				'condition'    => array( 'layout' => 'carousel' ),
 			)
 		);
 		$this->add_control(
@@ -581,16 +724,36 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => 'yes',
-				'condition'    => array( 'autoplay' => 'yes' ),
+				'condition'    => array(
+					'layout'   => 'carousel',
+					'autoplay' => 'yes',
+				),
 			)
 		);
+		$this->add_control(
+			'pause_button',
+			array(
+				'label'        => esc_html__( 'Pause Button', 'webcodingplace-post-carousel-for-elementor' ),
+				'description'  => esc_html__( 'Shows a small button that lets visitors stop the autoplay. Recommended for accessibility.', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'return_value' => 'yes',
+				'default'      => '',
+				'condition'    => array(
+					'layout'        => 'carousel',
+					'autoplay'      => 'yes',
+					'slider_engine' => 'swiper',
+				),
+			)
+		);
+
+		$this->register_swiper_extra_controls();
 
 		$this->end_controls_section();
 	}
 
-	/* =====================================================
-	 * SECTION 3 - APPEARANCE
-	 * ===================================================== */
+	/**
+	 * Register controls: Appearance.
+	 */
 	private function register_appearance_section() {
 		$this->start_controls_section(
 			'section_appearance',
@@ -616,31 +779,31 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'     => esc_html__( 'Accent Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .dpce-date' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-date'               => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-1 .dpce-icon' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-2 .hover' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-4' => 'border-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-6:after' => 'border-color:transparent transparent transparent {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-2 .hover'     => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-4'            => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-6:after'      => 'border-color:transparent transparent transparent {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-10 .dpce-body:before' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-10:before' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-10:before'    => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-14 .dpce-body:before' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-18' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-21:after' => 'background-color: {{VALUE}};border-right: 4px solid {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-18'           => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-21:after'     => 'background-color: {{VALUE}};border-right: 4px solid {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-22 .dpce-body .dpce-title' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-23:before' => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-23:after' => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-24 .hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-23:before'    => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-23:after'     => 'border-top: 50px solid {{VALUE}};border-bottom: 50px solid {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-24 .hover'    => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-26 .dpce-title' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-31 .dpce-body:after, {{WRAPPER}} .dpce-style-31 .dpce-body:before' => 'background: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-31:after, {{WRAPPER}} .dpce-style-31:before' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-33:before' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-34' => 'background-color: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-36' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-33:before'    => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-34'           => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-36'           => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-38 .dpce-title' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-39 .dpce-title, {{WRAPPER}} .dpce-style-39:before, {{WRAPPER}} .dpce-style-39:after' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-40' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-40'           => 'background: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-41:before, {{WRAPPER}} .dpce-style-41:after' => 'background: {{VALUE}};',
-					'{{WRAPPER}} .dpce-style-42' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .dpce-style-42'           => 'background: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-51, {{WRAPPER}} .dpce-style-51 .dpce-title, {{WRAPPER}} .dpce-style-51 a, {{WRAPPER}} .dpce-style-51 .price' => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-51 .dpce-title:before' => 'border-color: transparent transparent transparent {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-51 .price:before' => 'border-color: transparent {{VALUE}} transparent;',
@@ -654,7 +817,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'label'     => esc_html__( 'Post Background Color', 'webcodingplace-post-carousel-for-elementor' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => array(
-					'{{WRAPPER}} .dpce-bg' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dpce-bg'            => 'background-color: {{VALUE}};',
 					'{{WRAPPER}} .dpce-style-8 .dpce-body:before' => 'background-image: linear-gradient(to bottom, transparent 0%, {{VALUE}} 100%);',
 					'{{WRAPPER}} .dpce-style-9 .date:before' => 'border-color: transparent {{VALUE}} transparent transparent;',
 					'{{WRAPPER}} .dpce-style-9 .dpce-body:before' => 'border-color: transparent transparent transparent {{VALUE}};',
@@ -778,36 +941,59 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		);
 
 		$this->add_control(
-		    'style_icon',
-		    [
-		        'label' => __( 'Icon', 'webcodingplace-post-carousel-for-elementor' ),
-		        'type' => Controls_Manager::ICONS,
-		        'fa4compatibility' => 'icon',
-		        'default' => [
-		            'value' => 'fas fa-star',
-		            'library' => 'solid',
-		        ],
-		        'condition' => [
-		            'style_id' => [ '1', '2','10', '15', '24', '26', '30', '37', '38', '48', '49', 
-		            '50' ],
-		        ],
-		    ]
+			'style_icon',
+			array(
+				'label'            => __( 'Icon', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'             => Controls_Manager::ICONS,
+				'fa4compatibility' => 'icon',
+				'default'          => array(
+					'value'   => 'fas fa-star',
+					'library' => 'fa-solid',
+				),
+				'condition'        => array(
+					'style_id' => array(
+						'1',
+						'2',
+						'10',
+						'15',
+						'24',
+						'26',
+						'30',
+						'37',
+						'38',
+						'48',
+						'49',
+						'50',
+					),
+				),
+			)
 		);
 
 		$this->add_control(
-		    'style_icon_color',
-		    [
-		        'label' => __( 'Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
-		        'type' => Controls_Manager::COLOR,
-		        'selectors' => [
-		            '{{WRAPPER}} .dpce-icon' => 'color: {{VALUE}};',
-		            '{{WRAPPER}} .dpce-icon' => 'fill: {{VALUE}};',
-		        ],
-		        'condition' => [
-		            'style_id' => [ '1', '2', '10', '15', '24', '26', '30', '37', '38', '48', '49', 
-		            '50' ],
-		        ],
-		    ]
+			'style_icon_color',
+			array(
+				'label'     => __( 'Icon Color', 'webcodingplace-post-carousel-for-elementor' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => array(
+					'{{WRAPPER}} .dpce-icon' => 'color: {{VALUE}}; fill: {{VALUE}};',
+				),
+				'condition' => array(
+					'style_id' => array(
+						'1',
+						'2',
+						'10',
+						'15',
+						'24',
+						'26',
+						'30',
+						'37',
+						'38',
+						'48',
+						'49',
+						'50',
+					),
+				),
+			)
 		);
 
 		foreach ( DPCE_Styles::all() as $style_id => $style ) {
@@ -819,7 +1005,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 					continue;
 				}
 				$control_id = 'style_' . $style_id . '_' . $setting['id'];
-				$args = array(
+				$args       = array(
 					'label'     => isset( $setting['label'] ) ? $setting['label'] : $setting['id'],
 					'condition' => array( 'style_id' => (string) $style_id ),
 				);
@@ -848,7 +1034,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 						$args['type'] = Controls_Manager::ICONS;
 						break;
 					case 'slider':
-						$args['type'] = Controls_Manager::SLIDER;
+						$args['type']       = Controls_Manager::SLIDER;
 						$args['size_units'] = array( 'px', '%' );
 						break;
 					case 'text':
@@ -864,9 +1050,9 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/* =====================================================
-	 * SECTION 4 - ADVANCED
-	 * ===================================================== */
+	/**
+	 * Register controls: Advanced.
+	 */
 	private function register_advanced_section() {
 		$this->start_controls_section(
 			'section_advanced',
@@ -922,6 +1108,7 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'default'      => '',
+				'condition'    => array( 'layout' => 'carousel' ),
 			)
 		);
 
@@ -982,15 +1169,24 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 		$this->end_controls_section();
 	}
 
-	/* =====================================================
-	 * RENDER
-	 * ===================================================== */
+	/**
+	 * Render the carousel on the front end and in the editor preview.
+	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
-		$raw_settings = $this->get_settings();
 
 		// Normalize relevant fields the renderer hooks expect.
-		$carousel_settings = $this->build_carousel_settings( $settings, $raw_settings );
+		$carousel_settings = $this->build_carousel_settings( $settings );
+
+		/**
+		 * Filter the settings passed to templates as $carousel_settings.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param array $carousel_settings Settings used by templates and renderer hooks.
+		 * @param array $settings          Raw widget settings.
+		 */
+		$carousel_settings = (array) apply_filters( 'dpce_carousel_settings', $carousel_settings, $settings );
 
 		// Build query.
 		$query = DPCE_Query::run( $this->build_query_settings( $settings ) );
@@ -1002,10 +1198,181 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			return;
 		}
 
-		$style_id = isset( $settings['style_id'] ) ? $settings['style_id'] : '1';
+		dpce_mark_first_use();
+
+		$style_id = isset( $settings['style_id'] ) ? (string) $settings['style_id'] : '1';
 		$template = DPCE_Styles::locate_template( $style_id );
 
-		// Build slick options.
+		// Load all featured image data in one query instead of one per slide.
+		update_post_thumbnail_cache( $query );
+
+		$layout = self::get_layout( $settings );
+		if ( 'carousel' !== $layout ) {
+			$this->render_grid( $settings, $carousel_settings, $query, $template, $style_id, $layout );
+			return;
+		}
+
+		if ( 'swiper' === self::get_engine( $settings ) ) {
+			$this->render_swiper( $settings, $carousel_settings, $query, $template, $style_id );
+		} else {
+			$this->render_slick( $settings, $carousel_settings, $query, $template, $style_id );
+		}
+	}
+
+	/**
+	 * Layout for a set of settings.
+	 *
+	 * @param array $settings Widget settings.
+	 * @return string "carousel", "grid" or "list".
+	 */
+	public static function get_layout( $settings ) {
+		$layout = isset( $settings['layout'] ) ? (string) $settings['layout'] : 'carousel';
+		return in_array( $layout, array( 'grid', 'list' ), true ) ? $layout : 'carousel';
+	}
+
+	/**
+	 * Grid and list markup: the same slides, without a slider.
+	 *
+	 * @param array       $settings          Widget settings.
+	 * @param array       $carousel_settings Settings passed to templates.
+	 * @param WP_Query    $query             Query.
+	 * @param string|null $template          Template path.
+	 * @param string      $style_id          Template id.
+	 * @param string      $layout            "grid" or "list".
+	 */
+	private function render_grid( $settings, $carousel_settings, $query, $template, $style_id, $layout ) {
+		$classes   = $this->get_wrapper_classes( $settings, $style_id );
+		$classes[] = 'dpce-layout-' . $layout;
+		?>
+		<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+			<div class="dpce-track">
+				<?php $this->render_slides( $query, $template, $carousel_settings, 'dpce-slide' ); ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Slider engine for a set of settings.
+	 *
+	 * @param array $settings Widget settings.
+	 * @return string "swiper" or "slick".
+	 */
+	public static function get_engine( $settings ) {
+		return ( isset( $settings['slider_engine'] ) && 'swiper' === $settings['slider_engine'] ) ? 'swiper' : 'slick';
+	}
+
+	/**
+	 * Wrapper classes shared by both engines.
+	 *
+	 * @param array  $settings Widget settings.
+	 * @param string $style_id Template id.
+	 * @return string[]
+	 */
+	private function get_wrapper_classes( $settings, $style_id ) {
+		return array(
+			'dpce-carousel',
+			'dpce-wrapper-' . sanitize_html_class( $style_id ),
+			'dpce-arrows-' . sanitize_html_class( isset( $settings['arrows_style'] ) ? $settings['arrows_style'] : 'chevron' ),
+			'dpce-arrows-pos-' . sanitize_html_class( isset( $settings['arrows_position'] ) ? $settings['arrows_position'] : 'center' ),
+			'dpce-dots-' . sanitize_html_class( isset( $settings['dots_icon'] ) ? $settings['dots_icon'] : 'circle' ),
+		);
+	}
+
+	/**
+	 * Labels used by the carousel scripts.
+	 *
+	 * @return array
+	 */
+	private function get_script_i18n() {
+		return array(
+			'prev'       => __( 'Previous slide', 'webcodingplace-post-carousel-for-elementor' ),
+			'next'       => __( 'Next slide', 'webcodingplace-post-carousel-for-elementor' ),
+			'first'      => __( 'This is the first slide', 'webcodingplace-post-carousel-for-elementor' ),
+			'last'       => __( 'This is the last slide', 'webcodingplace-post-carousel-for-elementor' ),
+			/* translators: %d: slide number. */
+			'goToSlide'  => __( 'Go to slide %d', 'webcodingplace-post-carousel-for-elementor' ),
+			/* translators: Swiper replaces {{index}} with the slide number and {{slidesLength}} with the number of slides. */
+			'slideLabel' => __( '{{index}} of {{slidesLength}}', 'webcodingplace-post-carousel-for-elementor' ),
+			'pause'      => __( 'Pause autoplay', 'webcodingplace-post-carousel-for-elementor' ),
+			'play'       => __( 'Play autoplay', 'webcodingplace-post-carousel-for-elementor' ),
+		);
+	}
+
+	/**
+	 * Print a modern engine arrow, with a custom icon when one is set.
+	 *
+	 * @param string $direction "prev" or "next".
+	 * @param array  $settings  Widget settings.
+	 * @param string $label     Accessible label.
+	 */
+	private function render_arrow( $direction, $settings, $label ) {
+		$icon = isset( $settings[ 'arrow_' . $direction . '_icon' ] ) ? dpce_normalize_icon( $settings[ 'arrow_' . $direction . '_icon' ] ) : array();
+		$slug = 'prev' === $direction ? 'slick-prev' : 'slick-next';
+
+		if ( empty( $icon['value'] ) ) {
+			printf( '<button type="button" class="%1$s slick-arrow" aria-label="%2$s">%3$s</button>', esc_attr( $slug ), esc_attr( $label ), esc_html( $label ) );
+			return;
+		}
+
+		printf( '<button type="button" class="%1$s slick-arrow dpce-arrow-custom" aria-label="%2$s">', esc_attr( $slug ), esc_attr( $label ) );
+		\Elementor\Icons_Manager::render_icon( $icon, array( 'aria-hidden' => 'true' ) );
+		echo '<span class="dpce-sr">' . esc_html( $label ) . '</span></button>';
+	}
+
+	/**
+	 * Print every slide.
+	 *
+	 * Templates are included here, so they see $post_id and
+	 * $carousel_settings as local variables, exactly as in 1.4.
+	 *
+	 * @param WP_Query    $query             Query.
+	 * @param string|null $template          Template path, or null for the fallback markup.
+	 * @param array       $carousel_settings Settings passed to templates.
+	 * @param string      $slide_class       Class list for each slide.
+	 */
+	private function render_slides( $query, $template, $carousel_settings, $slide_class ) {
+		$slide_index = 0;
+		while ( $query->have_posts() ) {
+			$query->the_post();
+			$post_id                          = get_the_ID();
+			$carousel_settings['slide_index'] = $slide_index++;
+			ob_start();
+			if ( $template ) {
+				include $template;
+			} else {
+				$this->render_fallback_slide( $post_id, $carousel_settings );
+			}
+			$slide_html = (string) ob_get_clean();
+
+			/**
+			 * Filter the HTML of one card before it is printed.
+			 *
+			 * @since 2.0.0
+			 *
+			 * @param string $slide_html        Card HTML (the template output).
+			 * @param int    $post_id           Post ID.
+			 * @param array  $carousel_settings Settings used by the template.
+			 */
+			$slide_html = (string) apply_filters( 'dpce_slide_html', $slide_html, $post_id, $carousel_settings );
+
+			echo '<div class="' . esc_attr( $slide_class ) . '"><div class="dpce-slide-inner">';
+			echo $slide_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Template output, escaped inside each template.
+			echo '</div></div>';
+		}
+		wp_reset_postdata();
+	}
+
+	/**
+	 * Classic engine (Slick) markup, unchanged from 1.4.
+	 *
+	 * @param array       $settings          Widget settings.
+	 * @param array       $carousel_settings Settings passed to templates.
+	 * @param WP_Query    $query             Query.
+	 * @param string|null $template          Template path.
+	 * @param string      $style_id          Template id.
+	 */
+	private function render_slick( $settings, $carousel_settings, $query, $template, $style_id ) {
 		$slick_options = array(
 			'slidesToShow'   => max( 1, (int) ( isset( $settings['cols_desktop'] ) ? $settings['cols_desktop'] : 3 ) ),
 			'slidesToScroll' => max( 1, (int) ( isset( $settings['slides_to_scroll'] ) ? $settings['slides_to_scroll'] : 1 ) ),
@@ -1035,33 +1402,189 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			),
 		);
 
-		$wrapper_classes = array(
-			'dpce-carousel',
-			'dpce-wrapper-' . sanitize_html_class( $style_id ),
-			'dpce-arrows-' . sanitize_html_class( isset( $settings['arrows_style'] ) ? $settings['arrows_style'] : 'chevron' ),
-			'dpce-arrows-pos-' . sanitize_html_class( isset( $settings['arrows_position'] ) ? $settings['arrows_position'] : 'center' ),
-			'dpce-dots-' . sanitize_html_class( isset( $settings['dots_icon'] ) ? $settings['dots_icon'] : 'circle' ),
-		);
+		/**
+		 * Filter the options passed to Slick (classic engine).
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param array $slick_options Slick options.
+		 * @param array $settings      Widget settings.
+		 */
+		$slick_options         = apply_filters( 'dpce_slick_options', $slick_options, $settings );
+		$slick_options['i18n'] = array_intersect_key( $this->get_script_i18n(), array_flip( array( 'prev', 'next' ) ) );
 
 		?>
-		<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>"
-			data-slick="<?php echo esc_attr( wp_json_encode( $slick_options ) ); ?>">
+		<div class="<?php echo esc_attr( implode( ' ', $this->get_wrapper_classes( $settings, $style_id ) ) ); ?>"
+			data-slick="<?php echo esc_attr( (string) wp_json_encode( $slick_options ) ); ?>">
 			<div class="dpce-track">
-				<?php
-				while ( $query->have_posts() ) {
-					$query->the_post();
-					$post_id = get_the_ID();
-					echo '<div class="dpce-slide"><div class="dpce-slide-inner">';
-					if ( $template ) {
-						include $template;
-					} else {
-						$this->render_fallback_slide( $post_id, $carousel_settings );
-					}
-					echo '</div></div>';
-				}
-				wp_reset_postdata();
-				?>
+				<?php $this->render_slides( $query, $template, $carousel_settings, 'dpce-slide' ); ?>
 			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Modern engine (Swiper) markup.
+	 *
+	 * The class names of arrows and dots match the classic engine, so the
+	 * arrow and dot style settings and all templates work the same way.
+	 *
+	 * @param array       $settings          Widget settings.
+	 * @param array       $carousel_settings Settings passed to templates.
+	 * @param WP_Query    $query             Query.
+	 * @param string|null $template          Template path.
+	 * @param string      $style_id          Template id.
+	 */
+	private function render_swiper( $settings, $carousel_settings, $query, $template, $style_id ) {
+		$cols       = array(
+			'desktop' => max( 1, (int) ( isset( $settings['cols_desktop'] ) ? $settings['cols_desktop'] : 3 ) ),
+			'tablet'  => max( 1, (int) ( isset( $settings['cols_tablet'] ) ? $settings['cols_tablet'] : 2 ) ),
+			'mobile'  => max( 1, (int) ( isset( $settings['cols_mobile'] ) ? $settings['cols_mobile'] : 1 ) ),
+		);
+		$scroll     = max( 1, (int) ( isset( $settings['slides_to_scroll'] ) ? $settings['slides_to_scroll'] : 1 ) );
+		$vertical   = 'yes' === ( isset( $settings['vertical'] ) ? $settings['vertical'] : '' );
+		$autoplay   = 'yes' === ( isset( $settings['autoplay'] ) ? $settings['autoplay'] : '' );
+		$dots       = 'yes' === ( isset( $settings['dots'] ) ? $settings['dots'] : 'yes' );
+		$arrows     = 'yes' === ( isset( $settings['arrows'] ) ? $settings['arrows'] : 'yes' );
+		$rtl        = is_rtl() || 'yes' === ( isset( $settings['rtl'] ) ? $settings['rtl'] : '' );
+		$breakpoint = dpce_get_breakpoints();
+
+		$swiper = array(
+			'slidesPerView'  => $cols['mobile'],
+			'slidesPerGroup' => min( $scroll, $cols['mobile'] ),
+			'speed'          => max( 0, (int) ( isset( $settings['speed'] ) ? $settings['speed'] : 500 ) ),
+			'loop'           => 'yes' === ( isset( $settings['infinite'] ) ? $settings['infinite'] : 'yes' ),
+			'direction'      => $vertical ? 'vertical' : 'horizontal',
+			'autoHeight'     => ! $vertical && 'yes' === ( isset( $settings['adaptive_height'] ) ? $settings['adaptive_height'] : '' ),
+			'breakpoints'    => array(
+				( $breakpoint['mobile'] + 1 ) => array(
+					'slidesPerView'  => $cols['tablet'],
+					'slidesPerGroup' => min( $scroll, $cols['tablet'] ),
+				),
+				( $breakpoint['tablet'] + 1 ) => array(
+					'slidesPerView'  => $cols['desktop'],
+					'slidesPerGroup' => min( $scroll, $cols['desktop'] ),
+				),
+			),
+		);
+
+		if ( $vertical ) {
+			// A vertical carousel shows the same number of slides on every screen.
+			$swiper['slidesPerView']  = $cols['desktop'];
+			$swiper['slidesPerGroup'] = min( $scroll, $cols['desktop'] );
+			unset( $swiper['breakpoints'] );
+		}
+
+		if ( $autoplay ) {
+			$swiper['autoplay'] = array(
+				'delay'                => max( 500, (int) ( isset( $settings['autoplay_speed'] ) ? $settings['autoplay_speed'] : 3000 ) ),
+				'disableOnInteraction' => false,
+			);
+		}
+
+		$ticker = 'yes' === ( isset( $settings['ticker'] ) ? $settings['ticker'] : '' );
+		$effect = isset( $settings['effect'] ) && in_array( $settings['effect'], array( 'fade', 'coverflow' ), true ) ? $settings['effect'] : 'slide';
+
+		if ( $ticker ) {
+			// Continuous movement: no pause between slides, one slide at a time, linear easing (CSS).
+			$seconds                  = max( 1, (float) ( isset( $settings['ticker_speed'] ) ? $settings['ticker_speed'] : 4 ) );
+			$swiper['speed']          = (int) round( $seconds * 1000 );
+			$swiper['loop']           = true;
+			$swiper['slidesPerGroup'] = 1;
+			$swiper['allowTouchMove'] = false;
+			$swiper['autoplay']       = array(
+				'delay'                => 1,
+				'disableOnInteraction' => false,
+			);
+			foreach ( array_keys( isset( $swiper['breakpoints'] ) ? $swiper['breakpoints'] : array() ) as $bp ) {
+				$swiper['breakpoints'][ $bp ]['slidesPerGroup'] = 1;
+			}
+			$autoplay = true;
+			$effect   = 'slide';
+		} elseif ( 'fade' === $effect ) {
+			$swiper['effect']         = 'fade';
+			$swiper['fadeEffect']     = array( 'crossFade' => true );
+			$swiper['slidesPerView']  = 1;
+			$swiper['slidesPerGroup'] = 1;
+			unset( $swiper['breakpoints'] );
+		} elseif ( 'coverflow' === $effect ) {
+			$swiper['effect']          = 'coverflow';
+			$swiper['centeredSlides']  = true;
+			$swiper['coverflowEffect'] = array(
+				'rotate'       => 30,
+				'stretch'      => 0,
+				'depth'        => 120,
+				'modifier'     => 1,
+				'slideShadows' => false,
+			);
+		} elseif ( 'yes' === ( isset( $settings['centered_slides'] ) ? $settings['centered_slides'] : '' ) ) {
+			$swiper['centeredSlides'] = true;
+		}
+
+		$pagination = $dots && ! $ticker && isset( $settings['pagination_type'] ) && in_array( $settings['pagination_type'], array( 'fraction', 'progress' ), true ) ? $settings['pagination_type'] : 'dots';
+
+		/**
+		 * Filter the options passed to Swiper (modern engine).
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param array $swiper   Swiper options.
+		 * @param array $settings Widget settings.
+		 */
+		$swiper = apply_filters( 'dpce_swiper_options', $swiper, $settings );
+
+		$options = array(
+			'swiper'       => $swiper,
+			'pauseOnHover' => $ticker || 'yes' === ( isset( $settings['pause_on_hover'] ) ? $settings['pause_on_hover'] : 'yes' ),
+			'pagination'   => $dots ? $pagination : 'none',
+			'i18n'         => $this->get_script_i18n(),
+		);
+
+		$classes   = $this->get_wrapper_classes( $settings, $style_id );
+		$classes[] = 'dpce-engine-swiper';
+		if ( $dots ) {
+			$classes[] = 'dpce-has-dots';
+		}
+		if ( $vertical ) {
+			$classes[] = 'dpce-vertical';
+		}
+		if ( $ticker ) {
+			$classes[] = 'dpce-ticker';
+		}
+		if ( 'slide' !== $effect ) {
+			$classes[] = 'dpce-effect-' . $effect;
+		}
+
+		$i18n = $this->get_script_i18n();
+		?>
+		<div class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
+			role="region"
+			aria-roledescription="<?php echo esc_attr__( 'carousel', 'webcodingplace-post-carousel-for-elementor' ); ?>"
+			aria-label="<?php echo esc_attr__( 'Posts carousel', 'webcodingplace-post-carousel-for-elementor' ); ?>"
+			data-dpce-swiper="<?php echo esc_attr( (string) wp_json_encode( $options ) ); ?>">
+			<div class="dpce-track">
+				<?php if ( $arrows ) : ?>
+					<?php $this->render_arrow( 'prev', $settings, $i18n['prev'] ); ?>
+				<?php endif; ?>
+				<div class="dpce-swiper swiper swiper-container"<?php echo $rtl ? ' dir="rtl"' : ''; ?>>
+					<div class="swiper-wrapper">
+						<?php $this->render_slides( $query, $template, $carousel_settings, 'dpce-slide swiper-slide' ); ?>
+					</div>
+				</div>
+				<?php if ( $arrows ) : ?>
+					<?php $this->render_arrow( 'next', $settings, $i18n['next'] ); ?>
+				<?php endif; ?>
+				<?php if ( $dots && 'dots' === $pagination ) : ?>
+					<ul class="slick-dots" aria-label="<?php echo esc_attr__( 'Choose slide', 'webcodingplace-post-carousel-for-elementor' ); ?>"></ul>
+				<?php elseif ( 'fraction' === $pagination ) : ?>
+					<div class="dpce-fraction" aria-hidden="true"></div>
+				<?php elseif ( 'progress' === $pagination ) : ?>
+					<div class="dpce-progress" aria-hidden="true"><span></span></div>
+				<?php endif; ?>
+			</div>
+			<?php if ( $autoplay && 'yes' === ( isset( $settings['pause_button'] ) ? $settings['pause_button'] : '' ) ) : ?>
+				<button type="button" class="dpce-pause" aria-pressed="false" aria-label="<?php echo esc_attr( $i18n['pause'] ); ?>"></button>
+			<?php endif; ?>
 		</div>
 		<?php
 	}
@@ -1070,39 +1593,66 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 	 * Compose the settings array exposed to template files via $carousel_settings.
 	 *
 	 * @param array $settings    Display settings.
-	 * @param array $raw         Raw settings.
 	 * @return array
 	 */
-	private function build_carousel_settings( $settings, $raw ) {
-		unset( $raw );
-
-		$placeholder = '';
+	private function build_carousel_settings( $settings ) {
+		$placeholder    = '';
+		$placeholder_id = 0;
 		if ( isset( $settings['placeholder_image'] ) && is_array( $settings['placeholder_image'] ) && ! empty( $settings['placeholder_image']['url'] ) ) {
-			$placeholder = $settings['placeholder_image']['url'];
+			$placeholder    = $settings['placeholder_image']['url'];
+			$placeholder_id = isset( $settings['placeholder_image']['id'] ) ? absint( $settings['placeholder_image']['id'] ) : 0;
 		}
 
-		return array(
-			'heading_field'         => isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title',
-			'heading_meta_key'      => isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '',
-			'heading_max_words'     => isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0,
-			'title_tag'             => isset( $settings['title_tag'] ) && in_array( $settings['title_tag'], array( 'h2', 'h3', 'h4', 'h5', 'h6' ), true ) ? $settings['title_tag'] : 'h3',
-			'desc_field'            => isset( $settings['desc_field'] ) ? $settings['desc_field'] : 'excerpt',
-			'desc_meta_key'         => isset( $settings['desc_meta_key'] ) ? $settings['desc_meta_key'] : '',
-			'desc_max_words'        => isset( $settings['desc_max_words'] ) ? (int) $settings['desc_max_words'] : 20,
-			'desc_render_shortcodes' => 'yes' === ( isset( $settings['desc_render_shortcodes'] ) ? $settings['desc_render_shortcodes'] : '' ),
-			'trim_append'           => isset( $settings['trim_append'] ) ? $settings['trim_append'] : '...',
-			'read_more_txt'         => isset( $settings['read_more_txt'] ) ? $settings['read_more_txt'] : '',
-			'read_more_classes'     => isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button',
-			'read_more_target'      => isset( $settings['read_more_target'] ) ? $settings['read_more_target'] : '_self',
-			'link_area'             => isset( $settings['link_area'] ) && in_array( $settings['link_area'], array( 'card', 'button' ), true ) ? $settings['link_area'] : 'card',
-			'image_size'            => isset( $settings['image_size'] ) ? $settings['image_size'] : 'medium_large',
-			'lazy_load'             => 'yes' === ( isset( $settings['lazy_load'] ) ? $settings['lazy_load'] : 'yes' ),
-			'placeholder_image'     => $placeholder,
-			'enable_share'          => 'yes' === ( isset( $settings['enable_share'] ) ? $settings['enable_share'] : '' ),
-			'share_networks'        => isset( $settings['share_networks'] ) ? (array) $settings['share_networks'] : array(),
-			'style_id'              => isset( $settings['style_id'] ) ? $settings['style_id'] : '1',
-			'style_icon'              => isset( $settings['style_icon'] ) ? $settings['style_icon'] : '',
-			'style_icon_color'              => isset( $settings['style_icon_color'] ) ? $settings['style_icon_color'] : '',
+		$columns = array(
+			'desktop' => max( 1, (int) ( isset( $settings['cols_desktop'] ) ? $settings['cols_desktop'] : 3 ) ),
+			'tablet'  => max( 1, (int) ( isset( $settings['cols_tablet'] ) ? $settings['cols_tablet'] : 2 ) ),
+			'mobile'  => max( 1, (int) ( isset( $settings['cols_mobile'] ) ? $settings['cols_mobile'] : 1 ) ),
+		);
+
+		$layout = self::get_layout( $settings );
+		if ( 'grid' === $layout ) {
+			$columns = array(
+				'desktop' => max( 1, (int) ( ! empty( $settings['grid_columns'] ) ? $settings['grid_columns'] : 3 ) ),
+				'tablet'  => max( 1, (int) ( ! empty( $settings['grid_columns_tablet'] ) ? $settings['grid_columns_tablet'] : 2 ) ),
+				'mobile'  => max( 1, (int) ( ! empty( $settings['grid_columns_mobile'] ) ? $settings['grid_columns_mobile'] : 1 ) ),
+			);
+		} elseif ( 'list' === $layout ) {
+			$columns = array(
+				'desktop' => 1,
+				'tablet'  => 1,
+				'mobile'  => 1,
+			);
+		}
+
+		return array_merge(
+			$this->build_card_settings( $settings ),
+			array(
+				'heading_field'          => isset( $settings['heading_field'] ) ? $settings['heading_field'] : 'title',
+				'heading_meta_key'       => isset( $settings['heading_meta_key'] ) ? $settings['heading_meta_key'] : '',
+				'heading_max_words'      => isset( $settings['heading_max_words'] ) ? (int) $settings['heading_max_words'] : 0,
+				'title_tag'              => dpce_get_title_tag( $settings ),
+				'desc_field'             => isset( $settings['desc_field'] ) ? $settings['desc_field'] : 'excerpt',
+				'desc_meta_key'          => isset( $settings['desc_meta_key'] ) ? $settings['desc_meta_key'] : '',
+				'desc_max_words'         => isset( $settings['desc_max_words'] ) ? (int) $settings['desc_max_words'] : 20,
+				'desc_render_shortcodes' => 'yes' === ( isset( $settings['desc_render_shortcodes'] ) ? $settings['desc_render_shortcodes'] : '' ),
+				'trim_append'            => isset( $settings['trim_append'] ) ? $settings['trim_append'] : '...',
+				'read_more_txt'          => isset( $settings['read_more_txt'] ) ? $settings['read_more_txt'] : '',
+				'read_more_classes'      => isset( $settings['read_more_classes'] ) ? $settings['read_more_classes'] : 'dpce-button',
+				'read_more_target'       => dpce_get_link_target( $settings ),
+				'link_area'              => isset( $settings['link_area'] ) && in_array( $settings['link_area'], array( 'card', 'button' ), true ) ? $settings['link_area'] : 'card',
+				'image_size'             => isset( $settings['image_size'] ) ? $settings['image_size'] : 'medium_large',
+				'lazy_load'              => 'yes' === ( isset( $settings['lazy_load'] ) ? $settings['lazy_load'] : 'yes' ),
+				'placeholder_image'      => $placeholder,
+				'placeholder_image_id'   => $placeholder_id,
+				'visible_slides'         => $columns['desktop'],
+				'image_sizes_attr'       => dpce_get_image_sizes_attr( $columns ),
+				'slide_index'            => 0,
+				'enable_share'           => 'yes' === ( isset( $settings['enable_share'] ) ? $settings['enable_share'] : '' ),
+				'share_networks'         => isset( $settings['share_networks'] ) ? (array) $settings['share_networks'] : array(),
+				'style_id'               => isset( $settings['style_id'] ) ? $settings['style_id'] : '1',
+				'style_icon'             => isset( $settings['style_icon'] ) ? dpce_normalize_icon( $settings['style_icon'] ) : array(),
+				'style_icon_color'       => isset( $settings['style_icon_color'] ) ? $settings['style_icon_color'] : '',
+			)
 		);
 	}
 
@@ -1135,7 +1685,8 @@ class DPCE_Post_Carousel_Widget extends Widget_Base {
 			$query_settings[ 'posts__' . $post_type ] = (array) $settings[ 'posts__' . $post_type ];
 		}
 
-		return $query_settings;
+		// Everything else (query mode, filters) is read from the widget settings.
+		return array_merge( $settings, $query_settings );
 	}
 
 	/**

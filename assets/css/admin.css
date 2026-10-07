@@ -1,0 +1,170 @@
+/* WebCodingPlace Post Carousel: admin screens. */
+
+.dpce-admin {
+	max-width: 1200px;
+}
+
+.dpce-admin__header h1 {
+	font-size: 26px;
+	line-height: 1.3;
+}
+
+.dpce-admin__lead {
+	max-width: 720px;
+	font-size: 15px;
+	color: #3c434a;
+}
+
+.dpce-admin__grid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: 20px;
+	margin: 20px 0;
+}
+
+@media (max-width: 960px) {
+	.dpce-admin__grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.dpce-admin__card {
+	padding: 20px 24px;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+}
+
+.dpce-admin__card h2 {
+	margin-top: 0;
+}
+
+.dpce-admin__muted {
+	color: #50575e;
+}
+
+.dpce-checklist {
+	margin-left: 0;
+	list-style: none;
+	counter-reset: dpce-step;
+}
+
+.dpce-checklist li {
+	position: relative;
+	padding: 6px 0 6px 36px;
+	counter-increment: dpce-step;
+}
+
+.dpce-checklist li:before {
+	position: absolute;
+	top: 4px;
+	left: 0;
+	width: 24px;
+	height: 24px;
+	border: 2px solid #8c8f94;
+	border-radius: 50%;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 24px;
+	text-align: center;
+	content: counter(dpce-step);
+	box-sizing: border-box;
+	line-height: 20px;
+}
+
+.dpce-checklist li.is-done:before {
+	border-color: #00a32a;
+	background: #00a32a;
+	color: #fff;
+	content: "\2713";
+}
+
+.dpce-links li {
+	margin-bottom: 8px;
+}
+
+.dpce-gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 16px;
+	margin: 16px 0 0;
+}
+
+.dpce-gallery li {
+	margin: 0;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	overflow: hidden;
+	background: #f6f7f7;
+}
+
+.dpce-gallery img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 8 / 5;
+	object-fit: cover;
+	background: #fff;
+}
+
+.dpce-gallery span {
+	display: block;
+	padding: 8px 12px;
+	font-weight: 600;
+}
+
+.dpce-review-notice__actions .button,
+.dpce-review-notice__actions .button-link {
+	margin-right: 8px;
+	vertical-align: middle;
+}
+
+/* Deactivation feedback. */
+.dpce-feedback {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.dpce-feedback[hidden] {
+	display: none;
+}
+
+.dpce-feedback__dialog {
+	width: 520px;
+	max-width: calc(100% - 32px);
+	padding: 24px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+
+.dpce-feedback fieldset label {
+	display: block;
+	margin: 6px 0;
+}
+
+.dpce-feedback textarea {
+	width: 100%;
+	margin-top: 4px;
+}
+
+.dpce-feedback__note {
+	color: #50575e;
+	font-size: 12px;
+}
+
+.dpce-feedback__actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+}
+
+/* Elementor hides page headings under its admin top bar; keep ours. */
+#e-admin-top-bar-root ~ #wpbody .wrap.dpce-admin h1 {
+	display: block;
+}

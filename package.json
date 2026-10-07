@@ -1,0 +1,10 @@
+{
+	"name": "webcodingplace-post-carousel-for-elementor",
+	"private": true,
+	"description": "Build scripts for WebCodingPlace Post Carousel for Elementor.",
+	"license": "GPL-2.0-or-later",
+	"scripts": {
+		"build:css": "node bin/build-css.js",
+		"build": "npm run build:css"
+	}
+}

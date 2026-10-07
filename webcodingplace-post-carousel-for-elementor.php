@@ -1,19 +1,19 @@
 <?php
 /**
- * Plugin Name:       WebCodingPlace Post Carousel for Elementor
- * Description:       Display posts, custom post types or taxonomy terms in a beautiful, fully responsive Slick-powered carousel widget for Elementor with 50+ ready-made templates.
+ * Plugin Name:       Post Carousel & Grid for Elementor by WebCodingPlace
+ * Description:       Show posts, WooCommerce products or any post type in an Elementor carousel, grid or list, with 52 ready made templates.
  * Plugin URI:        https://webcodingplace.com/post-carousel-for-elementor
- * Version:           1.4
+ * Version:           2.0
  * Author:            WebCodingPlace
  * Author URI:        https://webcodingplace.com/
  * License:           GPL-2.0-or-later
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       webcodingplace-post-carousel-for-elementor
  * Domain Path:       /languages
- * Requires at least: 5.6
- * Requires PHP:      7.0
+ * Requires at least: 6.3
+ * Requires PHP:      7.4
  * Requires Plugins:  elementor
- * Elementor tested up to: 3.32
+ * Elementor tested up to: 4.3
  * Elementor Pro tested up to: 3.27
  *
  * @package DPCE
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'DPCE_VERSION' ) ) {
-	define( 'DPCE_VERSION', '1.4' );
+	define( 'DPCE_VERSION', '2.0' );
 }
 if ( ! defined( 'DPCE_FILE' ) ) {
 	define( 'DPCE_FILE', __FILE__ );
@@ -39,10 +39,20 @@ if ( ! defined( 'DPCE_TEMPLATES_PATH' ) ) {
 	define( 'DPCE_TEMPLATES_PATH', DPCE_PATH . 'templates/' );
 }
 if ( ! defined( 'DPCE_MIN_ELEMENTOR_VERSION' ) ) {
-	define( 'DPCE_MIN_ELEMENTOR_VERSION', '3.0.0' );
+	define( 'DPCE_MIN_ELEMENTOR_VERSION', '3.18.0' );
 }
 if ( ! defined( 'DPCE_MIN_PHP_VERSION' ) ) {
-	define( 'DPCE_MIN_PHP_VERSION', '7.0' );
+	define( 'DPCE_MIN_PHP_VERSION', '7.4' );
+}
+
+/*
+ * Optional deactivation feedback. Empty by default: no feedback form is
+ * shown and nothing is sent. Set an HTTPS URL here (or through the
+ * dpce_feedback_endpoint filter) to turn it on, and describe it in the
+ * readme's External services section when you do.
+ */
+if ( ! defined( 'DPCE_FEEDBACK_ENDPOINT' ) ) {
+	define( 'DPCE_FEEDBACK_ENDPOINT', '' );
 }
 
 /**
@@ -82,26 +92,25 @@ final class DPCE_Plugin {
 	 * Initialize the plugin.
 	 */
 	public function init() {
+		if ( version_compare( PHP_VERSION, DPCE_MIN_PHP_VERSION, '<' ) ) {
+			add_action( 'admin_notices', array( $this, 'admin_notice_minimum_php' ) );
+			return;
+		}
+
 		if ( ! did_action( 'elementor/loaded' ) ) {
 			add_action( 'admin_notices', array( $this, 'admin_notice_missing_elementor' ) );
 			return;
 		}
 
-		if ( ! version_compare( ELEMENTOR_VERSION, DPCE_MIN_ELEMENTOR_VERSION, '>=' ) ) {
+		if ( ! defined( 'ELEMENTOR_VERSION' ) || ! version_compare( ELEMENTOR_VERSION, DPCE_MIN_ELEMENTOR_VERSION, '>=' ) ) {
 			add_action( 'admin_notices', array( $this, 'admin_notice_minimum_elementor' ) );
-			return;
-		}
-
-		if ( version_compare( PHP_VERSION, DPCE_MIN_PHP_VERSION, '<' ) ) {
-			add_action( 'admin_notices', array( $this, 'admin_notice_minimum_php' ) );
 			return;
 		}
 
 		$this->includes();
 
 		add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ) );
-		add_action( 'elementor/frontend/after_register_scripts', array( $this, 'register_scripts' ) );
-		add_action( 'elementor/frontend/after_register_styles', array( $this, 'register_styles' ) );
+		add_action( 'elementor/controls/register', array( $this, 'register_controls' ) );
 	}
 
 	/**
@@ -112,9 +121,36 @@ final class DPCE_Plugin {
 		require_once DPCE_PATH . 'includes/class-dpce-styles.php';
 		require_once DPCE_PATH . 'includes/class-dpce-renderer.php';
 		require_once DPCE_PATH . 'includes/class-dpce-query.php';
+		require_once DPCE_PATH . 'includes/class-dpce-assets.php';
+		require_once DPCE_PATH . 'includes/class-dpce-rest.php';
+		require_once DPCE_PATH . 'includes/controls/class-dpce-query-control.php';
+		require_once DPCE_PATH . 'includes/widget/trait-dpce-query-controls.php';
+		require_once DPCE_PATH . 'includes/widget/trait-dpce-card-controls.php';
+		require_once DPCE_PATH . 'includes/widget/trait-dpce-layout-controls.php';
+		require_once DPCE_PATH . 'includes/class-dpce-woo.php';
 
 		// Boot renderer hooks.
 		DPCE_Renderer::instance();
+		DPCE_Assets::init();
+		DPCE_Rest::init();
+
+		if ( is_admin() ) {
+			require_once DPCE_PATH . 'includes/admin/class-dpce-admin.php';
+			require_once DPCE_PATH . 'includes/admin/class-dpce-review-notice.php';
+			require_once DPCE_PATH . 'includes/admin/class-dpce-feedback.php';
+			DPCE_Admin::init();
+			DPCE_Review_Notice::init();
+			DPCE_Feedback::init();
+		}
+	}
+
+	/**
+	 * Register custom Elementor controls.
+	 *
+	 * @param \Elementor\Controls_Manager $controls_manager Controls manager.
+	 */
+	public function register_controls( $controls_manager ) {
+		$controls_manager->register( new DPCE_Query_Control() );
 	}
 
 	/**
@@ -128,60 +164,17 @@ final class DPCE_Plugin {
 	}
 
 	/**
-	 * Register frontend scripts.
-	 */
-	public function register_scripts() {
-		$slick_js = DPCE_PATH . 'assets/vendor/slick/slick.min.js';
-		$slick_url = DPCE_URL . 'assets/vendor/slick/slick.min.js';
-
-		// Only register slick if the vendor file is present (required for wordpress.org).
-		if ( file_exists( $slick_js ) ) {
-			wp_register_script( 'dpce-slick', $slick_url, array( 'jquery' ), '1.8.1', true );
-		}
-
-		wp_register_script(
-			'dpce-frontend',
-			DPCE_URL . 'assets/js/main.js',
-			array( 'jquery', 'dpce-slick' ),
-			DPCE_VERSION,
-			true
-		);
-	}
-
-	/**
-	 * Register frontend styles.
-	 */
-	public function register_styles() {
-		$slick_css = DPCE_PATH . 'assets/vendor/slick/slick.css';
-		$slick_url = DPCE_URL . 'assets/vendor/slick/slick.css';
-
-		if ( file_exists( $slick_css ) ) {
-			wp_register_style( 'dpce-slick', $slick_url, array(), '1.8.1' );
-		}
-
-		$slick_theme = DPCE_PATH . 'assets/vendor/slick/slick-theme.css';
-		$slick_theme_url = DPCE_URL . 'assets/vendor/slick/slick-theme.css';
-
-		if ( file_exists( $slick_theme ) ) {
-			wp_register_style( 'dpce-slick-theme', $slick_theme_url, array( 'dpce-slick' ), '1.8.1' );
-		}
-
-		wp_register_style(
-			'dpce-frontend',
-			DPCE_URL . 'assets/css/main.css',
-			array( 'dpce-slick' ),
-			DPCE_VERSION
-		);
-	}
-
-	/**
 	 * Admin notice: Elementor missing.
 	 */
 	public function admin_notice_missing_elementor() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required plugin name */
 			esc_html__( '"%1$s" requires "%2$s" to be installed and active.', 'webcodingplace-post-carousel-for-elementor' ),
-			'<strong>' . esc_html__( 'WebCodingPlace Post Carousel for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
+			'<strong>' . esc_html__( 'Post Carousel & Grid for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
 			'<strong>' . esc_html__( 'Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>'
 		);
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', wp_kses_post( $message ) );
@@ -191,10 +184,14 @@ final class DPCE_Plugin {
 	 * Admin notice: Elementor below minimum version.
 	 */
 	public function admin_notice_minimum_elementor() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required plugin name, 3: minimum version */
 			esc_html__( '"%1$s" requires "%2$s" version %3$s or greater.', 'webcodingplace-post-carousel-for-elementor' ),
-			'<strong>' . esc_html__( 'WebCodingPlace Post Carousel for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
+			'<strong>' . esc_html__( 'Post Carousel & Grid for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
 			'<strong>' . esc_html__( 'Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
 			DPCE_MIN_ELEMENTOR_VERSION
 		);
@@ -205,10 +202,14 @@ final class DPCE_Plugin {
 	 * Admin notice: PHP below minimum version.
 	 */
 	public function admin_notice_minimum_php() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
 		$message = sprintf(
 			/* translators: 1: plugin name, 2: required PHP version */
 			esc_html__( '"%1$s" requires PHP version %2$s or greater.', 'webcodingplace-post-carousel-for-elementor' ),
-			'<strong>' . esc_html__( 'WebCodingPlace Post Carousel for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
+			'<strong>' . esc_html__( 'Post Carousel & Grid for Elementor', 'webcodingplace-post-carousel-for-elementor' ) . '</strong>',
 			DPCE_MIN_PHP_VERSION
 		);
 		printf( '<div class="notice notice-warning is-dismissible"><p>%1$s</p></div>', wp_kses_post( $message ) );
@@ -216,3 +217,11 @@ final class DPCE_Plugin {
 }
 
 DPCE_Plugin::instance();
+
+register_activation_hook(
+	__FILE__,
+	static function ( $network_wide = false ) {
+		require_once DPCE_PATH . 'includes/admin/class-dpce-admin.php';
+		DPCE_Admin::on_activation( (bool) $network_wide );
+	}
+);
