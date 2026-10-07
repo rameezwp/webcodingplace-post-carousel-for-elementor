@@ -4,6 +4,7 @@ on:
   push:
     branches: [ main, master, 'claude/**' ]
   pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -67,14 +68,21 @@ jobs:
       - run: vendor/bin/phpstan analyse --no-progress --memory-limit=2G
 
   plugin-check:
-    name: Plugin Check
+    name: Plugin Check and release zip
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build the release folder
+      - name: Build the release zip
         run: |
-          mkdir -p build/webcodingplace-post-carousel-for-elementor
-          rsync -a --exclude-from=.distignore ./ build/webcodingplace-post-carousel-for-elementor/
+          bash bin/build-zip.sh
+          mkdir -p build/unzipped
+          unzip -q build/*.zip -d build/unzipped
       - uses: wordpress/plugin-check-action@v1
         with:
-          build-dir: build/webcodingplace-post-carousel-for-elementor
+          build-dir: build/unzipped/webcodingplace-post-carousel-for-elementor
+      - name: Upload the release zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-zip
+          path: build/*.zip
+          retention-days: 30

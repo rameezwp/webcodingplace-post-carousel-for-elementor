@@ -48,4 +48,4 @@ The captions in `readme.txt` match the shot list in `docs/ASSETS-BRIEF.md`. Uplo
 
 ## Live preview
 
-`.wordpress-org/blueprints/blueprint.json` drives the "Live Preview" button. Copy it to SVN as `assets/blueprints/blueprint.json`, then turn the preview on in the plugin's Advanced view on WordPress.org. It downloads the demo images from the `main` branch of the GitHub repository, so merge this branch first.
+`.wordpress-org/blueprints/blueprint.json` drives the "Live Preview" button. Copy it to SVN as `assets/blueprints/blueprint.json`, then turn the preview on in the plugin's Advanced view on WordPress.org. It downloads the demo images from the `main` branch of the GitHub repository. Full release steps: `docs/RELEASING.md`.
