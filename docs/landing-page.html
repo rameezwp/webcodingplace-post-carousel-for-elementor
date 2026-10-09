@@ -1,0 +1,813 @@
+<!--
+  Landing page: https://webcodingplace.com/post-carousel-for-elementor/
+  Paste everything below into ONE Custom HTML block.
+  Needs the shared .wcp-pp base CSS that your other product pages already use.
+  The <style> block only adds what is new on this page.
+-->
+<style>
+/* ==========================================================================
+   Post Carousel & Grid page: additions to the shared .wcp-pp styles
+   ========================================================================== */
+
+/* Light section that is not one of the base section types */
+.wcp-pp > .wcp-pc-alt {
+  background: var(--wcp-light);
+  border-block: 1px solid var(--wcp-border);
+}
+
+/* Product icon drawn in CSS: three cards, the middle one in front */
+.wcp-pp .wcp-pc-icon {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  gap: 3px;
+  padding: 0 7px;
+  background: var(--wcp-amber);
+}
+
+.wcp-pp .wcp-pc-icon i {
+  display: block;
+  height: 22px;
+  border-radius: 3px;
+  background: rgba(16, 40, 42, 0.45);
+}
+
+.wcp-pp .wcp-pc-icon i:nth-child(2) {
+  height: 30px;
+  background: #10282A;
+}
+
+/* Card images: soft gradients with light bubbles, no image files needed */
+.wcp-pp .wcp-pc-g1 { background: linear-gradient(135deg, #FF9A8B, #FF6A88); }
+.wcp-pp .wcp-pc-g2 { background: linear-gradient(135deg, #43C6AC, #2A7B9B); }
+.wcp-pp .wcp-pc-g3 { background: linear-gradient(135deg, #E0C3FC, #A18CD1); }
+.wcp-pp .wcp-pc-g4 { background: linear-gradient(135deg, #FDC66B, #F7797D); }
+.wcp-pp .wcp-pc-g5 { background: linear-gradient(135deg, #84FAB0, #8FD3F4); }
+.wcp-pp .wcp-pc-g6 { background: linear-gradient(135deg, #2B5876, #4E9DBF); }
+
+.wcp-pp .wcp-pc-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.wcp-pp .wcp-pc-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 72% 30%, rgba(255, 255, 255, 0.32) 0 17%, transparent 18%),
+    radial-gradient(circle at 28% 78%, rgba(255, 255, 255, 0.22) 0 26%, transparent 27%),
+    radial-gradient(circle at 92% 88%, rgba(255, 255, 255, 0.18) 0 14%, transparent 15%);
+}
+
+/* Mock carousel inside the hero frame */
+.wcp-pp .wcp-pc-stage {
+  position: relative;
+  padding: 22px 22px 46px;
+  background: var(--wcp-light);
+}
+
+.wcp-pp .wcp-pc-track {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.wcp-pp .wcp-pc-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--wcp-white);
+  border: 1px solid var(--wcp-border);
+  border-radius: 10px;
+}
+
+.wcp-pp .wcp-pc-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--wcp-ink);
+  font-size: 0.66rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--wcp-white);
+}
+
+.wcp-pp .wcp-pc-badge--sale {
+  left: auto;
+  right: 8px;
+  background: var(--wcp-amber);
+  color: #10282A;
+}
+
+.wcp-pp .wcp-pc-text {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px 14px;
+}
+
+.wcp-pp .wcp-pc-title {
+  font-family: var(--wcp-font-head);
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--wcp-ink);
+}
+
+.wcp-pp .wcp-pc-meta {
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: var(--wcp-muted);
+}
+
+.wcp-pp .wcp-pc-line {
+  height: 6px;
+  border-radius: 3px;
+  background: #E3E9E6;
+}
+
+.wcp-pp .wcp-pc-line--short {
+  width: 62%;
+}
+
+.wcp-pp .wcp-pc-btn {
+  justify-self: start;
+  margin-top: 4px;
+  padding: 4px 9px;
+  border-radius: 5px;
+  background: var(--wcp-ink);
+  font-size: 0.64rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--wcp-white);
+}
+
+.wcp-pp .wcp-pc-arrow {
+  position: absolute;
+  top: 40%;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--wcp-ink);
+  box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.45);
+}
+
+.wcp-pp .wcp-pc-arrow::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid var(--wcp-white);
+  border-right: 2px solid var(--wcp-white);
+}
+
+.wcp-pp .wcp-pc-arrow--prev { left: 8px; }
+.wcp-pp .wcp-pc-arrow--next { right: 8px; }
+.wcp-pp .wcp-pc-arrow--prev::before { transform: translate(-30%, -50%) rotate(-135deg); }
+.wcp-pp .wcp-pc-arrow--next::before { transform: translate(-70%, -50%) rotate(45deg); }
+
+.wcp-pp .wcp-pc-dots {
+  position: absolute;
+  right: 0;
+  bottom: 18px;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.wcp-pp .wcp-pc-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 4px;
+  background: #C8D2CE;
+}
+
+.wcp-pp .wcp-pc-dots span.is-on {
+  width: 20px;
+  background: var(--wcp-ink);
+}
+
+/* Settings card on top of the hero frame: sit lower so card titles stay visible */
+@media (min-width: 641px) {
+  .wcp-pp .wcp-hero__visual {
+    padding-bottom: 150px;
+  }
+}
+
+.wcp-pp .wcp-demo__thumb.wcp-pc-thumb {
+  background: var(--wcp-amber);
+  display: grid;
+  place-items: center;
+}
+
+.wcp-pp .wcp-pc-thumb::before {
+  content: "";
+  width: 18px;
+  height: 14px;
+  border-radius: 3px;
+  background: #10282A;
+  box-shadow: -9px 0 0 -3px rgba(16, 40, 42, 0.45), 9px 0 0 -3px rgba(16, 40, 42, 0.45);
+}
+
+/* Layout section: carousel, grid and list side by side */
+.wcp-pp .wcp-pc-modes {
+  display: grid;
+  gap: 14px;
+}
+
+.wcp-pp .wcp-pc-mode {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  align-items: center;
+  gap: 22px;
+  padding: 18px 20px;
+  background: var(--wcp-white);
+  border: 1px solid var(--wcp-border);
+  border-radius: var(--wcp-radius-lg);
+}
+
+.wcp-pp .wcp-pc-mode__name {
+  font-family: var(--wcp-font-head);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--wcp-ink);
+}
+
+.wcp-pp .wcp-pc-mode__note {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--wcp-muted);
+}
+
+.wcp-pp .wcp-pc-mini {
+  display: grid;
+  gap: 8px;
+}
+
+.wcp-pp .wcp-pc-mini i {
+  display: block;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #43C6AC, #2A7B9B);
+}
+
+.wcp-pp .wcp-pc-mini i:nth-child(3n + 2) { background: linear-gradient(135deg, #FF9A8B, #FF6A88); }
+.wcp-pp .wcp-pc-mini i:nth-child(3n) { background: linear-gradient(135deg, #E0C3FC, #A18CD1); }
+
+.wcp-pp .wcp-pc-mini--carousel {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) 0.45fr;
+}
+
+.wcp-pp .wcp-pc-mini--carousel i { height: 58px; }
+.wcp-pp .wcp-pc-mini--carousel i:last-child { opacity: 0.4; }
+
+.wcp-pp .wcp-pc-mini--grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wcp-pp .wcp-pc-mini--grid i { height: 34px; }
+
+.wcp-pp .wcp-pc-mini--list i {
+  height: 26px;
+}
+
+/* Image block on the left, text area on the right */
+.wcp-pp .wcp-pc-mini--list i:nth-child(n) {
+  background: linear-gradient(135deg, #43C6AC, #2A7B9B) 0 0 / 26% 100% no-repeat, #E9EFEC;
+}
+
+.wcp-pp .wcp-pc-mini--list i:nth-child(2) {
+  background: linear-gradient(135deg, #FF9A8B, #FF6A88) 0 0 / 26% 100% no-repeat, #E9EFEC;
+}
+
+.wcp-pp .wcp-pc-mini--list i:nth-child(3) {
+  background: linear-gradient(135deg, #E0C3FC, #A18CD1) 0 0 / 26% 100% no-repeat, #E9EFEC;
+}
+
+/* WooCommerce mock shop */
+.wcp-pp .wcp-pc-shop {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  padding: clamp(16px, 2.5vw, 28px);
+  background: var(--wcp-light);
+}
+
+.wcp-pp .wcp-pc-stars {
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  color: #D9A126;
+}
+
+.wcp-pp .wcp-pc-price {
+  font-family: var(--wcp-font-head);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--wcp-ink);
+}
+
+.wcp-pp .wcp-pc-price del {
+  margin-right: 4px;
+  font-weight: 500;
+  color: var(--wcp-muted);
+}
+
+.wcp-pp .wcp-pc-stock {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #A3412C;
+}
+
+@media (max-width: 900px) {
+  .wcp-pp .wcp-pc-shop {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .wcp-pp .wcp-pc-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wcp-pp .wcp-pc-track > :nth-child(n + 3) {
+    display: none;
+  }
+
+  .wcp-pp .wcp-pc-mode {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+</style>
+
+<div class="wcp-pp wcp-pc">
+
+  <!-- ============================== Hero ============================== -->
+  <section class="wcp-hero wcp-is-dark" aria-labelledby="wcp-pc-title">
+    <div class="wcp-wrap wcp-hero__grid">
+      <div class="wcp-hero__text">
+        <div class="wcp-product-id">
+          <div class="wcp-product-id__icon wcp-pc-icon" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div>
+            <p class="wcp-product-id__name">Post Carousel &amp; Grid for Elementor</p>
+            <p class="wcp-product-id__meta">Free plugin by WebCodingPlace · Version 2.0</p>
+          </div>
+        </div>
+
+        <h1 id="wcp-pc-title" class="wcp-hero__title">The free carousel plugin for Elementor that turns your posts into <span class="wcp-hl">sliders and grids</span></h1>
+
+        <p class="wcp-hero__lede">Show blog posts, WooCommerce products or any custom post type in a carousel, a grid or a list. Pick one of 52 templates, choose which posts appear, and style everything in the Elementor editor you already use. It works with the free version of Elementor.</p>
+
+        <div class="wcp-actions">
+          <a class="wcp-btn wcp-btn--amber" href="https://wordpress.org/plugins/webcodingplace-post-carousel-for-elementor/">Download free <span aria-hidden="true">→</span></a>
+          <a class="wcp-btn wcp-btn--outline-light" href="https://playground.wordpress.net/?blueprint-url=https://raw.githubusercontent.com/rameezwp/webcodingplace-post-carousel-for-elementor/main/.wordpress-org/blueprints/blueprint.json" rel="nofollow">Try it in your browser</a>
+        </div>
+        <p class="wcp-hero__note">No Pro version, no locked settings, no account to create.</p>
+
+        <ul class="wcp-facts">
+          <li>52 templates</li>
+          <li>Carousel, grid or list</li>
+          <li>WooCommerce ready</li>
+          <li>Works with free Elementor</li>
+        </ul>
+      </div>
+
+      <div class="wcp-hero__visual" aria-hidden="true">
+        <div class="wcp-frame wcp-hero__shot">
+          <div class="wcp-frame__bar"><span></span><span></span><span></span></div>
+          <div class="wcp-pc-stage">
+            <div class="wcp-pc-track">
+              <div class="wcp-pc-card">
+                <div class="wcp-pc-media wcp-pc-g1"><span class="wcp-pc-badge">Travel</span></div>
+                <div class="wcp-pc-text">
+                  <span class="wcp-pc-title">A Slow Weekend in Lisbon</span>
+                  <span class="wcp-pc-meta">Sep 30 · 3 min read</span>
+                  <span class="wcp-pc-line"></span><span class="wcp-pc-line wcp-pc-line--short"></span>
+                  <span class="wcp-pc-btn">Read more</span>
+                </div>
+              </div>
+              <div class="wcp-pc-card">
+                <div class="wcp-pc-media wcp-pc-g2"><span class="wcp-pc-badge">Food</span></div>
+                <div class="wcp-pc-text">
+                  <span class="wcp-pc-title">10 Easy Weeknight Dinners</span>
+                  <span class="wcp-pc-meta">Sep 29 · 4 min read</span>
+                  <span class="wcp-pc-line"></span><span class="wcp-pc-line wcp-pc-line--short"></span>
+                  <span class="wcp-pc-btn">Read more</span>
+                </div>
+              </div>
+              <div class="wcp-pc-card">
+                <div class="wcp-pc-media wcp-pc-g3"><span class="wcp-pc-badge">Design</span></div>
+                <div class="wcp-pc-text">
+                  <span class="wcp-pc-title">How We Redesigned Our Studio</span>
+                  <span class="wcp-pc-meta">Sep 28 · 2 min read</span>
+                  <span class="wcp-pc-line"></span><span class="wcp-pc-line wcp-pc-line--short"></span>
+                  <span class="wcp-pc-btn">Read more</span>
+                </div>
+              </div>
+            </div>
+            <span class="wcp-pc-arrow wcp-pc-arrow--prev"></span>
+            <span class="wcp-pc-arrow wcp-pc-arrow--next"></span>
+            <div class="wcp-pc-dots"><span class="is-on"></span><span></span><span></span><span></span></div>
+          </div>
+        </div>
+
+        <div class="wcp-demo">
+          <div class="wcp-demo__head">
+            <div class="wcp-demo__thumb wcp-pc-thumb"></div>
+            <div>
+              <p class="wcp-demo__name">Post Carousel (WCP)</p>
+              <p class="wcp-demo__sku">Elementor widget settings</p>
+            </div>
+          </div>
+          <div class="wcp-demo__status"><span class="is-active">Carousel</span><span>Grid</span><span>List</span></div>
+          <dl class="wcp-demo__rows">
+            <div><dt>Source</dt><dd>Related posts</dd></div>
+            <div><dt>Template</dt><dd>Card</dd></div>
+            <div><dt>Columns</dt><dd>3 · 2 · 1</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== Problem ============================== -->
+  <section class="wcp-problem">
+    <div class="wcp-wrap wcp-split">
+      <div>
+        <p class="wcp-label">Why we built it</p>
+        <h2 class="wcp-h2">A post slider should not need a paid add-on</h2>
+      </div>
+      <div class="wcp-stack-text">
+        <p class="wcp-lead">Elementor's own Posts and Loop Carousel widgets are part of Elementor Pro, and post sliders in add-on packs are often part of a paid tier.</p>
+        <p class="wcp-body">If all you want is your latest articles in a neat row of cards, that is a lot to pay for. So we made a free Elementor slider for exactly that job, and kept adding the things people asked for: grids, related posts, product cards, more templates.</p>
+        <p class="wcp-body">Today it is the carousel plugin Elementor users can set up in a minute. Drop the widget on a page, pick your posts, pick a template. Everything on this page is in the free plugin, because there is no other version.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== How it works ============================== -->
+  <section class="wcp-how">
+    <div class="wcp-wrap">
+      <div class="wcp-section-head">
+        <p class="wcp-label">How it works</p>
+        <h2 class="wcp-h2">From empty page to post slider in three steps</h2>
+      </div>
+      <ol class="wcp-steps">
+        <li class="wcp-step">
+          <p class="wcp-step__num">01</p>
+          <h3 class="wcp-h3">Install the plugin</h3>
+          <p class="wcp-body">In your dashboard go to Plugins, Add New, and search for “Post Carousel WebCodingPlace”. Elementor needs to be active.</p>
+        </li>
+        <li class="wcp-step">
+          <p class="wcp-step__num">02</p>
+          <h3 class="wcp-h3">Drop in the widget</h3>
+          <p class="wcp-body">Edit any page with Elementor, search for “Post Carousel” in the widget panel and drag it where you want it.</p>
+        </li>
+        <li class="wcp-step">
+          <p class="wcp-step__num">03</p>
+          <h3 class="wcp-h3">Choose posts and a look</h3>
+          <p class="wcp-body">Pick a source, a template and a layout. The preview updates as you go, so you publish when it looks right.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================== Layouts ============================== -->
+  <section class="wcp-pc-alt">
+    <div class="wcp-wrap wcp-split wcp-split--media">
+      <div class="wcp-stack-text">
+        <p class="wcp-label">Carousel, grid or list</p>
+        <h2 class="wcp-h2">Carousel grid, post slider or simple list: one widget</h2>
+        <p class="wcp-body">Every widget has a Layout switch. Keep it as a sliding carousel, turn it into a grid that follows Elementor's tablet and phone breakpoints, or use the list layout with the image next to the text.</p>
+        <p class="wcp-body">Some people call it a grid slider, some call it a carousel grid. Either way you set the columns for desktop, tablet and phone, and the plugin handles the rest. Grid and list layouts load no slider script at all, so they stay light.</p>
+      </div>
+      <div class="wcp-pc-modes" aria-hidden="true">
+        <div class="wcp-pc-mode">
+          <div><p class="wcp-pc-mode__name">Carousel</p><p class="wcp-pc-mode__note">Slides, arrows, dots</p></div>
+          <div class="wcp-pc-mini wcp-pc-mini--carousel"><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="wcp-pc-mode">
+          <div><p class="wcp-pc-mode__name">Grid</p><p class="wcp-pc-mode__note">Columns per device</p></div>
+          <div class="wcp-pc-mini wcp-pc-mini--grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+        <div class="wcp-pc-mode">
+          <div><p class="wcp-pc-mode__name">List</p><p class="wcp-pc-mode__note">Image beside text</p></div>
+          <div class="wcp-pc-mini wcp-pc-mini--list"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== Features ============================== -->
+  <section class="wcp-features-sec">
+    <div class="wcp-wrap">
+      <div class="wcp-section-head">
+        <p class="wcp-label">What you can control</p>
+        <h2 class="wcp-h2">Every setting lives in the Elementor panel</h2>
+        <p class="wcp-body">No shortcodes, no separate settings screen. Click the widget and change what you need.</p>
+      </div>
+      <ul class="wcp-features">
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Related posts</h3>
+          <p class="wcp-body">On a single post, show posts that share its categories, tags or any other taxonomy. It can fall back to your latest posts when nothing is related.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Archive and search pages</h3>
+          <p class="wcp-body">Set the source to Current query and the widget shows the posts of the category, tag or search page it sits on.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Filters that make sense</h3>
+          <p class="wcp-body">Include or leave out terms and authors, limit by date, skip the first few posts and decide what happens to sticky posts.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">A Card you can shape</h3>
+          <p class="wcp-body">Switch the image, category badge, meta row, excerpt and button on or off. New carousels start with this template.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Image ratio and hover</h3>
+          <p class="wcp-body">Set the aspect ratio, fit and corner radius, then add a zoom, lift or darken effect. Works on all 52 templates.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Meta row</h3>
+          <p class="wcp-body">Date, author, author picture, categories, comment count and reading time. Show only the ones you want.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Effects and pagination</h3>
+          <p class="wcp-body">Slide, fade, coverflow or a centered active slide, with dots, numbers or a progress bar underneath.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">News ticker</h3>
+          <p class="wcp-body">A steady, continuous scroll for headlines. It stops when a visitor hovers over it or tabs into it with the keyboard.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Light on your pages</h3>
+          <p class="wcp-body">Only the stylesheet of your template loads, about 6 KB. New carousels reuse the Swiper library already inside Elementor.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================== WooCommerce ============================== -->
+  <section class="wcp-pro wcp-is-dark">
+    <div class="wcp-wrap">
+      <div class="wcp-section-head">
+        <p class="wcp-label">WooCommerce</p>
+        <h2 class="wcp-h2">A Woo products slider that helps you sell</h2>
+        <p class="wcp-lead">Set the post type to Products and the Card template shows the price with the sale price, a Sale badge, star ratings and an Add to cart button that works without leaving the page.</p>
+      </div>
+
+      <div class="wcp-frame wcp-pro__shot" aria-hidden="true">
+        <div class="wcp-frame__bar"><span></span><span></span><span></span></div>
+        <div class="wcp-pc-shop">
+          <div class="wcp-pc-card">
+            <div class="wcp-pc-media wcp-pc-g4"><span class="wcp-pc-badge wcp-pc-badge--sale">Sale</span></div>
+            <div class="wcp-pc-text">
+              <span class="wcp-pc-title">Linen Cushion Cover</span>
+              <span class="wcp-pc-stars">★★★★★</span>
+              <span class="wcp-pc-price"><del>$32</del>$24</span>
+              <span class="wcp-pc-btn">Add to cart</span>
+            </div>
+          </div>
+          <div class="wcp-pc-card">
+            <div class="wcp-pc-media wcp-pc-g5"></div>
+            <div class="wcp-pc-text">
+              <span class="wcp-pc-title">Stoneware Mug Set</span>
+              <span class="wcp-pc-stars">★★★★☆</span>
+              <span class="wcp-pc-price">$38</span>
+              <span class="wcp-pc-btn">Add to cart</span>
+            </div>
+          </div>
+          <div class="wcp-pc-card">
+            <div class="wcp-pc-media wcp-pc-g6"><span class="wcp-pc-badge wcp-pc-badge--sale">Sale</span></div>
+            <div class="wcp-pc-text">
+              <span class="wcp-pc-title">Canvas Weekend Bag</span>
+              <span class="wcp-pc-stars">★★★★★</span>
+              <span class="wcp-pc-price"><del>$89</del>$69</span>
+              <span class="wcp-pc-btn">Select options</span>
+            </div>
+          </div>
+          <div class="wcp-pc-card">
+            <div class="wcp-pc-media wcp-pc-g2"></div>
+            <div class="wcp-pc-text">
+              <span class="wcp-pc-title">Oak Serving Board</span>
+              <span class="wcp-pc-stars">★★★★☆</span>
+              <span class="wcp-pc-price">$45</span>
+              <span class="wcp-pc-stock">Out of stock</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="wcp-features wcp-features--dark">
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Pick the right products</h3>
+          <p class="wcp-body">Show featured, on sale, best selling or top rated products, and hide the ones that are out of stock.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Any template, with a product block</h3>
+          <p class="wcp-body">Prefer another of the 52 templates? Turn on the product block to add price, rating and Add to cart to it.</p>
+        </li>
+        <li>
+          <h3 class="wcp-feature__title wcp-h3">Uses the WooCommerce cart</h3>
+          <p class="wcp-body">Add to cart goes through WooCommerce itself, so the mini cart and the View cart link update as usual. Variable products get a Select options button.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================== Engines ============================== -->
+  <section class="wcp-compare">
+    <div class="wcp-wrap">
+      <div class="wcp-section-head">
+        <p class="wcp-label">Updating from version 1.4?</p>
+        <h2 class="wcp-h2">Your existing carousels stay exactly as they are</h2>
+        <p class="wcp-body">Carousels made before 2.0 keep the Classic engine and look the same after the update. New carousels use the Modern engine, built on the Swiper library that comes with Elementor. You can switch any carousel with one setting, and switch back.</p>
+      </div>
+      <div class="wcp-table-wrap">
+        <table class="wcp-table">
+          <caption class="wcp-sr">Classic and Modern slider engines compared</caption>
+          <thead>
+            <tr><th scope="col">Feature</th><th scope="col">Classic</th><th scope="col">Modern</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">Arrows, dots, autoplay, loop, RTL and vertical mode</th><td><span class="wcp-yes" role="img" aria-label="Yes"></span></td><td><span class="wcp-yes" role="img" aria-label="Yes"></span></td></tr>
+            <tr><th scope="row">Default for carousels made before 2.0</th><td><span class="wcp-yes" role="img" aria-label="Yes"></span></td><td><span class="wcp-no" role="img" aria-label="No"></span></td></tr>
+            <tr><th scope="row">Default for new carousels</th><td><span class="wcp-no" role="img" aria-label="No"></span></td><td><span class="wcp-yes" role="img" aria-label="Yes"></span></td></tr>
+            <tr><th scope="row">Runs without jQuery</th><td><span class="wcp-no" role="img" aria-label="No"></span></td><td><span class="wcp-yes" role="img" aria-label="Yes"></span></td></tr>
+            <tr><th scope="row">Fade and coverflow effects</th><td><span class="wcp-no" role="img" aria-label="No"></span></td><td><span class="wcp-yes" role="img" aria-label="Yes"></span></td></tr>
+            <tr><th scope="row">News ticker mode</th><td><span class="wcp-no" role="img" aria-label="No"></span></td><td><span class="wcp-yes" role="img" aria-label="Yes"></span></td></tr>
+            <tr><th scope="row">Numbers and progress bar pagination</th><td><span class="wcp-no" role="img" aria-label="No"></span></td><td><span class="wcp-yes" role="img" aria-label="Yes"></span></td></tr>
+            <tr><th scope="row">Pause button for autoplay</th><td><span class="wcp-no" role="img" aria-label="No"></span></td><td><span class="wcp-yes" role="img" aria-label="Yes"></span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== Use cases ============================== -->
+  <section class="wcp-uses">
+    <div class="wcp-wrap wcp-split">
+      <div class="wcp-stack-text">
+        <p class="wcp-label">Ideas</p>
+        <h2 class="wcp-h2">What people build with it</h2>
+        <p class="wcp-body">A few of the ways site owners use the widget. You can place as many as you like on one page.</p>
+      </div>
+      <dl class="wcp-uses__list">
+        <div>
+          <dt>Blog post slider on the home page</dt>
+          <dd>Your latest articles in a row of cards, with autoplay and a pause button.</dd>
+        </div>
+        <div>
+          <dt>Related posts under each article</dt>
+          <dd>Keep readers on your site with posts from the same category or tag.</dd>
+        </div>
+        <div>
+          <dt>Woo products slider for a sale</dt>
+          <dd>Only products on sale, with the old and new price side by side.</dd>
+        </div>
+        <div>
+          <dt>Portfolio or case study grid</dt>
+          <dd>A custom post type in a three column grid that drops to one column on phones.</dd>
+        </div>
+        <div>
+          <dt>Headline ticker</dt>
+          <dd>A continuous strip of news or announcements across the top of a page.</dd>
+        </div>
+        <div>
+          <dt>Category carousel</dt>
+          <dd>Show categories, tags or product categories instead of posts.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================== Details ============================== -->
+  <section class="wcp-details">
+    <div class="wcp-wrap wcp-split">
+      <div class="wcp-stack-text">
+        <p class="wcp-label">Plugin details</p>
+        <h2 class="wcp-h2">The short version</h2>
+        <p class="wcp-body">Free under the GPL and maintained by WebCodingPlace. The plugin sends no data anywhere and adds no tracking.</p>
+      </div>
+      <dl class="wcp-specs">
+        <div><dt>Price</dt><dd>Free, no Pro version</dd></div>
+        <div><dt>Current version</dt><dd>2.0</dd></div>
+        <div><dt>WordPress</dt><dd>6.3 or newer, tested up to 7.1</dd></div>
+        <div><dt>Elementor</dt><dd>3.18 or newer, the free version is enough</dd></div>
+        <div><dt>PHP</dt><dd>7.4 or newer</dd></div>
+        <div><dt>WooCommerce</dt><dd>Optional, for product sliders</dd></div>
+        <div><dt>Templates</dt><dd>52</dd></div>
+        <div><dt>Translations</dt><dd>Ready for any language</dd></div>
+        <div><dt>License</dt><dd>GPLv2 or later</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============================== FAQ ============================== -->
+  <section class="wcp-faq">
+    <div class="wcp-wrap wcp-faq__grid">
+      <div class="wcp-stack-text">
+        <p class="wcp-label">FAQ</p>
+        <h2 class="wcp-h2">Questions people ask</h2>
+        <p class="wcp-body">Something else on your mind? Ask in the support forum and we will help.</p>
+        <div class="wcp-faq__links">
+          <a class="wcp-link" href="https://wordpress.org/support/plugin/webcodingplace-post-carousel-for-elementor/">Support forum <span aria-hidden="true">→</span></a>
+          <a class="wcp-link" href="https://classicaddons.com/elementor/posts-carousel-slider/">See the live demos <span aria-hidden="true">→</span></a>
+          <a class="wcp-link" href="https://github.com/rameezwp/webcodingplace-post-carousel-for-elementor/blob/main/docs/HOOKS.md">Developer hooks <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="wcp-faq__list">
+        <details class="wcp-faq__item">
+          <summary><h3 class="wcp-faq__q">Is this carousel plugin for Elementor really free?</h3></summary>
+          <p class="wcp-body">Yes. Every feature on this page is in the plugin on WordPress.org. There is no Pro version, no trial and no setting that asks you to upgrade.</p>
+        </details>
+        <details class="wcp-faq__item">
+          <summary><h3 class="wcp-faq__q">Do I need Elementor Pro?</h3></summary>
+          <p class="wcp-body">No. It works with the free Elementor plugin, version 3.18 or newer. If you have Elementor Pro, you can also use the widget in Theme Builder templates, for example for related posts on single posts.</p>
+        </details>
+        <details class="wcp-faq__item">
+          <summary><h3 class="wcp-faq__q">Can I show a grid instead of a slider?</h3></summary>
+          <p class="wcp-body">Yes. Set Layout to Grid or List and choose the number of columns for desktop, tablet and phone. Grid and list layouts load no slider script.</p>
+        </details>
+        <details class="wcp-faq__item">
+          <summary><h3 class="wcp-faq__q">Can I make a WooCommerce product slider?</h3></summary>
+          <p class="wcp-body">Yes. Set the post type to Products. You can limit it to featured, on sale, best selling or top rated products, and the Card template shows price, rating, a Sale badge and an Add to cart button.</p>
+        </details>
+        <details class="wcp-faq__item">
+          <summary><h3 class="wcp-faq__q">I used version 1.4. Will my carousels change?</h3></summary>
+          <p class="wcp-body">No. Carousels you made before keep the same template, settings and slider script. The one visible change is a fix: a default star icon in some templates was invisible and now shows.</p>
+        </details>
+        <details class="wcp-faq__item">
+          <summary><h3 class="wcp-faq__q">Will it slow down my site?</h3></summary>
+          <p class="wcp-body">The plugin loads nothing on pages without the widget. On pages with it, it loads a small base stylesheet and the one for your template. The Modern engine reuses the Swiper library that Elementor already has.</p>
+        </details>
+        <details class="wcp-faq__item">
+          <summary><h3 class="wcp-faq__q">Can I change a template or add my own?</h3></summary>
+          <p class="wcp-body">Yes. Copy a template file to a <code>dpce</code> folder in your theme and edit the copy, or register a new template with the <code>dpce_styles</code> filter. The developer guide on GitHub has examples.</p>
+        </details>
+        <details class="wcp-faq__item">
+          <summary><h3 class="wcp-faq__q">Does the plugin collect any data?</h3></summary>
+          <p class="wcp-body">No. It sends nothing from your site. The optional share buttons only contact a social network when a visitor clicks one.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== CTA ============================== -->
+  <section class="wcp-cta wcp-is-dark">
+    <div class="wcp-wrap wcp-cta__inner">
+      <h2 class="wcp-cta__title">Add your first post carousel in the next five minutes</h2>
+      <div>
+        <p class="wcp-body">Install it from your dashboard or WordPress.org. If it helps you, a short review helps other people find it.</p>
+        <div class="wcp-actions">
+          <a class="wcp-btn wcp-btn--amber" href="https://wordpress.org/plugins/webcodingplace-post-carousel-for-elementor/">Download free <span aria-hidden="true">→</span></a>
+          <a class="wcp-btn wcp-btn--outline-light" href="https://wordpress.org/support/plugin/webcodingplace-post-carousel-for-elementor/reviews/#new-post">Leave a review</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Post Carousel & Grid for Elementor",
+      "description": "Free carousel plugin for Elementor. Show posts, WooCommerce products or any post type in a carousel, grid or list with 52 templates.",
+      "url": "https://webcodingplace.com/post-carousel-for-elementor/",
+      "downloadUrl": "https://wordpress.org/plugins/webcodingplace-post-carousel-for-elementor/",
+      "applicationCategory": "WebApplication",
+      "applicationSubCategory": "WordPress plugin",
+      "operatingSystem": "WordPress",
+      "softwareVersion": "2.0",
+      "softwareRequirements": "WordPress 6.3 or newer, Elementor 3.18 or newer, PHP 7.4 or newer",
+      "license": "https://www.gnu.org/licenses/gpl-2.0.html",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@type": "Organization", "name": "WebCodingPlace", "url": "https://webcodingplace.com/" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "Is this carousel plugin for Elementor really free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every feature is in the plugin on WordPress.org. There is no Pro version, no trial and no setting that asks you to upgrade." } },
+        { "@type": "Question", "name": "Do I need Elementor Pro?", "acceptedAnswer": { "@type": "Answer", "text": "No. It works with the free Elementor plugin, version 3.18 or newer. With Elementor Pro you can also use the widget in Theme Builder templates." } },
+        { "@type": "Question", "name": "Can I show a grid instead of a slider?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Set Layout to Grid or List and choose the number of columns for desktop, tablet and phone. Grid and list layouts load no slider script." } },
+        { "@type": "Question", "name": "Can I make a WooCommerce product slider?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Set the post type to Products. You can limit it to featured, on sale, best selling or top rated products, and the Card template shows price, rating, a Sale badge and an Add to cart button." } },
+        { "@type": "Question", "name": "I used version 1.4. Will my carousels change?", "acceptedAnswer": { "@type": "Answer", "text": "No. Carousels you made before keep the same template, settings and slider script. The one visible change is a fix: a default star icon in some templates was invisible and now shows." } },
+        { "@type": "Question", "name": "Will it slow down my site?", "acceptedAnswer": { "@type": "Answer", "text": "The plugin loads nothing on pages without the widget. On pages with it, it loads a small base stylesheet and the one for your template. The Modern engine reuses the Swiper library that Elementor already has." } },
+        { "@type": "Question", "name": "Can I change a template or add my own?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Copy a template file to a dpce folder in your theme and edit the copy, or register a new template with the dpce_styles filter." } },
+        { "@type": "Question", "name": "Does the plugin collect any data?", "acceptedAnswer": { "@type": "Answer", "text": "No. It sends nothing from your site. The optional share buttons only contact a social network when a visitor clicks one." } }
+      ]
+    }
+  ]
+}
+</script>
